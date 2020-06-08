@@ -23,13 +23,7 @@ namespace SGDb.Server.Data.EntityConfiguration
                 .WithOne(g => g.Creator)
                 .HasForeignKey(g => g.CreatorId)
                 .OnDelete(DeleteBehavior.Cascade);
-            
-            builder
-                .HasMany(u => u.Studios)
-                .WithOne(g => g.Creator)
-                .HasForeignKey(g => g.CreatorId)
-                .OnDelete(DeleteBehavior.Cascade);
-            
+
             builder
                 .HasMany(u => u.Publishers)
                 .WithOne(g => g.Creator)

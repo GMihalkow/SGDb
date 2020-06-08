@@ -32,7 +32,5 @@ namespace SGDb.Server.Data.Models
         public ICollection<VideoGameGenre> Genres { get; set; }
         
         public ICollection<VideoGamePublisher> Publishers { get; set; }
-        
-        public ICollection<VideoGameStudio> Studios { get; set; }
     }
 }

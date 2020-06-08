@@ -15,10 +15,6 @@ namespace SGDb.Server.Data
 
         public DbSet<Publisher> Publishers { get; set; }
 
-        public DbSet<Studio> Studios { get; set; }
-        
-        public DbSet<VideoGameStudio> VideoGameStudios { get; set; }
-
         public DbSet<VideoGamePublisher> VideoGamePublishers { get; set; }
 
         public DbSet<VideoGameGenre> VideoGameGenres { get; set; }
@@ -30,7 +26,6 @@ namespace SGDb.Server.Data
             builder.ApplyConfiguration(new UserConfiguration());
             builder.ApplyConfiguration(new VideoGameGenreConfiguration());
             builder.ApplyConfiguration(new VideoGamePublisherConfiguration());
-            builder.ApplyConfiguration(new VideoGameStudioConfiguration());
         }
     }
 }
