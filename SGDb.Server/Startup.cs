@@ -22,6 +22,8 @@ namespace SGDb.Server
                     options.UseMySql(this.Configuration.GetConnectionString("DefaultConnection"));
                 })
                 .AddIdentity()
+                .AddJwtAuthentication(services.GetApplicationSettings(this.Configuration))
+                .AddApplicationServices()
                 .AddControllers();
         }
 
@@ -34,8 +36,14 @@ namespace SGDb.Server
 
             app.UseHttpsRedirection();
             app.UseRouting();
-            app.UseAuthorization();
+            
+            app.UseCors(options => options
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod());
+            
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
