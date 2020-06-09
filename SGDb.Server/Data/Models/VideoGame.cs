@@ -17,11 +17,11 @@ namespace SGDb.Server.Data.Models
 
         public string About { get; set; }
 
-        public decimal Price { get; set; }
+        public decimal? Price { get; set; }
 
-        public uint Recommendations { get; set; }
+        public uint? Recommendations { get; set; }
 
-        public DateTime ReleasedOn { get; set; }
+        public DateTime? ReleasedOn { get; set; }
 
         public DateTime CreatedOn { get; set; }
         
