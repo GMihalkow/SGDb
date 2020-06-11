@@ -21,6 +21,8 @@ namespace SGDb.Server.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            //TODO [GM]: Make some Video Game columns not required (price, website)
+        
             base.OnModelCreating(builder);
 
             builder.ApplyConfiguration(new UserConfiguration());
