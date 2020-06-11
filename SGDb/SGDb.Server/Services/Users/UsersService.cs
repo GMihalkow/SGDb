@@ -8,11 +8,11 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SGDb.Server.Data.Models;
 using SGDb.Server.Helpers;
-using SGDb.Server.Services.Account.Contracts;
+using SGDb.Server.Services.Users.Contracts;
 
-namespace SGDb.Server.Services.Account
+namespace SGDb.Server.Services.Users
 {
-    public class AccountService : IAccountService
+    public class UsersService : IUsersService
     {
         // TODO [GM]: Finish implementation
         private List<User> _users = new List<User>
@@ -22,7 +22,7 @@ namespace SGDb.Server.Services.Account
 
         private readonly AppSettings _appSettings;
 
-        public AccountService(IOptions<AppSettings> appSettings)
+        public UsersService(IOptions<AppSettings> appSettings)
         {
             this._appSettings = appSettings.Value;
         }

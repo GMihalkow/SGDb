@@ -7,8 +7,8 @@ using Microsoft.IdentityModel.Tokens;
 using SGDb.Server.Data;
 using SGDb.Server.Data.Models;
 using SGDb.Server.Helpers;
-using SGDb.Server.Services.Account;
-using SGDb.Server.Services.Account.Contracts;
+using SGDb.Server.Services.Users;
+using SGDb.Server.Services.Users.Contracts;
 
 namespace SGDb.Server.Infrastructure.Extensions
 {
@@ -68,6 +68,6 @@ namespace SGDb.Server.Infrastructure.Extensions
         }
 
         public static IServiceCollection AddApplicationServices(this IServiceCollection services) =>
-            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IUsersService, UsersService>();
     }
 }
