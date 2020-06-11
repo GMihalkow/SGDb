@@ -13,6 +13,6 @@ namespace SGDb.Server.Data.Models
 
         public User Creator { get; set; }
         
-        public ICollection<VideoGamePublisher> Games { get; set; }
+        public ICollection<GamePublisher> Games { get; set; }
     }
 }

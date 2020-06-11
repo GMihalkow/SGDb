@@ -4,9 +4,9 @@ using SGDb.Server.Data.Models;
 
 namespace SGDb.Server.Data.EntityConfiguration
 {
-    public class VideoGamePublisherConfiguration : IEntityTypeConfiguration<VideoGamePublisher>
+    public class GamePublisherConfiguration : IEntityTypeConfiguration<GamePublisher>
     {
-        public void Configure(EntityTypeBuilder<VideoGamePublisher> builder)
+        public void Configure(EntityTypeBuilder<GamePublisher> builder)
         {
             builder.HasOne(vgp => vgp.Game)
                 .WithMany(g => g.Publishers)

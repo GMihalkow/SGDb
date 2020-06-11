@@ -1,10 +1,10 @@
 namespace SGDb.Server.Data.Models
 {
-    public class VideoGameGenre
+    public class GameGenre
     {
         public uint GameId { get; set; }
 
-        public VideoGame Game { get; set; }
+        public Game Game { get; set; }
 
         public uint GenreId { get; set; }
 

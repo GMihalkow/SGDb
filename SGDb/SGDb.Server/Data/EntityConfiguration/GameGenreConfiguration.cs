@@ -4,9 +4,9 @@ using SGDb.Server.Data.Models;
 
 namespace SGDb.Server.Data.EntityConfiguration
 {
-    public class VideoGameGenreConfiguration : IEntityTypeConfiguration<VideoGameGenre>
+    public class GameGenreConfiguration : IEntityTypeConfiguration<GameGenre>
     {
-        public void Configure(EntityTypeBuilder<VideoGameGenre> builder)
+        public void Configure(EntityTypeBuilder<GameGenre> builder)
         {
             builder.HasOne(vgg => vgg.Game)
                 .WithMany(g => g.Genres)

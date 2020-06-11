@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SGDb.Server.Data.Models
 {
-    public class VideoGame : BaseEntity<uint>
+    public class Game : BaseEntity<uint>
     {
         public string Name { get; set; }
 
@@ -29,8 +29,8 @@ namespace SGDb.Server.Data.Models
 
         public User Creator { get; set; }
         
-        public ICollection<VideoGameGenre> Genres { get; set; }
+        public ICollection<GameGenre> Genres { get; set; }
         
-        public ICollection<VideoGamePublisher> Publishers { get; set; }
+        public ICollection<GamePublisher> Publishers { get; set; }
     }
 }
