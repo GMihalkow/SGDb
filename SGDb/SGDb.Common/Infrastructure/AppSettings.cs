@@ -1,4 +1,4 @@
-namespace SGDb.Server.Helpers
+namespace SGDb.Common.Infrastructure
 {
     public class AppSettings
     {
