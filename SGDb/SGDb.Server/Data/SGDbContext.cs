@@ -25,6 +25,9 @@ namespace SGDb.Server.Data
         
             base.OnModelCreating(builder);
 
+            builder.ApplyConfiguration(new PublisherConfiguration());
+            builder.ApplyConfiguration(new GenreConfiguration());
+            builder.ApplyConfiguration(new GameConfiguration());
             builder.ApplyConfiguration(new UserConfiguration());
             builder.ApplyConfiguration(new GameGenreConfiguration());
             builder.ApplyConfiguration(new GamePublisherConfiguration());
