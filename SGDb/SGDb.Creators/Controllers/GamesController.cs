@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using SGDb.Common.Controllers;
+using SGDb.Common.Infrastructure;
+using SGDb.Creators.Models.Games;
 using SGDb.Creators.Services.GamesService.Contracts;
 
 namespace SGDb.Creators.Controllers
@@ -14,18 +16,18 @@ namespace SGDb.Creators.Controllers
             this._gamesService = gamesService;
         }
         
-        public async Task<IActionResult> GetAll()
+        public async Task<Result<IEnumerable<GameViewModel>>> GetAll()
         {
             var games = await this._gamesService.GetAll();
-            
-            return this.Ok(games);
+
+            return Result<IEnumerable<GameViewModel>>.SuccessWith(games);
         }
 
-        public async Task<IActionResult> GetAllForAutoComplete()
+        public async Task<Result<IEnumerable<GameAutoCompleteModel>>> GetAllForAutoComplete()
         {
             var autoCompleteGames = await this._gamesService.GetAutoCompleteModels();
 
-            return this.Ok(autoCompleteGames);
+            return Result<IEnumerable<GameAutoCompleteModel>>.SuccessWith(autoCompleteGames);
         }
     }
 }
