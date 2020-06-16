@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace SGDb.Common.Infrastructure
 {
@@ -45,5 +47,8 @@ namespace SGDb.Common.Infrastructure
         public static Result Success() => new Result(true, new List<string>());
 
         public static Result Failure(string error) => new Result(false, new List<string> {error});
+        
+        public static implicit operator Result(ModelStateDictionary modelState) => new Result(false, new string[] { modelState
+            .FirstOrDefault(m => m.Value.Errors.Count > 0).Value.Errors.FirstOrDefault().ErrorMessage});
     }
 }
