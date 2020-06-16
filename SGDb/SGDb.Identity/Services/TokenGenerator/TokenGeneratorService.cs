@@ -15,37 +15,42 @@ namespace SGDb.Identity.Services.TokenGenerator
 {
     public class TokenGeneratorService : ITokenGeneratorService
     {
-        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
         private readonly IOptions<AppSettings> _options;
 
-        public TokenGeneratorService(UserManager<User> userManager, IOptions<AppSettings> options)
+        public TokenGeneratorService(SignInManager<User> signInManager, IOptions<AppSettings> options)
         {
-            this._userManager = userManager;
+            this._signInManager = signInManager;
             this._options = options;
         }
 
         public async Task<string> GenerateToken(string username, string password)
         {
-            var user = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == username);
+            var signInResult = await this._signInManager.PasswordSignInAsync(username, password, true, false);
+
+            if (!signInResult.Succeeded)
+                return null;
+            
+            var user = await this._signInManager.UserManager.Users.SingleOrDefaultAsync(x => x.UserName == username);
 
             if (user == null)
                 return null;
 
-            var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_options.Value.Secret);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, user.Id.ToString()),
-                    new Claim(ClaimTypes.Email, user.Email.ToString()),
+                    new Claim(ClaimTypes.NameIdentifier, user.Id),
+                    new Claim(ClaimTypes.Email, user.Email),
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
                     SecurityAlgorithms.HmacSha256Signature)
             };
 
+            var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
             return tokenHandler.WriteToken(token);
