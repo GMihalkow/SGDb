@@ -17,9 +17,8 @@ namespace SGDb.Identity
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
             => services
-                .AddApplicationSettings(this.Configuration)
-                .AddWebService<IdentityDbContext>(this.Configuration)
                 .AddIdentity()
+                .AddWebService<IdentityDbContext>(this.Configuration)
                 .AddApplicationServices();
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
