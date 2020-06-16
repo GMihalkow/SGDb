@@ -1,5 +1,6 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,8 +23,14 @@ namespace SGDb.Common.Infrastructure.Extensions
             services
                 .AddDbContext<TDbContext>(options
                     => options.UseMySql(configuration.GetConnectionString("DefaultConnection")))
+                .AddApplicationSettings(configuration)
                 .AddJwtAuthentication(configuration)
-                .AddControllers();
+                .AddControllers()
+                .ConfigureApiBehaviorOptions(options =>
+                {
+                    options.InvalidModelStateResponseFactory =
+                        context => new JsonResult((Result) context.ModelState);
+                });
 
             return services;
         }
@@ -37,7 +44,7 @@ namespace SGDb.Common.Infrastructure.Extensions
                 .GetValue<string>(nameof(AppSettings.Secret));
 
             var key = Encoding.ASCII.GetBytes(secret);
-            
+
             services
                 .AddAuthentication(x =>
                 {
@@ -56,6 +63,9 @@ namespace SGDb.Common.Infrastructure.Extensions
                         ValidateAudience = false
                     };
                 });
+
+            services.AddHttpContextAccessor();
+
             return services;
         }
     }
