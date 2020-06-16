@@ -13,18 +13,17 @@ namespace SGDb.Common.Infrastructure.Extensions
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection()
+            app
                 .UseRouting()
+                .UseHttpsRedirection()
                 .UseCors(options => options
                     .AllowAnyOrigin()
                     .AllowAnyHeader()
                     .AllowAnyMethod())
                 .UseAuthentication()
                 .UseAuthorization()
-                .UseEndpoints(endpoints =>
-                {
-                    endpoints.MapControllers();
-                });
+                .UseEndpoints(endpoints
+                    => endpoints.MapControllers());
 
             return app;
         }
