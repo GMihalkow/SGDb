@@ -1,0 +1,40 @@
+@font-face {
+    font-family: Roboto-Medium;
+    src: url('../fonts/Roboto/Roboto-Medium.ttf');
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    min-height: 100%;
+}
+
+html {
+    font-family: Roboto, sans-serif;
+    line-height: 1.5em;
+    font-size: 16px;
+}
+
+.main-bg-dark {
+    background-color: #10161d;
+}
+
+.main-bg-light {
+    background-color: #1c2833;
+}
+
+.m1r-auto {
+    margin: 1rem auto;
+}
+
+.w-60r {
+    width: 60rem;
+}
+
+.d-flex {
+    display: flex;
+}
