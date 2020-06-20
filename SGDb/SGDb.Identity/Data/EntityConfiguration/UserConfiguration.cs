@@ -11,10 +11,18 @@ namespace SGDb.Identity.Data.EntityConfiguration
             builder
                 .Property(u => u.UserName)
                 .IsRequired();
+
+            builder
+                .HasIndex(u => u.UserName)
+                .IsUnique();
             
             builder
                 .Property(u => u.Email)
                 .IsRequired();
+
+            builder
+                .HasIndex(u => u.Email)
+                .IsUnique();
             
             builder
                 .Property(u => u.PasswordHash)
