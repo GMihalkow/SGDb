@@ -4,13 +4,16 @@
             <router-link to="/">Home</router-link>
             <router-link to="/about">About</router-link>
 
+            <a v-if="isLoggedIn" href="javascript:void(0)" v-on:click="test()">Test</a>
+
             <div class="p-fluid d-flex">
                 <AutoComplete v-model="selectedGameName" :suggestions="gameNames" @complete="searchGame($event)" placeholder="Search for games by name..." field="name" />
                 <Button icon="pi pi-search" class="p-button-primary p-button" />    
             </div>
 
-            <router-link to="/about">Login</router-link>
-            <router-link to="/about">Register</router-link>
+            <router-link v-if="!isLoggedIn" to="/identity/login">Login</router-link>
+            <router-link v-if="!isLoggedIn" to="/identity/register">Register</router-link>
+            <a href="javascript:void(0)" v-if="isLoggedIn" v-on:click="logout()">Logout</a>
         </nav>
     </div>
 </template>
@@ -35,11 +38,27 @@
         },
         methods: {
             async searchGame(event) {
-                var result = (await baseApi.getAllForAutoComplete());
+            //     var result = (await baseApi.getAllForAutoComplete());
 
-                console.log(result);
+            //     console.log(result);
 
-                this.gameNames = result.data.data.filter(function(g) { return g.name.toLowerCase().includes(event.query.toLowerCase()); /* IE11 support*/ });
+            //     this.gameNames = result.data.data.filter(function(g) { return g.name.toLowerCase().includes(event.query.toLowerCase()); /* IE11 support*/ });
+            },
+            logout() {
+                this.$store.dispatch('logout');
+            },
+            test() {
+                baseApi.get('https://localhost:5003/api/identity/test').then(function(res) {
+                    console.log(res);
+                }).catch(function(error) {
+                    console.log(error);
+                });
+            }
+        },
+        computed: {
+            isLoggedIn() {
+                console.log(this.$store.getters);
+                return this.$store.getters.isLoggedIn;
             }
         }
     }
