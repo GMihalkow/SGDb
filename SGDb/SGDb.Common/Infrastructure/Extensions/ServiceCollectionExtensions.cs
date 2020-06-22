@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,7 @@ namespace SGDb.Common.Infrastructure.Extensions
                 .ConfigureApiBehaviorOptions(options =>
                 {
                     options.InvalidModelStateResponseFactory =
-                        context => new JsonResult((Result) context.ModelState);
+                        context => new BadRequestObjectResult((Result) context.ModelState);
                 });
 
             return services;
