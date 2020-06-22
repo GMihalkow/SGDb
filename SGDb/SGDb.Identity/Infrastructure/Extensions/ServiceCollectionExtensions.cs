@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using SGDb.Identity.Data;
 using SGDb.Identity.Data.Models;
+using SGDb.Identity.Services.Identity;
+using SGDb.Identity.Services.Identity.Contracts;
 using SGDb.Identity.Services.TokenGenerator;
 using SGDb.Identity.Services.TokenGenerator.Contracts;
 
@@ -27,6 +29,7 @@ namespace SGDb.Identity.Infrastructure.Extensions
 
         public static IServiceCollection AddApplicationServices(this IServiceCollection services) =>
             services
-                .AddScoped<ITokenGeneratorService, TokenGeneratorService>();
+                .AddTransient<IIdentityService, IdentityService>()
+                .AddTransient<ITokenGeneratorService, TokenGeneratorService>();
     }
 }
