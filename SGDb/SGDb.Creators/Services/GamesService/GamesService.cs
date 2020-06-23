@@ -82,7 +82,23 @@ namespace SGDb.Creators.Services.GamesService
 
             return gameAutoCompleteModels;
         }
-        
+
+        public async Task<IEnumerable<GameIndexCardViewModel>> GetIndexGameCards()
+        {
+            var gameCardsModels = await this._dbContext
+                .Games
+                .OrderByDescending(g => g.CreatedOn)
+                .Take(3)
+                .Select(g => new GameIndexCardViewModel
+                {
+                    Name = g.Name.Substring(0, g.Name.Length <= 15 ? g.Name.Length : 15) + "...",
+                    HeaderUrl = g.HeaderImageUrl
+                })
+                .ToListAsync();
+
+            return gameCardsModels;
+        }
+
         public Task Create(GameInputModel model)
         {
             throw new System.NotImplementedException();

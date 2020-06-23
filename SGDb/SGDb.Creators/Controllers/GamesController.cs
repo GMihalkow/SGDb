@@ -15,7 +15,7 @@ namespace SGDb.Creators.Controllers
         {
             this._gamesService = gamesService;
         }
-        
+
         public async Task<Result<IEnumerable<GameViewModel>>> GetAll()
         {
             var games = await this._gamesService.GetAll();
@@ -29,5 +29,8 @@ namespace SGDb.Creators.Controllers
 
             return Result<IEnumerable<GameAutoCompleteModel>>.SuccessWith(autoCompleteGames);
         }
+
+        public async Task<Result<IEnumerable<GameIndexCardViewModel>>> GetGameIndexCards() =>
+            Result<IEnumerable<GameIndexCardViewModel>>.SuccessWith(await this._gamesService.GetIndexGameCards());
     }
 }
