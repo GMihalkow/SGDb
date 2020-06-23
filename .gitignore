@@ -351,3 +351,5 @@ MigrationBackup/
 .idea/
 
 Plan
+
+sgdb.client/package-lock.json
