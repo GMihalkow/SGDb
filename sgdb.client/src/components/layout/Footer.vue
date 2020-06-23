@@ -12,7 +12,6 @@
 
 <style scoped>
     .footer {
-        position: absolute;
         display: block;
         text-align: center;
         color: #fff;

@@ -35,12 +35,24 @@ html {
     width: 60rem;
 }
 
+.w-mx-60r {
+    max-width: 60rem;
+}
+
 .text-center {
     text-align: center;
 }
 
 .py-1 {
     padding: 1rem 0;
+}
+
+.p-1 {
+    padding: 1rem;
+}
+
+.mb-1 {
+    margin-bottom: 1rem;
 }
 
 .d-flex {

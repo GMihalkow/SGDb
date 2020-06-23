@@ -1,5 +1,5 @@
 <template>
-    <form action="#" @submit.prevent="submit">
+    <form action="#" @submit.prevent="submit" class="w-mx-60r p-1 m1r-auto">
         <div class="p-grid p-formgrid py-1 p-fluid p-justify-center">
             <h2 class="p-col-12 p-md-8 p-sm-12 m1r-auto text-center">Login</h2>
             

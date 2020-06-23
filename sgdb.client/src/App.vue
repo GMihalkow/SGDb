@@ -23,8 +23,8 @@
 
 <style>
   .main {
-    max-height: 100%;
-    max-width: 60rem;
+    min-height: 100%;
+    max-height: unset;
     margin: 0 auto;
   }
 
