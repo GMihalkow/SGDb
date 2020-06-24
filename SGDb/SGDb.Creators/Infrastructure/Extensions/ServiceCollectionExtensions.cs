@@ -1,6 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
-using SGDb.Creators.Services.GamesService;
-using SGDb.Creators.Services.GamesService.Contracts;
+using SGDb.Creators.Services.Creators;
+using SGDb.Creators.Services.Creators.Contracts;
+using SGDb.Creators.Services.Games;
+using SGDb.Creators.Services.Games.Contracts;
 
 namespace SGDb.Creators.Infrastructure.Extensions
 {
@@ -8,6 +10,7 @@ namespace SGDb.Creators.Infrastructure.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services) =>
             services
-                .AddScoped<IGamesService, GamesService>();
+                .AddTransient<ICreatorsService, CreatorsService>()
+                .AddTransient<IGamesService, GamesService>();
     }
 }
