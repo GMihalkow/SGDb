@@ -3,11 +3,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SGDb.Creators.Data;
-using SGDb.Creators.Models.Games;
-using SGDb.Creators.Services.GamesService.Contracts;
 using SGDb.Creators.Infrastructure.Extensions;
+using SGDb.Creators.Models.Games;
+using SGDb.Creators.Services.Games.Contracts;
 
-namespace SGDb.Creators.Services.GamesService
+namespace SGDb.Creators.Services.Games
 {
     public class GamesService : IGamesService
     {
