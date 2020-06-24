@@ -26,38 +26,42 @@ namespace SGDb.Identity.Controllers
         }
 
         [HttpPost]
-        public async Task<Result<string>> Register([FromForm] RegisterInputModel registerInputModel)
+        public async Task<IActionResult> Register([FromForm] RegisterInputModel registerInputModel)
         {
             try
             {
                 await this._identityService.Register(registerInputModel);
 
-                var token = await this._tokenGeneratorService.GenerateToken(registerInputModel.Username, registerInputModel.Password);
+                var token = await this._tokenGeneratorService.GenerateToken(registerInputModel.EmailAddress, registerInputModel.Password);
                 
-                return Result.SuccessWith(token);
+                return this.Ok(Result.SuccessWith(token));
             }
             catch (InvalidOperationException ex)
             {
-                this.Response.StatusCode = 400;
-                return Result.Failure(ex.Message);
+                return this.BadRequest(Result.Failure(ex.Message));
             }
         }
         
         [HttpPost]
-        public async Task<Result<string>> Login([FromForm] LoginInputModel loginInputInputModel)
+        public async Task<IActionResult> Login([FromForm] LoginInputModel loginInputInputModel)
         {
-            var loginSucceeded = await this._identityService.Login(loginInputInputModel);
-
-            if (!loginSucceeded)
+            try
             {
-                // TODO [GM]: Sort this out
-                this.Response.StatusCode = 400;
-                return Result.Failure("Invalid password and username combination.");
-            }
+                var loginSucceeded = await this._identityService.Login(loginInputInputModel);
 
-            var token = await this._tokenGeneratorService.GenerateToken(loginInputInputModel.Username, loginInputInputModel.Password);
-            
-            return Result.SuccessWith(token);
+                if (!loginSucceeded)
+                {
+                    return this.BadRequest(Result.Failure("Invalid password and email combination."));
+                }
+
+                var token = await this._tokenGeneratorService.GenerateToken(loginInputInputModel.EmailAddress, loginInputInputModel.Password);
+                
+                return this.Ok(Result.SuccessWith(token));
+            }
+            catch (Exception)
+            {
+                return this.BadRequest(Result.Failure("Something went wrong."));
+            }
         }
 
         [HttpGet]
