@@ -9,16 +9,9 @@ namespace SGDb.Identity.Data.EntityConfiguration
         public void Configure(EntityTypeBuilder<User> builder)
         {
             builder
-                .Property(u => u.UserName)
-                .IsRequired();
-
-            builder
-                .HasIndex(u => u.UserName)
-                .IsUnique();
-            
-            builder
                 .Property(u => u.Email)
-                .IsRequired();
+                .IsRequired()
+                .HasMaxLength(DataConstants.Users.EmailAddressMaxLength);
 
             builder
                 .HasIndex(u => u.Email)
