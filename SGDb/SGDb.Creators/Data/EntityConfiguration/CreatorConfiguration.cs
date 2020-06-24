@@ -8,24 +8,32 @@ namespace SGDb.Creators.Data.EntityConfiguration
     {
         public void Configure(EntityTypeBuilder<Creator> builder)
         {
-            builder.HasKey(u => u.Id);
+            builder.HasKey(c => c.Id);
 
-            builder.Property(u => u.Id).ValueGeneratedOnAdd();
+            builder.Property(c => c.Id).ValueGeneratedOnAdd();
+
+            builder.HasIndex(c => c.Username).IsUnique();
+
+            builder.Property(c => c.Username)
+                .IsRequired()
+                .HasMaxLength(DataConstants.Creators.UsernameMaxLength);
+
+            builder.Property(c => c.UserId).IsRequired();
 
             builder
-                .HasMany(u => u.Games)
+                .HasMany(c => c.Games)
                 .WithOne(g => g.Creator)
                 .HasForeignKey(g => g.CreatorId)
                 .OnDelete(DeleteBehavior.Cascade);
             
             builder
-                .HasMany(u => u.Genres)
+                .HasMany(c => c.Genres)
                 .WithOne(g => g.Creator)
                 .HasForeignKey(g => g.CreatorId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder
-                .HasMany(u => u.Publishers)
+                .HasMany(c => c.Publishers)
                 .WithOne(g => g.Creator)
                 .HasForeignKey(g => g.CreatorId)
                 .OnDelete(DeleteBehavior.Cascade);

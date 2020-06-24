@@ -2,6 +2,13 @@ namespace SGDb.Creators.Data
 {
     public class DataConstants
     {
+        public class Creators
+        {
+            public const int UsernameMinLength = 6;
+
+            public const int UsernameMaxLength = 50;
+        }
+        
         public class Games
         {
             public const int MaxNameLength = 500;
