@@ -1,10 +1,10 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SGDb.Common.Infrastructure;
@@ -24,18 +24,21 @@ namespace SGDb.Identity.Services.TokenGenerator
             this._options = options;
         }
 
-        public async Task<string> GenerateToken(string username, string password)
+        public async Task<string> GenerateToken(string email, string password)
         {
-            var signInResult = await this._signInManager.PasswordSignInAsync(username, password, true, false);
+            var signInResult = await this._signInManager.PasswordSignInAsync(email, password, true, false);
 
             if (!signInResult.Succeeded)
                 return null;
-            
-            var user = await this._signInManager.UserManager.Users.SingleOrDefaultAsync(x => x.UserName == username);
 
+            var user = await this._signInManager.UserManager.FindByEmailAsync(email);
+            
+            // TODO [GM]: Exception?
             if (user == null)
                 return null;
 
+            var roles = await this._signInManager.UserManager.GetRolesAsync(user);
+            
             var key = Encoding.ASCII.GetBytes(_options.Value.Secret);
 
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -44,6 +47,7 @@ namespace SGDb.Identity.Services.TokenGenerator
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id),
                     new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.Role, roles.FirstOrDefault()) 
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
