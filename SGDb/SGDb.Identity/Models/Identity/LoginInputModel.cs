@@ -6,7 +6,8 @@ namespace SGDb.Identity.Models.Identity
     {
         [Required]
         [MinLength(6)]
-        public string Username { get; set; }
+        [MaxLength(70)]
+        public string EmailAddress { get; set; }
 
         [Required]
         [DataType(DataType.Password)]

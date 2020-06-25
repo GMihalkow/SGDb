@@ -4,13 +4,14 @@ namespace SGDb.Identity.Models.Identity
 {
     public class RegisterInputModel
     {
-         [Required]
-         [MinLength(6)]
-         public string Username { get; set; }
- 
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
+        
          [Required] 
          [EmailAddress]
          [MinLength(6)]
+         [MaxLength(70)]
          public string EmailAddress { get; set; }
          
          [Required] 

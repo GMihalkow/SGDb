@@ -5,6 +5,8 @@ namespace SGDb.Identity.Services.Identity.Contracts
 {
     public interface IIdentityService
     {
+        Task<string> GetUserRole(string email);
+        
         Task Register(RegisterInputModel registerInputModel);
 
         Task<bool> Login(LoginInputModel loginInputModel);
