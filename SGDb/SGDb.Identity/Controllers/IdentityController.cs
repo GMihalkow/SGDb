@@ -33,8 +33,16 @@ namespace SGDb.Identity.Controllers
                 await this._identityService.Register(registerInputModel);
 
                 var token = await this._tokenGeneratorService.GenerateToken(registerInputModel.EmailAddress, registerInputModel.Password);
+
+                var roleName = await this._identityService.GetUserRole(registerInputModel.EmailAddress);
+
+                var result = new AuthenticationSuccessOutputModel
+                {
+                    Role = roleName,
+                    Token = token
+                };
                 
-                return this.Ok(Result.SuccessWith(token));
+                return this.Ok(Result<AuthenticationSuccessOutputModel>.SuccessWith(result));
             }
             catch (InvalidOperationException ex)
             {
@@ -55,8 +63,16 @@ namespace SGDb.Identity.Controllers
                 }
 
                 var token = await this._tokenGeneratorService.GenerateToken(loginInputInputModel.EmailAddress, loginInputInputModel.Password);
-                
-                return this.Ok(Result.SuccessWith(token));
+
+                var roleName = await this._identityService.GetUserRole(loginInputInputModel.EmailAddress);
+
+                var result = new AuthenticationSuccessOutputModel
+                {
+                    Role = roleName,
+                    Token = token
+                };
+
+                return this.Ok(Result<AuthenticationSuccessOutputModel>.SuccessWith(result));
             }
             catch (Exception)
             {
