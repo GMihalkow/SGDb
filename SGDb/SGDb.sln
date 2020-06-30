@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SGDb.Common", "SGDb.Common\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SGDb.Creators.Gateway", "SGDb.Creators.Gateway\SGDb.Creators.Gateway.csproj", "{A465B8BB-A0AF-436F-B48E-66E6FC2ED7F8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SGDb.Statistics", "SGDb.Statistics\SGDb.Statistics.csproj", "{1E0CFE31-E177-42A3-B97E-B6FA26E08C0C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{A465B8BB-A0AF-436F-B48E-66E6FC2ED7F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A465B8BB-A0AF-436F-B48E-66E6FC2ED7F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A465B8BB-A0AF-436F-B48E-66E6FC2ED7F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E0CFE31-E177-42A3-B97E-B6FA26E08C0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E0CFE31-E177-42A3-B97E-B6FA26E08C0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E0CFE31-E177-42A3-B97E-B6FA26E08C0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E0CFE31-E177-42A3-B97E-B6FA26E08C0C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
