@@ -16,6 +16,12 @@
                     </Card>
                 </div>
             </div>
+            <h2 class="text-center mb-1">Statistics</h2>
+            <div class="text-center mb-1">
+                <h4>Total Games: {{statistics.totalGamesCount}}</h4>
+                <h4>Total Genres: {{statistics.totalGenresCount}}</h4>
+                <h4>Total Publishers: {{statistics.totalPublishersCount}}</h4> 
+            </div>
         </div>
     </div>
 </template>
@@ -24,6 +30,7 @@
     import Card from 'primevue/card';
     import Button from 'primevue/button';
     import gamesApi from '../api/creators/games-api';
+    import statisticsApi from '../api/statistics/statistics-api';
     
     export default {
         name: 'Home',
@@ -34,7 +41,8 @@
         data() {
             return {
                 images: [],
-                gameCards: []
+                gameCards: [],
+                statistics: {}
             }
         },
         mounted() {
@@ -42,8 +50,17 @@
 
             gamesApi.getGameIndexCards().then(function(res) {
                 var gameCards = res.data.data;
+                
                 _this.gameCards = gameCards;
             }).catch(function(err) {
+                console.log(err);
+            });
+
+            statisticsApi.get().then(function(res) {
+                var statistics = res.data.data;
+                
+                _this.statistics = statistics;
+            }).catch(function(err){
                 console.log(err);
             });
         }
