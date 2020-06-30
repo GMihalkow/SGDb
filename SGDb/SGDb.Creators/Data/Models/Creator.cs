@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace SGDb.Creators.Data.Models
@@ -15,5 +16,7 @@ namespace SGDb.Creators.Data.Models
         public ICollection<Game> Games { get; set; }
         
         public ICollection<Publisher> Publishers { get; set; }
+
+        public DateTime CreatedOn { get; set; }
     }
 }

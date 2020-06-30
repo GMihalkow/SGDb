@@ -14,11 +14,17 @@ namespace SGDb.Creators.Data.EntityConfiguration
 
             builder.HasIndex(c => c.Username).IsUnique();
 
-            builder.Property(c => c.Username)
+            builder
+                .Property(c => c.Username)
                 .IsRequired()
                 .HasMaxLength(DataConstants.Creators.UsernameMaxLength);
-
+  
             builder.Property(c => c.UserId).IsRequired();
+            
+            builder
+                .Property(c => c.CreatedOn)
+                .ValueGeneratedOnAdd()
+                .IsRequired();
 
             builder
                 .HasMany(c => c.Games)
