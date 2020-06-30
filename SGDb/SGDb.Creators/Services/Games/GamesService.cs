@@ -15,7 +15,7 @@ namespace SGDb.Creators.Services.Games
 
         public GamesService(CreatorsDbContext dbContext)
         {
-            _dbContext = dbContext;
+            this._dbContext = dbContext;
         }
 
         public async Task<GameViewModel> Get(uint id)
@@ -46,11 +46,9 @@ namespace SGDb.Creators.Services.Games
 
         public async Task<IEnumerable<GameViewModel>> GetAll(IEnumerable<uint> ids = null)
         {
-            var idsList = ids?.ToList(); 
-            
             var gameViewModels = await this._dbContext
                 .Games
-                .Where((g) => idsList.IsNullOrEmpty() || idsList.Contains(g.Id))
+                .Where((g) => ids.IsNullOrEmpty() || ids.Contains(g.Id))
                 .Select((g) => new GameViewModel
                 {
                     Name = g.Name,

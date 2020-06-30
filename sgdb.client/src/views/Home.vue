@@ -11,7 +11,7 @@
                         </template>
                         <template slot="title">{{gameCard.name}}</template>
                         <template slot="footer">
-                            <Button icon="pi pi-check-square" label="Check Out" />
+                            <Button icon="pi pi-check-square" label="Details" />
                         </template>
                     </Card>
                 </div>
