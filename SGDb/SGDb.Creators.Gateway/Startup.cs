@@ -13,7 +13,7 @@ namespace SGDb.Creators.Gateway
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration) =>this.Configuration = configuration;
+        public Startup(IConfiguration configuration) => this.Configuration = configuration;
 
         public IConfiguration Configuration { get; }
 
@@ -27,7 +27,7 @@ namespace SGDb.Creators.Gateway
                     options.InvalidModelStateResponseFactory =
                         context => new BadRequestObjectResult((Result) context.ModelState);
                 });
-            
+
             var serviceEndpoints = this.Configuration.GetSection(nameof(ServiceEndpoints))
                 .Get<ServiceEndpoints>(config => config.BindNonPublicProperties = true);
 
@@ -37,8 +37,6 @@ namespace SGDb.Creators.Gateway
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            app.UseWebService(env);
-        }
+            => app.UseWebService(env);
     }
 }
