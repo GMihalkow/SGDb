@@ -1,4 +1,4 @@
-namespace SGDb.Creators.Data.Models
+namespace SGDb.Common.Data.Models
 {
     public abstract class BaseEntity<T>
     {

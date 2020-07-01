@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using SGDb.Common.Data.Models;
 
 namespace SGDb.Creators.Data.Models
 {
