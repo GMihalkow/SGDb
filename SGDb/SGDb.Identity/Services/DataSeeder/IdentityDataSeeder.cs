@@ -2,7 +2,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using SGDb.Common.Infrastructure;
-using SGDb.Identity.Services.DataSeeder.Contracts;
+using SGDb.Common.Services.DataSeeder.Contracts;
 
 namespace SGDb.Identity.Services.DataSeeder
 {

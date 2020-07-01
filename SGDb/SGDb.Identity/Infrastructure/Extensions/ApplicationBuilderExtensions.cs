@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using SGDb.Identity.Services.DataSeeder.Contracts;
+using SGDb.Common.Services.DataSeeder.Contracts;
 
 namespace SGDb.Identity.Infrastructure.Extensions
 {
