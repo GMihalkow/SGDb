@@ -355,3 +355,5 @@ Plan
 sgdb.client/package-lock.json
 
 SGDb/SGDb.Creators/Data/Migrations/
+
+SGDb/SGDb.Identity/Data/Migrations/
