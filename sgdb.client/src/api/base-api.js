@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const client = axios.create({
-    timeout: 10000, // indicates, 1000ms ie. 1 second
+    timeout: 10000,
     headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Headers' : '*'
@@ -9,6 +9,13 @@ const client = axios.create({
 });
 
 export default {
+    get(url) {
+        return client.get(url, { 
+            headers:  {
+                'Authorization': axios.defaults.headers.common['Authorization'] ? axios.defaults.headers.common['Authorization'] : ''
+            }
+        });
+    },
     postWithFormData(url, data) { 
         return client.post(url, data, {
             headers: {
@@ -17,11 +24,11 @@ export default {
             }
         });
     },
-    get(url) {
-        return client.get(url, { 
-            headers:  {
+    patch(url, data) {
+        return client.patch(url, data, {
+            headers: {
                 'Authorization': axios.defaults.headers.common['Authorization'] ? axios.defaults.headers.common['Authorization'] : ''
             }
-        });
+        });      
     }
 };
