@@ -17,6 +17,8 @@ namespace SGDb.Creators.Controllers
             this._gamesService = gamesService;
         }
 
+        public async Task<IActionResult> Get(uint id) => this.Ok(await this._gamesService.Get(id));
+
         public async Task<IActionResult> GetAll()
         {
             var games = await this._gamesService.GetAll();
@@ -26,12 +28,20 @@ namespace SGDb.Creators.Controllers
 
         public async Task<IActionResult> GetAllForAutoComplete()
         {
-            var autoCompleteGames = await this._gamesService.GetAutoCompleteModels();
+            var autoCompleteGames = await this._gamesService.GetAutoCompleteGameModels();
 
             return this.Ok(Result<IEnumerable<GameAutoCompleteModel>>.SuccessWith(autoCompleteGames));
         }
 
+        public async Task<IActionResult> GetAllFeatured()
+        {
+            var featuredGames = await this._gamesService.GetFeaturedGames();
+
+            return this.Ok(Result<IEnumerable<FeaturedGameViewModel>>.SuccessWith(featuredGames));
+        }
+
         public async Task<IActionResult> GetGameIndexCards() =>
-            this.Ok(Result<IEnumerable<GameIndexCardViewModel>>.SuccessWith(await this._gamesService.GetIndexGameCards()));
+            this.Ok(Result<IEnumerable<GameIndexCardViewModel>>.SuccessWith(
+                await this._gamesService.GetIndexGameCards()));
     }
 }

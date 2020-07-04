@@ -8,8 +8,10 @@ namespace SGDb.Creators.Services.Games.Contracts
 {
     public interface IGamesService : IBaseService<uint, GameViewModel, Game, GameInputModel, GameEditModel>
     {
-        Task<IEnumerable<GameAutoCompleteModel>> GetAutoCompleteModels();
+        Task<IEnumerable<GameAutoCompleteModel>> GetAutoCompleteGameModels();
 
         Task<IEnumerable<GameIndexCardViewModel>> GetIndexGameCards();
+
+        Task<IEnumerable<FeaturedGameViewModel>> GetFeaturedGames();
     }
 }

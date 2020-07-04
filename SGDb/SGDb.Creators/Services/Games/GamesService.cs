@@ -66,8 +66,8 @@ namespace SGDb.Creators.Services.Games
 
             return gameViewModels;
         }
-        
-        public async Task<IEnumerable<GameAutoCompleteModel>> GetAutoCompleteModels()
+
+        public async Task<IEnumerable<GameAutoCompleteModel>> GetAutoCompleteGameModels()
         {
             var gameAutoCompleteModels = await this._dbContext
                 .Games
@@ -95,6 +95,23 @@ namespace SGDb.Creators.Services.Games
                 .ToListAsync();
 
             return gameCardsModels;
+        }
+
+        public async Task<IEnumerable<FeaturedGameViewModel>> GetFeaturedGames()
+        {
+            var featuredGameModels = await this._dbContext.Games
+                .Select(g => new FeaturedGameViewModel
+                {
+                    Id = g.Id,
+                    Name = g.Name,
+                    PublisherNames = string.Join(", ", g.Publishers.Select(p => p.Publisher.Name)),
+                    GenreNames = string.Join(", ", g.Genres.Select(p => p.Genre.Name)),
+                    ReleasedOn = g.ReleasedOn,
+                    HeaderImageUrl = g.HeaderImageUrl
+                })
+                .ToListAsync();
+
+            return featuredGameModels;
         }
 
         public Task Create(GameInputModel model)

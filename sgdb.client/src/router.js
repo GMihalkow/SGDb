@@ -5,6 +5,7 @@ import About from './views/About';
 import Register from './views/identity/Register';
 import Login from './views/identity/Login';
 import CreatorsSearch from './views/admin/CreatorsSearch';
+import FeaturedGames from './views/games/FeaturedGames';
 
 import authStore from './stores/auth-store';
 import { roles } from './helpers/constants/roles';
@@ -40,6 +41,11 @@ var router = new Router({
       component: CreatorsSearch,
       meta: { authenticate: true, authorize: [roles.Administrator] } 
     },
+    {
+      path: '/games/featured',
+      name: 'featuredGames',
+      component: FeaturedGames
+    }
   ]
 });
 
