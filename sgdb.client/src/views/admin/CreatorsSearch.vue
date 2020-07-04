@@ -1,7 +1,7 @@
 <template>
     <div class="w-mx-60r p-1 mx-auto">
         <div class="p-card">
-            <div class="p-card-body p-0">
+            <div class="p-card-body">
                 <DataTable :value="creators" 
                         dataKey="id"
                         class="p-datatable-responsive"
