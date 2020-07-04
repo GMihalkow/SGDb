@@ -17,8 +17,11 @@
     components: {
       Nav: Nav,
       Footer: Footer
+    },
+    beforeCreate: function() {
+      this.$store.dispatch('setAuthHeader');
     }
-  }
+  };
 </script>
 
 <style>

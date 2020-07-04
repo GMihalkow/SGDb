@@ -8,15 +8,15 @@
             <div class="p-field p-col-12 p-md-8 p-sm-12">
                 <div class="p-inputgroup">
                     <span class="p-inputgroup-addon">
-                        <i class="pi pi-user"></i>
+                        <i class="pi pi-inbox"></i>
                     </span>
                     <InputText 
-                        v-model="form.username" 
-                        v-bind:class="{ 'p-invalid': !$v.form.username.minLength || !$v.form.username.required }"
-                        @blur="setFieldValue('username', $event.target.value)"
-                        placeholder="Username" />
+                        v-model="form.email" 
+                        v-bind:class="{ 'p-invalid': !$v.form.email.minLength || !$v.form.email.required }"
+                        @blur="setFieldValue('email', $event.target.value)"
+                        placeholder="Email" />
                 </div>
-                <ValidationMessages v-bind:validationContext="$v.form.username" v-bind:propName="'Username'" />
+                <ValidationMessages v-bind:validationContext="$v.form.email" v-bind:propName="'Email Address'" />
             </div>
 
             <div class="p-field p-col-12 p-md-8 p-sm-12">
@@ -48,10 +48,8 @@
     import Button from 'primevue/button';
     import ValidationSummary from '../../components/partials/ValidationSummary';
     import ValidationMessages from '../../components/partials/ValidationMessages';
-    
-    import authApi from '../../api/auth-api';
 
-    import { required, minLength, between, maxLength } from 'vuelidate/lib/validators';
+    import { required, minLength, email, maxLength } from 'vuelidate/lib/validators';
 
     export default {
         name: 'Login',
@@ -65,7 +63,7 @@
         data () {
             return {
                 form: {
-                    username: '',
+                    email: '',
                     password: ''
                 },
                 errors: []
@@ -73,12 +71,14 @@
         },
         validations: {
             form: {
-                username: {
-                    required,
-                    minLength: minLength(6)
+                email: {
+                    required: required,
+                    email: email,
+                    minLength: minLength(6),
+                    maxLength: maxLength(70)
                 },
                 password: {
-                    required,
+                    required: required,
                     minLength: minLength(6),
                     maxLength: maxLength(50)
                 }
@@ -95,15 +95,20 @@
                 if (!_this.$v.$invalid) {
                     var formObj = new FormData();
                     
-                    formObj.append('Username', this.form.username);
+                    formObj.append('EmailAddress', this.form.email);
                     formObj.append('Password', this.form.password);
 
+                    _this.$store.dispatch('authenticate', { endpoint: 'login',
+                        creds: formObj, 
+                        errorCallback: function(error) {
+                            if(error.response){
+                                var data = error.response.data;
 
-                    _this.$store.dispatch('login', { creds: formObj, errorCallback: function(error) {
-                            var data = error.response.data;
-
-                            if (!data.succeeded) {
-                                _this.errors = data.errors;
+                                if (!data.succeeded) {
+                                    _this.errors = data.errors;
+                                }
+                            } else {
+                                _this.errors = ['Something went wrong.'];
                             }
                         }
                     });

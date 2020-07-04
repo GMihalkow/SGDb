@@ -22,6 +22,24 @@
             <div class="p-field p-col-12 p-md-8 p-sm-12">
                 <div class="p-inputgroup">
                     <span class="p-inputgroup-addon">
+                        <i class="pi pi-user"></i>
+                    </span>
+                    <InputText v-model="form.firstName" placeholder="First name" />
+                </div>
+            </div>
+
+            <div class="p-field p-col-12 p-md-8 p-sm-12">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon">
+                        <i class="pi pi-user"></i>
+                    </span>
+                    <InputText v-model="form.lastName" placeholder="Last name" />
+                </div>
+            </div>
+
+            <div class="p-field p-col-12 p-md-8 p-sm-12">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon">
                         <i class="pi pi-inbox"></i>
                     </span>
                     <InputText
@@ -92,9 +110,8 @@
     import Button from 'primevue/button';
     import ValidationSummary from '../../components/partials/ValidationSummary';
     import ValidationMessages from '../../components/partials/ValidationMessages';
+    import creatorsApi from '../../api/creators/creators-api';
     
-    import authApi from '../../api/auth-api';
-
     import { required, minLength, email, numeric, maxLength, sameAs } from 'vuelidate/lib/validators';
 
     export default {
@@ -110,6 +127,8 @@
             return {
                 form: {
                     username: '',
+                    firstName: '',
+                    lastName: '',
                     emailAddress: '',
                     phoneNumber: '',
                     password: '',
@@ -121,27 +140,28 @@
         validations: {
             form: {
                 username: {
-                    required,
-                    minLength: minLength(6)
+                    required: required,
+                    minLength: minLength(6),
+                    maxLength: maxLength(50)
                 },
                 emailAddress: {
-                    required,
+                    required: required,
                     minLength: minLength(6),
-                    email
+                    email: email
                 },
                 phoneNumber: {
-                    required,
-                    numeric,
+                    required: required,
+                    numeric: numeric,
                     minLength: minLength(10),
                     maxLength: maxLength(12)
                 },
                 password: {
-                    required,
+                    required: required,
                     minLength: minLength(6),
                     maxLength: maxLength(50)
                 },
                 confirmPassword: {
-                    required,
+                    required: required,
                     sameAs: sameAs('password'),
                     minLength: minLength(6),
                     maxLength: maxLength(50)
@@ -159,17 +179,34 @@
                 if (!_this.$v.$invalid) {
                     var formObj = new FormData();
                     
-                    formObj.append('Username', this.form.username);
+                    // formObj.append('Username', this.form.username);
+                    formObj.append('FirstName', this.form.firstName);
+                    formObj.append('LastName', this.form.lastName);
                     formObj.append('Password', this.form.password);
                     formObj.append('ConfirmPassword', this.form.confirmPassword);
                     formObj.append('EmailAddress', this.form.emailAddress);
                     formObj.append('PhoneNumber', this.form.phoneNumber);
 
-                    _this.$store.dispatch('register', { creds: formObj, errorCallback: function(error) {
-                            var data = error.response.data;
+                    _this.$store.dispatch('authenticate', { endpoint: 'register', creds: formObj, successCallback: function() {
+                        var creatorsFormObj = new FormData();
+                        
+                        creatorsFormObj.append('Username', _this.form.username);
+                        
+                        creatorsApi.create(creatorsFormObj).then(function(res){
+                            console.log(res);
+                        }).catch(function(err) {
+                            console.log(err);
+                        });
+                        
+                    }, errorCallback: function(error) {
+                            if(error.response){
+                                var data = error.response.data;
 
-                            if (!data.succeeded) {
-                                _this.errors = data.errors;
+                                if (!data.succeeded) {
+                                    _this.errors = data.errors;
+                                }
+                            } else {
+                                _this.errors = ['Something went wrong.'];
                             }
                         }
                     });

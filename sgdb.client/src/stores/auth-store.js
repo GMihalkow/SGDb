@@ -1,8 +1,10 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import SecureLS from 'secure-ls';
 import axios from 'axios';
 import router from '../router';
 import authApi from '../api/auth-api';
+import { roles } from '../helpers/constants/roles';
 
 Vue.use(Vuex);
 
@@ -10,83 +12,98 @@ const AUTHENTICATE = 'AUTHENTICATE';
 const AUTHENTICATE_SUCCESS = 'AUTHENTICATE_SUCCESS';
 const LOGOUT = 'LOGOUT';
 
+var secureLs = new SecureLS({ encodingType: 'aes' });
+
 const store = new Vuex.Store({
   state: {
-    isLoggedIn: !!localStorage.getItem('auth_token'),
+    isLoggedIn: !!secureLs.get('auth_token'),
+    role: secureLs.get('role'),
+    isUserAdmin: !!secureLs.get('auth_token') && secureLs.get('role') == roles.Administrator,
+    isUserCreator: !!secureLs.get('auth_token') && secureLs.get('role') == roles.Creator,
     pending: false
   },
   mutations: {
+    // TODO [GM]: remove?
     [AUTHENTICATE] (state) {
       state.pending = true;
     },
     [AUTHENTICATE_SUCCESS] (state) {
-      state.isLoggedIn = true;
+      Vue.set(state, 'isLoggedIn', !!secureLs.get('auth_token'));
+      
+      var role = secureLs.get('role');
+
+      Vue.set(state, 'role', secureLs.get('role'));
+      
+      var isUserAdmin = role === roles.Administrator;
+
+      // TODO [GM]: set isUserCreator
+      var isUserCreator = role === roles.Creator;
+
+      Vue.set(state, 'isUserAdmin', !!secureLs.get('auth_token') && isUserAdmin);
+
       state.pending = false;
 
       router.push('/');
     },
     [LOGOUT](state) {
-      state.isLoggedIn = false;
+      Vue.set(state, 'isLoggedIn', false);
+      Vue.set(state, 'role', '');
+      Vue.set(state, 'isUserAdmin', false);
+      Vue.set(state, 'isUserCreator', false);
+      
       axios.defaults.headers.common['Authorization'] = '';
 
       router.push('/');
     }
   },
   actions: {
-    login({ commit }, { creds, errorCallback }) {
+    authenticate({ commit }, { endpoint, creds, successCallback, errorCallback }) {
       commit(AUTHENTICATE); // TODO [GM]: show spinner
 
-      return new Promise(resolve => {
-        authApi.login(creds).then(function(res) {
-            var data = res.data;
+      return new Promise(function() {
+        authApi[endpoint](creds).then(function(res) {
+          var data = res.data;
 
-            if (data.succeeded) {
-                var token = data.data;
-                
-                localStorage.setItem('auth_token', token);
+          if (data.succeeded) {
+            var token = data.data.token;
+            
+            secureLs.set('auth_token', token);
 
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
-                
-                commit(AUTHENTICATE_SUCCESS);
+            var role = data.data.role;
+            secureLs.set('role', role);
+            
+            if (successCallback){
+              successCallback();
             }
+
+            commit(AUTHENTICATE_SUCCESS);
+          }
         }).catch(function(error) {
-            if (errorCallback) {
-              errorCallback(error);
-            }
-        });
-      });
-    },
-    register({ commit }, { creds, errorCallback }) {
-      commit(AUTHENTICATE); // TODO [GM]: show spinner
-
-      return new Promise(resolve => {
-        authApi.register(creds).then(function(res) {
-            var data = res.data;
-
-            if (data.succeeded) {
-                var token = data.data;
-                
-                localStorage.setItem('auth_token', token);
-
-                commit(AUTHENTICATE_SUCCESS);
-            }
-        }).catch(function(error) {
-            if (errorCallback) {
-              errorCallback(error);
-            }
+          if (errorCallback) {
+            errorCallback(error);
+          }
         });
       });
     },
     logout({ commit }) {
-      localStorage.removeItem('auth_token');
+      secureLs.remove('auth_token');
+      secureLs.remove('role');
 
       commit(LOGOUT);
+    },
+    setAuthHeader({ commit }) {
+      var token = secureLs.get('auth_token');
+
+      if(token){
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+      }
     }
   },
   getters: {
-    isLoggedIn: function(state) {
-      return state.isLoggedIn;
-    }
+    isLoggedIn: state => state.isLoggedIn,
+    role: state => state.role,
+    isUserAdmin: state => state.isUserAdmin,
+    isUserCreator: state => state.isUserCreator
   }
 });  
 
