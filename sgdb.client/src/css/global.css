@@ -31,6 +31,10 @@ html {
     margin: 1rem auto;
 }
 
+.mx-auto {
+    margin: 0 auto;
+}
+
 .w-60r {
     width: 60rem;
 }
@@ -43,12 +47,24 @@ html {
     text-align: center;
 }
 
+.text-start {
+    text-align: start;
+}
+
+.text-end {
+    text-align: end;
+}
+
 .py-1 {
     padding: 1rem 0;
 }
 
 .p-1 {
     padding: 1rem;
+}
+
+.p-0 {
+    padding: 0;
 }
 
 .mb-1 {
