@@ -353,3 +353,5 @@ MigrationBackup/
 Plan
 
 sgdb.client/package-lock.json
+
+SGDb/SGDb.Creators/Data/Migrations/
