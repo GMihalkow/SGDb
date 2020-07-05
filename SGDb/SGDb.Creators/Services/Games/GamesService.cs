@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using SGDb.Common.Infrastructure.Extensions;
 using SGDb.Creators.Data;
-using SGDb.Creators.Infrastructure.Extensions;
 using SGDb.Creators.Models.Games;
 using SGDb.Creators.Services.Games.Contracts;
 
