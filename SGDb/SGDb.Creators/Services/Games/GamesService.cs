@@ -31,7 +31,6 @@ namespace SGDb.Creators.Services.Games
             {
                 Name = gameEntity.Name,
                 About = gameEntity.About,
-                Description = gameEntity.Description,
                 Price = gameEntity.Price,
                 Recommendations = gameEntity.Recommendations,
                 CreatedOn = gameEntity.CreatedOn,
@@ -53,7 +52,6 @@ namespace SGDb.Creators.Services.Games
                 {
                     Name = g.Name,
                     About = g.About,
-                    Description = g.Description,
                     Price = g.Price,
                     Recommendations = g.Recommendations,
                     CreatedOn = g.CreatedOn,
@@ -89,6 +87,7 @@ namespace SGDb.Creators.Services.Games
                 .Take(3)
                 .Select(g => new GameIndexCardViewModel
                 {
+                    Id =  g.Id,
                     Name = g.Name.Substring(0, g.Name.Length <= 15 ? g.Name.Length : 15) + "...",
                     HeaderUrl = g.HeaderImageUrl
                 })

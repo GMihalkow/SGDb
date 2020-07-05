@@ -12,8 +12,6 @@ namespace SGDb.Creators.Data.Models
 
         public string BackgroundImageUrl { get; set; }
 
-        public string Description { get; set; }
-
         public string WebsiteUrl { get; set; }
 
         public string About { get; set; }

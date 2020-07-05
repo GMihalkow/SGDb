@@ -21,10 +21,6 @@ namespace SGDb.Creators.Data.EntityConfiguration
                 .HasColumnType("decimal(18,2)");
 
             builder
-                .Property(g => g.Description)
-                .HasMaxLength(DataConstants.Games.MaxDescriptionLength);
-            
-            builder
                 .Property(g => g.About)
                 .HasMaxLength(DataConstants.Games.MaxAboutLength);
             
