@@ -198,7 +198,11 @@
                             console.log(err);
                         });
                         
-                    }, errorCallback: function(error) {
+                    }, 
+                    successCallback: function(){
+                        _this.$store.dispatch('setAuthHeader');
+                    },
+                    errorCallback: function(error) {
                             if(error.response){
                                 var data = error.response.data;
 

@@ -100,8 +100,11 @@
 
                     _this.$store.dispatch('authenticate', { endpoint: 'login',
                         creds: formObj, 
+                        successCallback: function(){
+                            _this.$store.dispatch('setAuthHeader');
+                        },
                         errorCallback: function(error) {
-                            if(error.response){
+                            if (error.response){
                                 var data = error.response.data;
 
                                 if (!data.succeeded) {
