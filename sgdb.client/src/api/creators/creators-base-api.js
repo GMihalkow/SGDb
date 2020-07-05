@@ -4,7 +4,6 @@ import baseApi from '../base-api';
 var baseUrl = 'https://localhost:5001/api';
 
 export default {
-    // TODO [GM]: Implement
-    get(endpoint, queryString) { return baseApi.get(baseUrl + endpoint); },
+    get(endpoint, queryParams) { return baseApi.get(baseUrl + endpoint, queryParams); },
     postWithFormData(endpoint, data) { return baseApi.postWithFormData(baseUrl + endpoint, data); }
 };
