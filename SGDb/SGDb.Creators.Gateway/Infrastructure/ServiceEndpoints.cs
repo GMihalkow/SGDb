@@ -6,6 +6,8 @@ namespace SGDb.Creators.Gateway.Infrastructure
     public class ServiceEndpoints
     {
         public string Creators { get; private set; }
+        
+        public string Statistics { get; private set; }
 
         public string this[string service] 
             => this.GetType()

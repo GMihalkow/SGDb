@@ -6,6 +6,7 @@ import Register from './views/identity/Register';
 import Login from './views/identity/Login';
 import CreatorsSearch from './views/admin/CreatorsSearch';
 import FeaturedGames from './views/games/FeaturedGames';
+import GameDetails from './views/games/GameDetails';
 
 import authStore from './stores/auth-store';
 import { roles } from './helpers/constants/roles';
@@ -45,6 +46,12 @@ var router = new Router({
       path: '/games/featured',
       name: 'featuredGames',
       component: FeaturedGames
+    },
+    {
+      path: '/games/details/:id',
+      name: 'gameDetails',
+      component: GameDetails,
+      meta: { authenticate: true } 
     }
   ]
 });

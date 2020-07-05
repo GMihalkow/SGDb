@@ -17,6 +17,7 @@ namespace SGDb.Creators
         public void ConfigureServices(IServiceCollection services)
             => services
                 .AddWebService<CreatorsDbContext>(this.Configuration)
+                .AddMessaging()
                 .AddApplicationServices();
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

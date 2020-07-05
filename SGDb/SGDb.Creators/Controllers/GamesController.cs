@@ -1,8 +1,13 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MassTransit;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SGDb.Common.Controllers;
 using SGDb.Common.Infrastructure;
+using SGDb.Common.Infrastructure.Extensions;
+using SGDb.Common.Messages.Creators;
 using SGDb.Creators.Models.Games;
 using SGDb.Creators.Services.Games.Contracts;
 
@@ -11,19 +16,33 @@ namespace SGDb.Creators.Controllers
     public class GamesController : BaseController
     {
         private readonly IGamesService _gamesService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IBus _bus;
 
-        public GamesController(IGamesService gamesService)
+        public GamesController(IGamesService gamesService, IHttpContextAccessor httpContextAccessor ,IBus bus)
         {
             this._gamesService = gamesService;
+            this._httpContextAccessor = httpContextAccessor;
+            this._bus = bus;
         }
 
-        public async Task<IActionResult> Get(uint id) => this.Ok(await this._gamesService.Get(id));
-
-        public async Task<IActionResult> GetAll()
+        [Authorize]
+        public async Task<IActionResult> Get(uint id)
         {
-            var games = await this._gamesService.GetAll();
+            var gameViewModel = await this._gamesService.Get(id);
 
-            return this.Ok(Result<IEnumerable<GameViewModel>>.SuccessWith(games));
+            if (gameViewModel == null)
+                return this.NotFound();
+
+            var message = new GameDetailsViewedMessage
+            {
+                GameId = id,
+                UserId = this._httpContextAccessor.UserId()
+            };
+            
+            await this._bus.Publish<GameDetailsViewedMessage>(message);
+            
+            return this.Ok(gameViewModel);  
         }
 
         public async Task<IActionResult> GetAllForAutoComplete()

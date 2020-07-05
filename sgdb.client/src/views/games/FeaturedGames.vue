@@ -58,7 +58,7 @@
                             </div>
                         </div>
                         <div class="game-grid-item-bottom text-end">
-                            <Button label="Details" icon="pi pi-search"></Button>
+                            <Button label="Details" icon="pi pi-search" @click="gameDetails(slotProps.data.id)"></Button>
                         </div>
                     </div>
                 </div>
@@ -120,6 +120,9 @@
                     this.sortField = value;
                     this.sortKey = sortKey;
                 }
+            },
+            gameDetails(id) {
+                this.$router.push({ name: 'gameDetails', params: { id: id } });
             },
             loadData() {
                 var _this = this;

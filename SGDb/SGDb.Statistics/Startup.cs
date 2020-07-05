@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SGDb.Common.Infrastructure.Extensions;
 using SGDb.Statistics.Data;
 using SGDb.Statistics.Infrastructure.Extensions;
+using SGDb.Statistics.Messages;
 
 namespace SGDb.Statistics
 {
@@ -17,6 +18,7 @@ namespace SGDb.Statistics
         public void ConfigureServices(IServiceCollection services)
             => services
                 .AddWebService<StatisticsDbContext>(this.Configuration)
+                .AddMessaging(typeof(GameDetailsViewedConsumer))
                 .AddApplicationServices();
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
