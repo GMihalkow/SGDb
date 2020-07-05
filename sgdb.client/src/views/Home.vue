@@ -2,8 +2,8 @@
     <div>
         <div class="bg-img-wrapper"></div>
         <div class="w-mx-60r m1r-auto">
-            <h2 class="text-center mb-1">Featured Games</h2>
-            <div class="p-grid p-justify-center">
+            <h2 v-if="gameCards.length" class="text-center mb-1">Featured Games</h2>
+            <div v-if="gameCards.length" class="p-grid p-justify-center">
                 <div class="p-col-10 p-md-4 p-sm-8" v-bind:key="gameCard.id" v-for="gameCard in gameCards">
                     <Card>
                         <template slot="header">
@@ -11,13 +11,13 @@
                         </template>
                         <template slot="title">{{gameCard.name}}</template>
                         <template slot="footer">
-                            <Button icon="pi pi-check-square" label="Details" />
+                            <Button icon="pi pi-check-square" label="Details" @click="gameDetails(gameCard.id)" />
                         </template>
                     </Card>
                 </div>
             </div>
-            <h2 class="text-center mb-1">Statistics</h2>
-            <div class="text-center mb-1">
+            <h2 v-if="statistics" class="text-center mb-1">Statistics</h2>
+            <div v-if="statistics" class="text-center mb-1">
                 <h4>Total Games: {{statistics.totalGamesCount}}</h4>
                 <h4>Total Genres: {{statistics.totalGenresCount}}</h4>
                 <h4>Total Publishers: {{statistics.totalPublishersCount}}</h4> 
@@ -42,10 +42,15 @@
             return {
                 images: [],
                 gameCards: [],
-                statistics: {}
+                statistics: undefined
             }
         },
-        mounted() {
+        methods: {
+            gameDetails(id) {
+                this.$router.push({ name: 'gameDetails', params: { id: id } });
+            }
+        },
+        created() {
             var _this = this;
 
             gamesApi.getGameIndexCards().then(function(res) {
