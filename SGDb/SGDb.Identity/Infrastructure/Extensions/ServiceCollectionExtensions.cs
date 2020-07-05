@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using SGDb.Common.Services.DataSeeder.Contracts;
 using SGDb.Identity.Data;
 using SGDb.Identity.Data.Models;
 using SGDb.Identity.Services.DataSeeder;
-using SGDb.Identity.Services.DataSeeder.Contracts;
 using SGDb.Identity.Services.Identity;
 using SGDb.Identity.Services.Identity.Contracts;
 using SGDb.Identity.Services.TokenGenerator;

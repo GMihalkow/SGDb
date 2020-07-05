@@ -9,7 +9,9 @@
 <script>
     export default {
         name: 'ValidationSummary',
-        props: ['errors']
+        props: {
+            errors: Array
+        }
     }
 </script>
 

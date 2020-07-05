@@ -11,7 +11,10 @@
 <script>
     export default {
         name: 'ValidationMessages',
-        props: ['validationContext', 'propName'],
+        props: {
+            propName: String,
+            validationContext: Object
+        },
         methods: {
             validationMessage: function (prop, propName) {
                 const validationMessages = {
