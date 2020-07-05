@@ -9,11 +9,12 @@ const client = axios.create({
 });
 
 export default {
-    get(url) {
+    get(url, queryParams) {
         return client.get(url, { 
             headers:  {
                 'Authorization': axios.defaults.headers.common['Authorization'] ? axios.defaults.headers.common['Authorization'] : ''
-            }
+            },
+            params: queryParams
         });
     },
     postWithFormData(url, data) { 
