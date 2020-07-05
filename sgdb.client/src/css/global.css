@@ -11,6 +11,7 @@
 
 html, body {
     height: 100%;
+    background-color: #1b2839;
 }
 
 html {
@@ -83,4 +84,8 @@ html {
 
 .bold {
     font-weight: bold;
+}
+
+h1, h2, h3, h4 {
+    color: #fff;
 }
