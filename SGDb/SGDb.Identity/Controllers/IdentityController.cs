@@ -1,28 +1,30 @@
-using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using SGDb.Common.Controllers;
 using SGDb.Common.Infrastructure;
-using SGDb.Common.Infrastructure.Extensions;
+using SGDb.Common.Messages.Identity;
 using SGDb.Identity.Models.Identity;
 using SGDb.Identity.Services.Identity.Contracts;
 using SGDb.Identity.Services.TokenGenerator.Contracts;
+using SGDb.Identity.Services.Users.Contracts;
+using System;
+using System.Threading.Tasks;
 
 namespace SGDb.Identity.Controllers
 {
     public class IdentityController : BaseController
     {
         private readonly ITokenGeneratorService _tokenGeneratorService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IIdentityService _identityService;
+        private readonly IBus _bus;
+        private readonly IUsersService _usersService;
 
-        public IdentityController(ITokenGeneratorService tokenGeneratorService, IHttpContextAccessor httpContextAccessor, IIdentityService identityService)
+        public IdentityController(ITokenGeneratorService tokenGeneratorService, IIdentityService identityService, IBus bus, IUsersService usersService)
         {
             this._tokenGeneratorService = tokenGeneratorService;
-            this._httpContextAccessor = httpContextAccessor;
             this._identityService = identityService;
+            this._bus = bus;
+            this._usersService = usersService;
         }
 
         [HttpPost]
@@ -31,6 +33,10 @@ namespace SGDb.Identity.Controllers
             try
             {
                 await this._identityService.Register(registerInputModel);
+
+                var userId = await this._usersService.GetUserId(registerInputModel.EmailAddress);
+
+                await this._bus.Publish(new UserCreatedMessage { Username = registerInputModel.Username, UserId = userId });
 
                 var token = await this._tokenGeneratorService.GenerateToken(registerInputModel.EmailAddress, registerInputModel.Password);
 
@@ -78,15 +84,6 @@ namespace SGDb.Identity.Controllers
             {
                 return this.BadRequest(Result.Failure("Something went wrong."));
             }
-        }
-
-        [HttpGet]
-        [Authorize]
-        public IActionResult Test()
-        {
-            var loggedUserId = this._httpContextAccessor.UserId();
-            
-            return this.Ok();
         }
     }
 }

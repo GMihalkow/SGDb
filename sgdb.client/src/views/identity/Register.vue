@@ -179,7 +179,7 @@
                 if (!_this.$v.$invalid) {
                     var formObj = new FormData();
                     
-                    // formObj.append('Username', this.form.username);
+                    formObj.append('Username', this.form.username);
                     formObj.append('FirstName', this.form.firstName);
                     formObj.append('LastName', this.form.lastName);
                     formObj.append('Password', this.form.password);
@@ -188,20 +188,8 @@
                     formObj.append('PhoneNumber', this.form.phoneNumber);
 
                     _this.$store.dispatch('authenticate', { endpoint: 'register', creds: formObj, successCallback: function() {
-                        var creatorsFormObj = new FormData();
-                        
-                        creatorsFormObj.append('Username', _this.form.username);
-                        
-                        creatorsApi.create(creatorsFormObj).then(function(res){
-                            console.log(res);
-                        }).catch(function(err) {
-                            console.log(err);
-                        });
-                        
+                        _this.$store.dispatch('setAuthHeader');                        
                     }, 
-                    successCallback: function(){
-                        _this.$store.dispatch('setAuthHeader');
-                    },
                     errorCallback: function(error) {
                             if(error.response){
                                 var data = error.response.data;
@@ -220,6 +208,4 @@
     }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

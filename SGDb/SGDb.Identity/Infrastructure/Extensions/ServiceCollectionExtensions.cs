@@ -8,6 +8,8 @@ using SGDb.Identity.Services.Identity;
 using SGDb.Identity.Services.Identity.Contracts;
 using SGDb.Identity.Services.TokenGenerator;
 using SGDb.Identity.Services.TokenGenerator.Contracts;
+using SGDb.Identity.Services.Users;
+using SGDb.Identity.Services.Users.Contracts;
 
 namespace SGDb.Identity.Infrastructure.Extensions
 {
@@ -34,6 +36,7 @@ namespace SGDb.Identity.Infrastructure.Extensions
         public static IServiceCollection AddApplicationServices(this IServiceCollection services) =>
             services
                 .AddTransient<IIdentityService, IdentityService>()
+                .AddTransient<IUsersService, UsersService>()
                 .AddTransient<ITokenGeneratorService, TokenGeneratorService>()
                 .AddTransient<IDataSeeder, IdentityDataSeeder>();
     }

@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SGDb.Common.Infrastructure.Extensions;
 using SGDb.Creators.Data;
 using SGDb.Creators.Infrastructure.Extensions;
+using SGDb.Creators.Messages;
 
 namespace SGDb.Creators
 {
@@ -17,7 +18,7 @@ namespace SGDb.Creators
         public void ConfigureServices(IServiceCollection services)
             => services
                 .AddWebService<CreatorsDbContext>(this.Configuration)
-                .AddMessaging()
+                .AddMessaging(typeof(UserCreatedConsumer))
                 .AddApplicationServices();
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -18,6 +18,7 @@ namespace SGDb.Identity
             => services
                 .AddIdentity()
                 .AddWebService<IdentityDbContext>(this.Configuration)
+                .AddMessaging()
                 .AddApplicationServices();
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
