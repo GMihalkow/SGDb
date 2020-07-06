@@ -4,6 +4,8 @@ namespace SGDb.Identity.Data
     {
         public class Users
         {
+            public const int UsernameMaxLength = 70;
+
             public const int EmailAddressMaxLength = 70;
         }
     }
