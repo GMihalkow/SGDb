@@ -68,7 +68,7 @@
     import Button from 'primevue/button';
     import Dialog from 'primevue/dialog';
     import Toast from 'primevue/toast';
-    import adminApi from '../../api/admin/adminApi';
+    import creatorsApi from '../../api/creators/creators-api';
     
     export default {
         name: 'CreatorsSearch',
@@ -99,7 +99,7 @@
             onEditSubmit() {
                 var _this = this;
 
-                adminApi.creators.edit({ id: this.form.id, username: this.form.username }).then(function(res){
+                creatorsApi.edit({ id: this.form.id, username: this.form.username }).then(function(res){
                     _this.$toast.add({severity: 'success', summary: 'Creator Updated.'});
                     
                     _this.creator.username = _this.form.username;
@@ -116,7 +116,7 @@
         mounted() {
             var _this = this;
 
-            adminApi.creators.getAll().then(function(res) {
+            creatorsApi.getAll().then(function(res) {
                 _this.creators = res.data.data;
             }).catch(function(err) {
                 console.log(err);

@@ -7,7 +7,6 @@ using Refit;
 using SGDb.Common.Infrastructure;
 using SGDb.Common.Infrastructure.Extensions;
 using SGDb.Creators.Gateway.Infrastructure;
-using SGDb.Creators.Gateway.Services.Creators.Contracts;
 using SGDb.Creators.Gateway.Services.GameDetailsViewService.Contracts;
 using SGDb.Creators.Gateway.Services.Games.Contracts;
 
@@ -33,10 +32,6 @@ namespace SGDb.Creators.Gateway
             var serviceEndpoints = this.Configuration.GetSection(nameof(ServiceEndpoints))
                 .Get<ServiceEndpoints>(config => config.BindNonPublicProperties = true);
 
-            services
-                .AddRefitClient<ICreatorsService>()
-                .WithConfiguration(serviceEndpoints.Creators);
-            
             services
                 .AddRefitClient<IGamesService>()
                 .WithConfiguration(serviceEndpoints.Creators);
