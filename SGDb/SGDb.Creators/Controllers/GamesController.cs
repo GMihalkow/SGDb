@@ -40,7 +40,7 @@ namespace SGDb.Creators.Controllers
                 UserId = this._httpContextAccessor.UserId()
             };
             
-            await this._bus.Publish<GameDetailsViewedMessage>(message);
+            await this._bus.Publish(message);
             
             return this.Ok(gameViewModel);  
         }
