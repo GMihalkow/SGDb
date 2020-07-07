@@ -2,7 +2,6 @@
     <div class="w-mx-60r p-1 m1r-auto">
         <h1 class="text-center mb-1">Featured Games</h1>
         <DataView 
-            v-bind:first.sync="first"
             :rows="9"
             :layout="layout"
             :paginator="true" 
@@ -89,7 +88,6 @@
         },
         data() {
             return {
-                first: 0,
                 featuredGames: [],
                 layout: 'grid',
                 searchFilter: '',
@@ -105,8 +103,6 @@
         },
         methods: {
             onSortChange(e) {
-                this.first = 0;
-                
                 const sortKey = e.value;
                 const value = e.value.value;
                 
@@ -140,7 +136,6 @@
         },
         watch: {
             searchFilter() {
-                this.first = 0;
                 this.loadData();
             }
         },
