@@ -15,7 +15,7 @@
                             List of Creators
                             <span class="p-input-icon-left">
                                 <i class="pi pi-search" />
-                                <InputText v-model="filters['global']" placeholder="Search by Username" />
+                                <InputText v-model="filters['global']" placeholder="Search by username" />
                             </span>
                         </div>
                     </template>
@@ -25,13 +25,13 @@
                     <template #loading>
                         Loading creators data. Please wait.
                     </template>
-                    <Column class="text-center" field="username" header="Username" :sortable="true" filterMatchMode="startsWith"></Column>
+                    <Column class="text-center" field="username" header="Username" :sortable="true" filterMatchMode="startsWith"/>
+                    <Column field="totalGamesCreatedCount" header="Total Games Created" :sortable="true"/>
                     <Column field="createdOn" header="Created On" :sortable="true">
                         <template #body="slotProps">
                             <div>{{new Date(slotProps.data.createdOn).toLocaleDateString()}}</div>
                         </template>
                     </Column>
-                    <Column field="totalGamesCreatedCount" header="Total Games Created" :sortable="true"></Column>
                     <Column header="Actions" headerStyle="text-align: center" bodyStyle="text-align: center; overflow: visible">
                         <template #body="slotProps">
                             <Button type="button" icon="pi pi-user-edit" v-on:click="onCreatorEdit(slotProps.data)" class="p-button-secondary"></Button>
@@ -104,7 +104,7 @@
                     
                     _this.creator.username = _this.form.username;
                 }).catch(function(err) {
-                    _this.$toast.add({severity: 'error', summary: 'Error occured.'});
+                    _this.$toast.add({severity: 'error', summary: 'Something went wrong.'});
                 });
 
                 this.closeDialog();

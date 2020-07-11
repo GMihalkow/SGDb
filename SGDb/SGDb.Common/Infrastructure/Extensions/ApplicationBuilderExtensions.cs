@@ -28,6 +28,7 @@ namespace SGDb.Common.Infrastructure.Extensions
                     if (context.HttpContext.Response.StatusCode != 400)
                     {
                         context.HttpContext.Response.ContentType = "application/json";
+
                         await context
                             .HttpContext
                             .Response

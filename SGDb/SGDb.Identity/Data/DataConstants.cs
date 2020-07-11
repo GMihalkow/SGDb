@@ -1,8 +1,8 @@
 namespace SGDb.Identity.Data
 {
-    public class DataConstants
+    public static class DataConstants
     {
-        public class Users
+        public static class Users
         {
             public const int UsernameMaxLength = 70;
 

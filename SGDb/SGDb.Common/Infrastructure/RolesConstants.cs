@@ -1,6 +1,6 @@
 namespace SGDb.Common.Infrastructure
 {
-    public class RolesConstants
+    public static class RolesConstants
     {
         public const string Administrator = "Administrator";
 

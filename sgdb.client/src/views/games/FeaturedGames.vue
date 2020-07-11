@@ -31,7 +31,7 @@
                             <div>Publishers: <b>{{slotProps.data.publisherNames}}</b></div>
                             <div>Genres: <b>{{slotProps.data.genreNames}}</b></div>
                             <div>Released On: <b>{{slotProps.data.releasedOn ? new Date(slotProps.data.releasedOn).toLocaleDateString() : 'TBD'}}</b></div>
-                            <Button label="Details" icon="pi pi-search"></Button>
+                            <Button label="Details" icon="pi pi-search" @click="gameDetails(slotProps.data.id)"></Button>
                         </div>
                     </div>
                 </div>
@@ -48,11 +48,11 @@
                                 <b>{{slotProps.data.releasedOn ? new Date(slotProps.data.releasedOn).toLocaleDateString() : 'TBD'}}</b>
                             </div>
                             <div>Publishers: 
-                                <b v-if="slotProps.data.length">{{slotProps.data.publisherNames.length > 20 ? slotProps.data.publisherNames.substr(0, 20) + '...' : slotProps.data.publisherNames}}</b>
-                                <b v-else>-</b>    
+                                <b v-if="slotProps.data.publisherNames.length">{{slotProps.data.publisherNames.length > 20 ? slotProps.data.publisherNames.substr(0, 20) + '...' : slotProps.data.publisherNames}}</b>
+                                <b v-else>-</b>
                             </div>
                             <div>Genres: 
-                                <b v-if="slotProps.data.length">{{slotProps.data.genreNames.length > 20 ? slotProps.data.genreNames.substr(0, 20) + '...' : slotProps.data.genreNames}}</b>
+                                <b v-if="slotProps.data.genreNames.length">{{slotProps.data.genreNames.length > 20 ? slotProps.data.genreNames.substr(0, 20) + '...' : slotProps.data.genreNames}}</b>
                                 <b v-else>-</b>
                             </div>
                         </div>
@@ -193,5 +193,4 @@
         }
     }
     /* list view */
-
 </style>
