@@ -10,19 +10,30 @@ namespace SGDb.Creators.Data.EntityConfiguration
         {
             builder.HasKey(g => g.Id);
 
-            builder.Property(g => g.CreatorId).IsRequired();
-            builder.Property(g => g.CreatedOn).IsRequired();
-            builder.Property(g => g.Id).ValueGeneratedOnAdd();
-            builder.Property(g => g.HeaderImageUrl).IsRequired();
-            builder.Property(g => g.BackgroundImageUrl).IsRequired();
+            builder
+                .Property(g => g.CreatorId)
+                .IsRequired();
+
+            builder
+                .Property(g => g.CreatedOn)
+                .ValueGeneratedOnAdd()
+                .IsRequired();
             
+            builder
+                .Property(g => g.Id)
+                .ValueGeneratedOnAdd();
+
+            builder
+                .Property(g => g.HeaderImageUrl)
+                .IsRequired();
+
+            builder
+                .Property(g => g.BackgroundImageUrl)
+                .IsRequired();
+
             builder
                 .Property(g => g.Price)
                 .HasColumnType("decimal(18,2)");
-
-            builder
-                .Property(g => g.About)
-                .HasMaxLength(DataConstants.Games.MaxAboutLength);
             
             builder
                 .Property(g => g.Name)
