@@ -25,11 +25,27 @@ export default {
             }
         });
     },
+    putWithFormData(url, data) { 
+        return client.put(url, data, {
+            headers: {
+                'Content-Type': 'multipart/form-data; boundary=' + data._boundary,
+                'Authorization': axios.defaults.headers.common['Authorization'] ? axios.defaults.headers.common['Authorization'] : ''
+            }
+        });
+    },
     patch(url, data) {
         return client.patch(url, data, {
             headers: {
                 'Authorization': axios.defaults.headers.common['Authorization'] ? axios.defaults.headers.common['Authorization'] : ''
             }
+        });      
+    },
+    delete(url, data) {
+        return client.delete(url, {
+            headers: {
+                'Authorization': axios.defaults.headers.common['Authorization'] ? axios.defaults.headers.common['Authorization'] : ''
+            },
+            params: data
         });      
     }
 };
