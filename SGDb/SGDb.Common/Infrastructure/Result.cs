@@ -50,7 +50,15 @@ namespace SGDb.Common.Infrastructure
         
         public static Result Failure(string error) => new Result(false, new List<string> {error});
 
-        public static implicit operator Result(ModelStateDictionary modelState) => new Result(false, new string[] { modelState
-            .FirstOrDefault(m => m.Value.Errors.Count > 0).Value.Errors.FirstOrDefault().ErrorMessage});
+        public static implicit operator Result(ModelStateDictionary modelState)
+        {
+            var error = modelState
+                .FirstOrDefault(m => m.Value.Errors.Count > 0);
+            
+            return new Result(false, new string[]
+            {
+                $"{error.Key} - {error.Value.Errors.FirstOrDefault().ErrorMessage}"
+            });
+        }
     }
 }
