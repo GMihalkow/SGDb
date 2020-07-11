@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SGDb.Creators.Data.Models;
+using System;
 
 namespace SGDb.Creators.Data.EntityConfiguration
 {
@@ -12,8 +13,9 @@ namespace SGDb.Creators.Data.EntityConfiguration
 
             builder
                 .Property(g => g.CreatedOn)
+                .ValueGeneratedOnAdd()
                 .IsRequired();
-            
+
             builder
                 .Property(g => g.CreatorId)
                 .IsRequired();
