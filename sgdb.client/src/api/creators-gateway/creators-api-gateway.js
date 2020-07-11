@@ -4,5 +4,6 @@ import baseApi from '../base-api';
 var baseUrl = 'https://localhost:5005/api';
 
 export default {
-    getGameDetails(id) { return baseApi.get(baseUrl + '/Games/GetGameDetails', { id: id }); }    
+    getGameDetails(id) { return baseApi.get(baseUrl + '/Games/GetGameDetails', { id: id }); },
+    getAllSearchGames() { return baseApi.get(baseUrl + '/Games/GetAllSearchGames'); },
 };

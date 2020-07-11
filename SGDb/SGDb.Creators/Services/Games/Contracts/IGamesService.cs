@@ -13,5 +13,7 @@ namespace SGDb.Creators.Services.Games.Contracts
         Task<IEnumerable<GameIndexCardViewModel>> GetIndexGameCards();
 
         Task<IEnumerable<FeaturedGameViewModel>> GetFeaturedGames();
+
+        Task<IEnumerable<GameSearchViewModel>> GetSearchGames();
     }
 }

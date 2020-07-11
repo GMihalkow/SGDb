@@ -5,6 +5,7 @@ import About from './views/About';
 import Register from './views/identity/Register';
 import Login from './views/identity/Login';
 import CreatorsSearch from './views/admin/CreatorsSearch';
+import GamesSearch from './views/admin/GamesSearch';
 import FeaturedGames from './views/games/FeaturedGames';
 import GameDetails from './views/games/GameDetails';
 
@@ -41,6 +42,12 @@ var router = new Router({
       name: 'creatorsSearch',
       component: CreatorsSearch,
       meta: { authenticate: true, authorize: [roles.Administrator] } 
+    },
+    {
+      path: '/admin/games/search',
+      name: 'gamesSearch',
+      component: GamesSearch,
+      meta: { authenticate: true, authorize: [roles.Administrator] }
     },
     {
       path: '/games/featured',

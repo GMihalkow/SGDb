@@ -1,11 +1,14 @@
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SGDb.Common.Controllers;
 using SGDb.Common.Infrastructure;
+using SGDb.Common.Infrastructure.Extensions;
 using SGDb.Creators.Gateway.Models.Games;
 using SGDb.Creators.Gateway.Services.GameDetailsViewService.Contracts;
 using SGDb.Creators.Gateway.Services.Games.Contracts;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SGDb.Creators.Gateway.Controllers
 {
@@ -19,14 +22,29 @@ namespace SGDb.Creators.Gateway.Controllers
             this._gamesService = gamesService;
             this._gameDetailsViewService = gameDetailsViewService;
         }
-        
+
         [Authorize]
         public async Task<IActionResult> GetGameDetails(uint id)
         {
             var game = await this._gamesService.Get(id);
             game.Views = await this._gameDetailsViewService.GetCountByGameId(id);;
-            
+
             return this.Ok(Result<GameDetailsViewModel>.SuccessWith(game));
+        }
+
+        [Authorize(Roles = RolesConstants.Administrator)]
+        public async Task<IActionResult> GetAllSearchGames()
+        {
+            var gamesSearchViewModels = await this._gamesService.GetAllSearchGames();
+            var gamesDetailsViewsCountByGameIds = (await this._gameDetailsViewService.GetCountByGameIds(gamesSearchViewModels.Select(g => g.Id)))
+                .ToList();
+
+            gamesSearchViewModels.ForEach(gsvm =>
+            {
+                gsvm.Views = gamesDetailsViewsCountByGameIds.FirstOrDefault(gdv => gdv.GameId == gsvm.Id)?.Views ?? 0;
+            });
+
+            return this.Ok(Result<IEnumerable<GameSearchViewModel>>.SuccessWith(gamesSearchViewModels));
         }
     }
 }

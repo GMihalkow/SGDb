@@ -1,21 +1,37 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SGDb.Common.Infrastructure.Extensions;
 using SGDb.Creators.Data;
+using SGDb.Creators.Data.Models;
 using SGDb.Creators.Models.Games;
+using SGDb.Creators.Services.GameGenres.Contracts;
+using SGDb.Creators.Services.GamePublishers.Contracts;
 using SGDb.Creators.Services.Games.Contracts;
+using SGDb.Creators.Services.Genres.Contracts;
+using SGDb.Creators.Services.Publishers.Contracts;
 
 namespace SGDb.Creators.Services.Games
 {
     public class GamesService : IGamesService
     {
         private readonly CreatorsDbContext _dbContext;
+        private readonly IPublishersService _publishersService;
+        private readonly IGenresService _genresService;
+        private readonly IGameGenreService _gameGenreService;
+        private readonly IGamePublishersService _gamePublishersService;
 
-        public GamesService(CreatorsDbContext dbContext)
+        public GamesService(CreatorsDbContext dbContext, IPublishersService publishersService,
+            IGenresService genresService, IGameGenreService gameGenreService,
+            IGamePublishersService gamePublishersService)
         {
             this._dbContext = dbContext;
+            this._publishersService = publishersService;
+            this._genresService = genresService;
+            this._gameGenreService = gameGenreService;
+            this._gamePublishersService = gamePublishersService;
         }
 
         public async Task<GameViewModel> Get(uint id)
@@ -87,7 +103,7 @@ namespace SGDb.Creators.Services.Games
                 .Take(3)
                 .Select(g => new GameIndexCardViewModel
                 {
-                    Id =  g.Id,
+                    Id = g.Id,
                     Name = g.Name.Substring(0, g.Name.Length <= 15 ? g.Name.Length : 15) + "...",
                     HeaderUrl = g.HeaderImageUrl
                 })
@@ -113,14 +129,116 @@ namespace SGDb.Creators.Services.Games
             return featuredGameModels;
         }
 
-        public Task Create(GameInputModel model)
+        public async Task<IEnumerable<GameSearchViewModel>> GetSearchGames()
         {
-            throw new System.NotImplementedException();
+            var gameSearchViewModels = await this._dbContext.Games
+                .Select(g => new GameSearchViewModel
+                {
+                    Id = g.Id,
+                    Name = g.Name,
+                    Price = g.Price,
+                    Recommendations = g.Recommendations,
+                    ReleasedOn = g.ReleasedOn,
+                    About = g.About,
+                    WebsiteUrl = g.WebsiteUrl,
+                    BackgroundImageUrl = g.BackgroundImageUrl,
+                    HeaderImageUrl = g.HeaderImageUrl
+                })
+                .ToListAsync();
+
+            var gameIds = gameSearchViewModels.Select(gsvm => gsvm.Id).ToList();
+            var gameGenres = await this._gameGenreService.GetByGameIds(gameIds);
+            var gamePublishers = await this._gamePublishersService.GetByGameIds(gameIds);
+                
+            gameSearchViewModels.ForEach(gsvm =>
+            {
+                gsvm.GenreIds = gameGenres.Where(ggnr => ggnr.GameId == gsvm.Id).Select(ggnr => ggnr.GenreId);
+                gsvm.PublisherIds = gamePublishers.Where(gp => gp.GameId == gsvm.Id).Select(gp => gp.PublisherId);
+            });
+            
+            return gameSearchViewModels;
         }
 
-        public Task Edit(GameEditModel model)
+        public async Task Create(GameInputModel model)
         {
-            throw new System.NotImplementedException();
+            var gameEntity = new Game
+            {
+                Name = model.Name,
+                About = model.About,
+                WebsiteUrl = model.WebsiteUrl,
+
+                // TODO [GM]: Make non nullable?
+                // TODO [GM]: Remove?
+                Recommendations = 0,
+
+                BackgroundImageUrl = model.BackgroundImageUrl,
+                HeaderImageUrl = model.HeaderImageUrl,
+                ReleasedOn = model.ReleasedOn,
+                Price = model.Price,
+                CreatorId = model.CreatorId
+            };
+
+            await this._dbContext.Games.AddAsync(gameEntity);
+            await this._dbContext.SaveChangesAsync();
+
+            var entry = this._dbContext.Entry(gameEntity).Entity;
+
+            if (!model.PublisherIds.IsNullOrEmpty())
+            {
+                var validPublishers = await this._publishersService.GetAll(model.PublisherIds?.ToArray());
+                var validPublisherIds = validPublishers.Select(p => p.Id);
+
+                var gamePublishers = validPublisherIds
+                    .Select(pId => new GamePublisher
+                    {
+                        GameId = entry.Id,
+                        PublisherId = pId
+                    });
+
+                await this._dbContext.GamePublishers.AddRangeAsync(gamePublishers);
+                await this._dbContext.SaveChangesAsync();
+            }
+
+            if (!model.GenreIds.IsNullOrEmpty())
+            {
+                var validGenres = await this._genresService.GetAll(model.GenreIds?.ToArray());
+                var validGenreIds = validGenres.Select(g => g.Id);
+
+                var gameGenres = validGenreIds
+                    .Select(genreId => new GameGenre
+                    {
+                        GameId = entry.Id,
+                        GenreId = genreId
+                    });
+
+                await this._dbContext.GameGenres.AddRangeAsync(gameGenres);
+                await this._dbContext.SaveChangesAsync();
+            }
+        }
+
+        public async Task Edit(GameEditModel model)
+
+        {
+            var gameEntity = await this._dbContext.Games.FirstOrDefaultAsync(g => g.Id == model.Id);
+
+            if (gameEntity == null)
+            {
+                throw new InvalidOperationException("Invalid car id.");
+            }
+
+            gameEntity.Name = model.Name;
+            gameEntity.About = model.About;
+            gameEntity.Price = model.Price;
+            gameEntity.ReleasedOn = model.ReleasedOn;
+            gameEntity.WebsiteUrl = model.WebsiteUrl;
+            gameEntity.HeaderImageUrl = model.HeaderImageUrl;
+            gameEntity.BackgroundImageUrl = model.BackgroundImageUrl;
+
+            await this._gameGenreService.DeleteByGameId(gameEntity.Id);
+            await this._gameGenreService.BulkCreateByGameId(gameEntity.Id, model.GenreIds);
+
+            await this._gamePublishersService.DeleteByGameId(gameEntity.Id);
+            await this._gamePublishersService.BulkCreateByGameId(gameEntity.Id, model.PublisherIds);
         }
 
         public async Task Delete(uint id)

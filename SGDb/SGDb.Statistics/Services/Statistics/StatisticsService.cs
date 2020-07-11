@@ -31,5 +31,25 @@ namespace SGDb.Statistics.Services.Statistics
             
             return statisticsViewModel;
         }
+
+        public async Task IncrementGamesCount()
+        {
+            var statistics = await this._dbContext.Statistics.FirstOrDefaultAsync();
+            
+            statistics.TotalGamesCount++;
+
+            this._dbContext.Statistics.Update(statistics);
+            await this._dbContext.SaveChangesAsync();
+        }
+
+        public async Task DecrementGamesCount()
+        {
+            var statistics = await this._dbContext.Statistics.FirstOrDefaultAsync();
+            
+            statistics.TotalGamesCount--;
+
+            this._dbContext.Statistics.Update(statistics);
+            await this._dbContext.SaveChangesAsync();
+        }
     }
 }

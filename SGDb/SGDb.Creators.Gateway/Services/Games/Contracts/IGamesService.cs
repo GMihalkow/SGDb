@@ -1,6 +1,7 @@
-using System.Threading.Tasks;
 using Refit;
 using SGDb.Creators.Gateway.Models.Games;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SGDb.Creators.Gateway.Services.Games.Contracts
 {
@@ -8,5 +9,8 @@ namespace SGDb.Creators.Gateway.Services.Games.Contracts
     {
         [Get("/api/Games/Get")]
         Task<GameDetailsViewModel> Get([Query]uint id);
+
+        [Get("/api/Games/GetAllSearchGames")]
+        Task<IEnumerable<GameSearchViewModel>> GetAllSearchGames();
     }
 }

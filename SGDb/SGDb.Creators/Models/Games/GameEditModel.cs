@@ -1,7 +1,10 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace SGDb.Creators.Models.Games
 {
     public class GameEditModel : GameInputModel
     {
-        public string Id { get; set; }
+        [Required]
+        public uint Id { get; set; }
     }
 }

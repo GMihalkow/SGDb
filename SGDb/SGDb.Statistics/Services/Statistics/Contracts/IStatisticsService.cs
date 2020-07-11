@@ -6,5 +6,9 @@ namespace SGDb.Statistics.Services.Statistics.Contracts
     public interface IStatisticsService
     {
         Task<StatisticsViewModel> Get();
+
+        Task IncrementGamesCount();
+        
+        Task DecrementGamesCount();
     }
 }

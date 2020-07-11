@@ -70,15 +70,6 @@
             }
         },
         computed: {
-            // isLoggedIn() {
-            //     return this.$store.getters.isLoggedIn;
-            // },
-            // role() {
-            //     return this.$store.getters.role;
-            // },
-            // isUserAdmin() {
-            //     return this.$store.getters.isUserAdmin;
-            // }
             ...mapGetters({'isLoggedIn': 'isLoggedIn'}),
             ...mapGetters({'role': 'role'}),
             ...mapGetters({'isUserAdmin': 'isUserAdmin'})
@@ -91,7 +82,8 @@
             _this.adminMenuModel[0].items = [
                 { label: '...', command:() => {} },
                 { separator: true },
-                { label: 'Creators', visible: _this.isUserAdmin, to: '/admin/creators/search' }
+                { label: 'Creators', visible: _this.isUserAdmin, to: '/admin/creators/search' },
+                { label: 'Games', visible: _this.isUserAdmin, to: '/admin/games/search' }
             ];
         },
         updated() {
@@ -102,6 +94,7 @@
             var items = this.adminMenuModel[0].items.filter(function(menuObj, index) { return index <= separatorIndex; });
 
             items.push({ label: 'Creators', visible: this.isUserAdmin, to: '/admin/creators/search' });
+            items.push({ label: 'Games', visible: this.isUserAdmin, to: '/admin/games/search' });
 
             this.adminMenuModel[0].items = items;
         }
