@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using SGDb.Common.Infrastructure.Extensions;
 using SGDb.Creators.Data;
 using SGDb.Creators.Data.Models;
-using SGDb.Creators.Infrastructure.Extensions;
 using SGDb.Creators.Models.Creators;
 using SGDb.Creators.Services.Creators.Contracts;
 
@@ -28,17 +27,15 @@ namespace SGDb.Creators.Services.Creators
                 .Include(c => c.Games)
                 .FirstOrDefaultAsync(c => c.Id == id);
 
-            if (creatorEntity == null)
-            {
+            if (creatorEntity == null) 
                 return null;
-            }
 
             var creatorViewModel = new CreatorViewModel
             {
                 Id = creatorEntity.Id,
                 Username = creatorEntity.Username,
                 CreatedOn = creatorEntity.CreatedOn,
-                TotalGamesCreatedCount = creatorEntity.Games.Count
+                TotalGamesCreatedCount = creatorEntity.Games?.Count ?? 0
             };
 
             return creatorViewModel;
@@ -54,11 +51,29 @@ namespace SGDb.Creators.Services.Creators
                     Id = c.Id,
                     Username = c.Username,
                     CreatedOn = c.CreatedOn,
-                    TotalGamesCreatedCount = c.Games.Count
+                    TotalGamesCreatedCount = c.Games.IsNullOrEmpty() ? 0 : c.Games.Count
                 })
                 .ToListAsync();
 
             return creatorsViewModels;
+        }
+        
+        public async Task<CreatorViewModel> GetByUserId(string userId)
+        {
+            var creatorEntity = await this._dbContext.Creators.FirstOrDefaultAsync(cr => cr.UserId == userId);
+
+            if (creatorEntity == null)
+                return null;
+
+            var creatorViewModel = new CreatorViewModel
+            {
+                Id = creatorEntity.Id,
+                Username = creatorEntity.Username,
+                CreatedOn = creatorEntity.CreatedOn,
+                TotalGamesCreatedCount = creatorEntity.Games?.Count ?? 0
+            };
+
+            return creatorViewModel;
         }
         
         public async Task Create(CreatorInputModel model)
