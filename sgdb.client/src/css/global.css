@@ -20,6 +20,14 @@ html {
     font-size: 16px;
 }
 
+.w-min-content {
+    width: min-content;
+}
+
+.ml-auto {
+    margin-left: auto;
+}
+
 .main-bg-dark {
     background-color: #10161d;
 }
@@ -76,6 +84,10 @@ html {
     display: flex;
 }
 
+.d-none {
+    display: none;
+}
+
 .error {
     color: #f00;
     font-size: 14px;
@@ -88,4 +100,16 @@ html {
 
 h1, h2, h3, h4 {
     color: #fff;
+}
+
+@media (max-width: 769px) {
+    .overflow-y-md-auto {
+        overflow-y: auto;
+    }
+}
+
+@media (max-width: 496px) {
+    .overflow-y-sm-auto {
+        overflow-y: auto;
+    }
 }
