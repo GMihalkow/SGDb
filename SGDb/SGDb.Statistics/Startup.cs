@@ -18,8 +18,8 @@ namespace SGDb.Statistics
         public void ConfigureServices(IServiceCollection services)
             => services
                 .AddWebService<StatisticsDbContext>(this.Configuration)
-                .AddMessaging(typeof(GameDetailsViewedConsumer), typeof(GameDeletedConsumer), typeof(GameCreatedConsumer))
-                .AddApplicationServices();
+                .AddApplicationServices()
+                .AddMessaging(this.Configuration, typeof(GameDetailsViewedConsumer), typeof(GameDeletedConsumer), typeof(GameCreatedConsumer));
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
             => app

@@ -13,9 +13,7 @@ namespace SGDb.Statistics.Controllers
         private readonly IGameDetailViewsService _gameDetailViewsService;
 
         public GameDetailsViewsController(IGameDetailViewsService gameDetailViewsService)
-        {
-            this._gameDetailViewsService = gameDetailViewsService;
-        }
+            => this._gameDetailViewsService = gameDetailViewsService;
 
         [Authorize]
         public async Task<IActionResult> GetCountByGameId(uint id) =>

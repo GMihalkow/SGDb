@@ -12,9 +12,7 @@ namespace SGDb.Statistics.Controllers
         private readonly IStatisticsService _statisticsService;
 
         public StatisticsController(IStatisticsService statisticsService)
-        {
-            this._statisticsService = statisticsService;
-        }
+            => this._statisticsService = statisticsService;
 
         public async Task<IActionResult> Get()
         {

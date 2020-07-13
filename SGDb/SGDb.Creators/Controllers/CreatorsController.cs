@@ -10,17 +10,14 @@ using System.Threading.Tasks;
 
 namespace SGDb.Creators.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = RolesConstants.Administrator)]
     public class CreatorsController : BaseController
     {
         private readonly ICreatorsService _creatorsService;
 
         public CreatorsController(ICreatorsService creatorsService)
-        {
-            this._creatorsService = creatorsService;
-        }
+            => this._creatorsService = creatorsService;
         
-        [Authorize(Roles = RolesConstants.Administrator)]
         public async Task<IActionResult> GetAll()
         {
             // TODO [GM]: Add ids as a parameter?
@@ -30,7 +27,6 @@ namespace SGDb.Creators.Controllers
         }
         
         [HttpPatch]
-        [Authorize(Roles = RolesConstants.Administrator)]
         public async Task<IActionResult> Edit(CreatorEditModel creatorEditModel)
         {
             try

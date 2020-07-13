@@ -14,9 +14,7 @@ namespace SGDb.Creators.Controllers
         private readonly IGenresService _genresService;
 
         public GenresController(IGenresService genresService)
-        {
-            this._genresService = genresService;
-        }
+            => this._genresService = genresService;
 
         [AuthorizeMultipleRoles(new[] {RolesConstants.Administrator, RolesConstants.Creator})]
         public async Task<IActionResult> GetAllGenresForMultiselect()

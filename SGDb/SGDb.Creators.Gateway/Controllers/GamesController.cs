@@ -2,13 +2,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SGDb.Common.Controllers;
 using SGDb.Common.Infrastructure;
-using SGDb.Common.Infrastructure.Extensions;
 using SGDb.Creators.Gateway.Models.Games;
 using SGDb.Creators.Gateway.Services.GameDetailsViewService.Contracts;
 using SGDb.Creators.Gateway.Services.Games.Contracts;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SGDb.Common.Infrastructure.Extensions;
 
 namespace SGDb.Creators.Gateway.Controllers
 {
@@ -35,8 +35,10 @@ namespace SGDb.Creators.Gateway.Controllers
         [Authorize(Roles = RolesConstants.Administrator)]
         public async Task<IActionResult> GetAllSearchGames()
         {
-            var gamesSearchViewModels = await this._gamesService.GetAllSearchGames();
-            var gamesDetailsViewsCountByGameIds = (await this._gameDetailsViewService.GetCountByGameIds(gamesSearchViewModels.Select(g => g.Id)))
+            var gamesSearchViewModels = (await this._gamesService.GetAllSearchGames()).ToList();
+            var gamesDetailsViewsCountByGameIds = (await this._gameDetailsViewService
+                    .GetCountByGameIds(gamesSearchViewModels
+                        .Select(g => g.Id)))
                 .ToList();
 
             gamesSearchViewModels.ForEach(gsvm =>

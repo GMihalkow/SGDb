@@ -11,9 +11,7 @@ namespace SGDb.Creators.Messages
         private readonly ICreatorsService _creatorsService;
 
         public UserCreatedConsumer(ICreatorsService creatorsService)
-        {
-            this._creatorsService = creatorsService;
-        }
+            => this._creatorsService = creatorsService;
 
         public async Task Consume(ConsumeContext<UserCreatedMessage> context)
         {
