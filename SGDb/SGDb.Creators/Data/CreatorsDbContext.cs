@@ -1,10 +1,11 @@
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using SGDb.Creators.Data.EntityConfiguration;
+using SGDb.Common.Data;
 using SGDb.Creators.Data.Models;
 
 namespace SGDb.Creators.Data
 {
-    public class CreatorsDbContext : DbContext
+    public class CreatorsDbContext : MessageDbContext
     {
         public CreatorsDbContext(DbContextOptions options) : base(options) { }
 
@@ -19,19 +20,7 @@ namespace SGDb.Creators.Data
         public DbSet<GamePublisher> GamePublishers { get; set; }
 
         public DbSet<GameGenre> GameGenres { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            //TODO [GM]: Make some Video Game columns not required (price, website)
         
-            base.OnModelCreating(builder);
-
-            builder.ApplyConfiguration(new PublisherConfiguration());
-            builder.ApplyConfiguration(new GenreConfiguration());
-            builder.ApplyConfiguration(new GameConfiguration());
-            builder.ApplyConfiguration(new CreatorConfiguration());
-            builder.ApplyConfiguration(new GameGenreConfiguration());
-            builder.ApplyConfiguration(new GamePublisherConfiguration());
-        }
+        protected override Assembly ConfigurationsAssembly => Assembly.GetExecutingAssembly();
     }
 }
