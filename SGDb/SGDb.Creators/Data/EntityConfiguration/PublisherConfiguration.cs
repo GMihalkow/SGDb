@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SGDb.Creators.Data.Models;
-using System;
 
 namespace SGDb.Creators.Data.EntityConfiguration
 {
@@ -28,6 +27,10 @@ namespace SGDb.Creators.Data.EntityConfiguration
                 .Property(p => p.Name)
                 .HasMaxLength(DataConstants.Publishers.MaxNameLength)
                 .IsRequired();
+
+            builder
+                .HasIndex(p => p.Name)
+                .IsUnique();
         }
     }
 }
