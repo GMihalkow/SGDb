@@ -11,6 +11,7 @@ using SGDb.Creators.Models.Games;
 using SGDb.Creators.Services.Games.Contracts;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SGDb.Common.Data.Models;
 using SGDb.Creators.Services.Creators.Contracts;
 
 namespace SGDb.Creators.Controllers
@@ -43,8 +44,12 @@ namespace SGDb.Creators.Controllers
                 GameId = id,
                 UserId = this._httpContextAccessor.UserId()
             };
-            
-            await this._bus.Publish(message);
+
+            var messageData = new Message(message);
+
+            await this._gamesService.Save(messageData);
+            await this._bus.PublishWithTimeout(message);
+            await this._gamesService.MarkAsPublished(messageData.GuidId);
             
             return this.Ok(gameViewModel);  
         }
@@ -80,7 +85,13 @@ namespace SGDb.Creators.Controllers
                 return this.NotFound(Result.Failure()); 
             
             await this._gamesService.Create(gameInputModel);
-            await this._bus.Publish(new GameCreatedMessage());
+            
+            var gameCreatedMessage = new GameCreatedMessage();
+            var messageData = new Message(gameCreatedMessage);
+
+            await this._gamesService.Save(messageData);
+            await this._bus.PublishWithTimeout(gameCreatedMessage);
+            await this._gamesService.MarkAsPublished(messageData.GuidId);
             
             return this.Ok(Result.Success());
         }
@@ -109,7 +120,13 @@ namespace SGDb.Creators.Controllers
                 return this.NotFound(Result.Failure());
 
             await this._gamesService.Delete(id);
-            await this._bus.Publish(new GameDeletedMessage { GameId = id });
+
+            var gameDeletedMessage = new GameDeletedMessage { GameId = id };
+            var messageDate = new Message(gameDeletedMessage);
+            
+            await this._gamesService.Save(messageDate);
+            await this._bus.PublishWithTimeout(gameDeletedMessage);
+            await this._gamesService.MarkAsPublished(messageDate.GuidId);
 
             return this.Ok(Result.Success());
         } 
