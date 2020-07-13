@@ -3,7 +3,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using SGDb.Common.Data.Models;
 using SGDb.Common.Infrastructure;
+using SGDb.Common.Infrastructure.Extensions;
+using SGDb.Identity.Data;
 using SGDb.Identity.Data.Models;
 using SGDb.Identity.Models.Identity;
 using SGDb.Identity.Services.Identity.Contracts;
@@ -13,10 +16,12 @@ namespace SGDb.Identity.Services.Identity
     public class IdentityService : IIdentityService
     {
         private readonly SignInManager<User> _signInManager;
+        private readonly IdentityDbContext _dbContext;
 
-        public IdentityService(SignInManager<User> signInManager)
+        public IdentityService(SignInManager<User> signInManager, IdentityDbContext dbContext)
         {
             this._signInManager = signInManager;
+            this._dbContext = dbContext;
         }
 
         public async Task<string> GetUserRole(string email)
@@ -66,5 +71,27 @@ namespace SGDb.Identity.Services.Identity
         public async Task<bool> Login(LoginInputModel loginInputModel) =>
             (await this._signInManager.PasswordSignInAsync(loginInputModel.EmailAddress, loginInputModel.Password, true,
                 false)).Succeeded;
+
+        public async Task MarkAsPublished(string guidId)
+        {
+            var message = await this._dbContext.Messages.FirstOrDefaultAsync(m => m.GuidId == guidId);
+            
+            message?.MarkAsPublished();
+
+            await this._dbContext.SaveChangesAsync();
+        }
+        
+        public async Task Save(params Message[] messages)
+        {
+            messages.ForEach(m =>
+            {
+                if (!this._dbContext.Messages.Any(msg => msg.GuidId == m.GuidId))
+                {
+                    this._dbContext.Messages.Add(m);
+                }
+            });                
+         
+            await this._dbContext.SaveChangesAsync();
+        }
     }
 }

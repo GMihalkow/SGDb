@@ -8,7 +8,10 @@ using SGDb.Identity.Services.Identity.Contracts;
 using SGDb.Identity.Services.TokenGenerator.Contracts;
 using SGDb.Identity.Services.Users.Contracts;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
+using SGDb.Common.Data.Models;
+using SGDb.Common.Infrastructure.Extensions;
 
 namespace SGDb.Identity.Controllers
 {
@@ -35,9 +38,14 @@ namespace SGDb.Identity.Controllers
                 await this._identityService.Register(registerInputModel);
 
                 var userId = await this._usersService.GetUserId(registerInputModel.EmailAddress);
+                
+                var userCreatedMessage = new UserCreatedMessage { Username = registerInputModel.Username, UserId = userId };
+                var messageData = new Message(userCreatedMessage);
 
-                await this._bus.Publish(new UserCreatedMessage { Username = registerInputModel.Username, UserId = userId });
-
+                await this._identityService.Save(messageData);
+                await this._bus.PublishWithTimeout(userCreatedMessage);
+                await this._identityService.MarkAsPublished(messageData.GuidId);
+                
                 var token = await this._tokenGeneratorService.GenerateToken(registerInputModel.EmailAddress, registerInputModel.Password);
 
                 var roleName = await this._identityService.GetUserRole(registerInputModel.EmailAddress);
@@ -50,9 +58,12 @@ namespace SGDb.Identity.Controllers
                 
                 return this.Ok(Result<AuthenticationSuccessOutputModel>.SuccessWith(result));
             }
-            catch (InvalidOperationException ex)
+            catch (Exception ex)
             {
-                return this.BadRequest(Result.Failure(ex.Message));
+                if (ex is OperationCanceledException || ex is InvalidOperationException)
+                    return this.BadRequest(Result.Failure(ex.Message));
+                
+                throw;
             }
         }
         

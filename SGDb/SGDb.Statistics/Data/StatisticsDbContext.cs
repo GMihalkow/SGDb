@@ -1,10 +1,11 @@
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using SGDb.Statistics.Data.EntityConfiguration;
+using SGDb.Common.Data;
 using SGDb.Statistics.Data.Models;
 
 namespace SGDb.Statistics.Data
 {
-    public class StatisticsDbContext : DbContext
+    public class StatisticsDbContext : MessageDbContext
     {
         public StatisticsDbContext(DbContextOptions options) : base(options)
         {
@@ -14,11 +15,6 @@ namespace SGDb.Statistics.Data
 
         public DbSet<GameDetailsView> GameDetailsViews { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            base.OnModelCreating(builder);
-
-            builder.ApplyConfiguration(new GameDetailsViewConfiguration());
-        }
+        protected override Assembly ConfigurationsAssembly => Assembly.GetExecutingAssembly();
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using SGDb.Common.Data.Models;
 using SGDb.Common.Infrastructure.Extensions;
 using SGDb.Creators.Data;
 using SGDb.Creators.Data.Models;
@@ -59,7 +60,7 @@ namespace SGDb.Creators.Services.Games
             return gameViewModel;
         }
 
-        public async Task<IEnumerable<GameViewModel>> GetAll(IEnumerable<uint> ids = null)
+        public async Task<IEnumerable<GameViewModel>> GetAll(uint[] ids = null)
         {
             var gameViewModels = await this._dbContext
                 .Games
@@ -217,7 +218,6 @@ namespace SGDb.Creators.Services.Games
         }
 
         public async Task Edit(GameEditModel model)
-
         {
             var gameEntity = await this._dbContext.Games.FirstOrDefaultAsync(g => g.Id == model.Id);
 
@@ -243,13 +243,17 @@ namespace SGDb.Creators.Services.Games
 
         public async Task Delete(uint id)
         {
-            var game = await this._dbContext.Games.FirstOrDefaultAsync(g => g.Id == id);
+            var gameEntity = await this._dbContext.Games.FirstOrDefaultAsync(g => g.Id == id);
 
-            if (game != null)
+            if (gameEntity != null)
             {
-                this._dbContext.Remove(game);
+                this._dbContext.Remove(gameEntity);
                 await this._dbContext.SaveChangesAsync();
             }
         }
+
+        public async Task MarkAsPublished(string guidId) => await this._dbContext.MarkAsPublished(guidId);
+        
+        public async Task Save(params Message[] messages) => await this._dbContext.Save(messages);
     }
 }

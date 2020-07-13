@@ -1,5 +1,8 @@
 using System;
 using System.Text;
+using GreenPipes;
+using Hangfire;
+using Hangfire.MySql.Core;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
@@ -23,8 +26,16 @@ namespace SGDb.Common.Infrastructure.Extensions
             where TDbContext : DbContext
         {
             services
+                .AddScoped<DbContext, TDbContext>()
                 .AddDbContext<TDbContext>(options
-                    => options.UseMySql(configuration.GetConnectionString("DefaultConnection")))
+                    => options.UseMySql(configuration.GetConnectionString("DefaultConnection"),
+                       mySqlOptionsAction: mySqlOption =>
+                       {
+                           mySqlOption.EnableRetryOnFailure(
+                               maxRetryCount: 10,
+                               maxRetryDelay: TimeSpan.FromSeconds(30),
+                               errorNumbersToAdd: null);
+                       }))
                 .AddApplicationSettings(configuration)
                 .AddJwtAuthentication(configuration)
                 .AddControllers()
@@ -75,6 +86,7 @@ namespace SGDb.Common.Infrastructure.Extensions
         
         public static IServiceCollection AddMessaging(
             this IServiceCollection services,
+            IConfiguration configuration,
             params Type[] consumers)
         {
             services
@@ -85,15 +97,29 @@ namespace SGDb.Common.Infrastructure.Extensions
                     mt.AddBus(bus => Bus.Factory.CreateUsingRabbitMq(rmq =>
                     {
                         rmq.Host("localhost");
-        
+
                         consumers.ForEach(consumer => rmq.ReceiveEndpoint(consumer.FullName, endpoint =>
                         {
+                            endpoint.PrefetchCount = 2;
+                            endpoint.UseMessageRetry(x => x.Interval(5, 5000));
+                            
                             endpoint.ConfigureConsumer(bus, consumer);
                         }));
                     }));
                 })
                 .AddMassTransitHostedService();
-        
+
+            services
+                .AddHangfire(config => config
+                    .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                    .UseSimpleAssemblyNameTypeSerializer()
+                    .UseRecommendedSerializerSettings()
+                    .UseStorage(
+                        new MySqlStorage(configuration.GetConnectionString("DefaultConnection"),
+                        new MySqlStorageOptions { TablePrefix = "Hangfire" })));
+            
+            services.AddHangfireServer(opts=> opts.WorkerCount = 1);
+
             return services;
         }
     }

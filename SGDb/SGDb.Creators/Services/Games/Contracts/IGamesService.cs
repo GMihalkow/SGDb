@@ -1,12 +1,14 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SGDb.Common.Services.Common.Contracts;
+using SGDb.Creators.Data;
 using SGDb.Creators.Data.Models;
 using SGDb.Creators.Models.Games;
 using SGDb.Creators.Services.Base.Contracts;
 
 namespace SGDb.Creators.Services.Games.Contracts
 {
-    public interface IGamesService : IBaseService<uint, GameViewModel, Game, GameInputModel, GameEditModel>
+    public interface IGamesService : IBaseService<uint, GameViewModel, Game, GameInputModel, GameEditModel>, IPersistMessages<CreatorsDbContext>
     {
         Task<IEnumerable<GameAutoCompleteModel>> GetAutoCompleteGameModels();
 

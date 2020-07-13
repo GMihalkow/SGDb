@@ -1,22 +1,24 @@
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using SGDb.Common.Data.EntityConfiguration;
 using SGDb.Common.Data.Models;
-using SGDb.Identity.Data.EntityConfiguration;
-using SGDb.Identity.Data.Models;
 
-namespace SGDb.Identity.Data
+namespace SGDb.Common.Data
 {
-    public class IdentityDbContext : IdentityDbContext<User>
+    public abstract class MessageDbContext : DbContext
     {
-        public IdentityDbContext (DbContextOptions options) : base(options) { }
+        protected MessageDbContext(DbContextOptions options) : base(options)
+        {
+        }
 
         public DbSet<Message> Messages { get; set; }
 
+        protected abstract Assembly ConfigurationsAssembly { get; }
+        
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new MessageConfiguration());
-            builder.ApplyConfiguration(new UserConfiguration());
+            builder.ApplyConfigurationsFromAssembly(this.ConfigurationsAssembly);
             
             base.OnModelCreating(builder);
         }
