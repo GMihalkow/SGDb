@@ -15,6 +15,18 @@ namespace SGDb.Common.Infrastructure.Extensions
 {
     public static class ServiceCollectionExtensions
     {
+        public static IServiceCollection AddHealth(
+            this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            var healthChecks = services.AddHealthChecks();
+            
+            healthChecks.AddMySql(configuration.GetConnectionString("DefaultConnection"));
+            // healthChecks.AddRabbitMQ(rabbitConnectionString: "amqp://localhost:localhost@localhost/");
+            
+            return services;
+        }        
+        
         public static IServiceCollection AddApplicationSettings(this IServiceCollection services,
             IConfiguration configuration)
             => services
@@ -38,6 +50,7 @@ namespace SGDb.Common.Infrastructure.Extensions
                        }))
                 .AddApplicationSettings(configuration)
                 .AddJwtAuthentication(configuration)
+                .AddHealth(configuration)
                 .AddControllers()
                 .ConfigureApiBehaviorOptions(options =>
                 {

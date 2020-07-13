@@ -21,6 +21,7 @@ namespace SGDb.Creators.Gateway
         public void ConfigureServices(IServiceCollection services)
         {
             services
+                .AddHealth(this.Configuration)
                 .AddJwtAuthentication(this.Configuration)
                 .AddControllers()
                 .ConfigureApiBehaviorOptions(options =>

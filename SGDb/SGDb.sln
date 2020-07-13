@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SGDb.Creators.Gateway", "SG
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SGDb.Statistics", "SGDb.Statistics\SGDb.Statistics.csproj", "{1E0CFE31-E177-42A3-B97E-B6FA26E08C0C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SGDb.Watchdog", "SGDb.Watchdog\SGDb.Watchdog.csproj", "{5A8423FB-74AD-4B68-90B4-D31BF0C0F57B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{1E0CFE31-E177-42A3-B97E-B6FA26E08C0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E0CFE31-E177-42A3-B97E-B6FA26E08C0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E0CFE31-E177-42A3-B97E-B6FA26E08C0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A8423FB-74AD-4B68-90B4-D31BF0C0F57B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A8423FB-74AD-4B68-90B4-D31BF0C0F57B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A8423FB-74AD-4B68-90B4-D31BF0C0F57B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A8423FB-74AD-4B68-90B4-D31BF0C0F57B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
