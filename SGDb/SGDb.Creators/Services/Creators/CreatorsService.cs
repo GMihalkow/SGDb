@@ -41,7 +41,7 @@ namespace SGDb.Creators.Services.Creators
             return creatorViewModel;
         }
 
-        public async Task<IEnumerable<CreatorViewModel>> GetAll(IEnumerable<uint> ids = null)
+        public async Task<IEnumerable<CreatorViewModel>> GetAll(uint[] ids = null)
         {
             var creatorsViewModels = await this._dbContext
                 .Creators

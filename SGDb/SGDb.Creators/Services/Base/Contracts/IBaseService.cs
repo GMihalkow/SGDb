@@ -7,7 +7,7 @@ namespace SGDb.Creators.Services.Base.Contracts
     {
         Task<TViewModel> Get(TKey id);
 
-        Task<IEnumerable<TViewModel>> GetAll(IEnumerable<TKey> ids = null);
+        Task<IEnumerable<TViewModel>> GetAll(TKey[] ids = null);
         
         Task Create(TInputModel model);
 
