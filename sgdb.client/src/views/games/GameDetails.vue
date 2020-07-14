@@ -22,38 +22,59 @@
                 </div>
             </div>
         </div>
+        <Toast />
         <ProgressSpinner v-show="loading"/>
     </div>
 </template>
 
 <script>
     import ProgressSpinner from 'primevue/progressspinner';
+    import Toast from 'primevue/toast';
     import creatorsApiGateway from '../../api/creators-gateway/creators-api-gateway';
 
     export default {
         name: 'GameDetails',
         components: {
-            ProgressSpinner: ProgressSpinner
+            ProgressSpinner: ProgressSpinner,
+            Toast: Toast
         },
         data() {
             return {
-                loading: true,
+                loading: false,
                 game: {}
             };
         },
-        created() {
-            var _this = this;
+        methods: {
+            loadData(gameId) {
+                var _this = this;
+                _this.loading = true;
 
-            creatorsApiGateway.getGameDetails(this.$route.params.id)
-                .then(function(res){ 
-                    var gameDetails = res.data.data;
-                    
-                    _this.loading = false;
-                    _this.game = gameDetails;
-                })
-                .catch(function(err) {
-                    console.log(err);
-                });
+                _this.game = {};
+                
+                creatorsApiGateway.getGameDetails(gameId).then(function(res){ 
+                        var gameDetails = res.data.data;
+                        
+                        _this.loading = false;
+                        _this.game = gameDetails;
+                    })
+                    .catch(function(err) {
+                        if (err.response) {
+                            var errors = err.response.data.errors;
+                            _this.$toast.add({severity: 'error', summary: errors[0] ? errors[0] : 'Something went wrong.'});
+                        } else {
+                            _this.$toast.add({severity: 'error', summary: 'Something went wrong.'});
+                        }
+                    });
+            }
+        },
+        created() {
+            this.loadData(this.$route.params.id);
+        },
+        beforeRouteUpdate(to, from) {
+            var gameId = to.params.id;
+
+            this.loadData(gameId);
+            history.replaceState(null, '', '/games/details/' + gameId);
         }
     }
 </script>

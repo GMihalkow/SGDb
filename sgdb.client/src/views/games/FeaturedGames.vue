@@ -28,8 +28,8 @@
                         <img :src="slotProps.data.headerImageUrl" :alt="slotProps.data.name"/>
                         <div class="p-1">
                             <div>Name: <b>{{slotProps.data.name}}</b></div>
-                            <div>Publishers: <b>{{slotProps.data.publisherNames}}</b></div>
-                            <div>Genres: <b>{{slotProps.data.genreNames}}</b></div>
+                            <div>Publishers: <b>{{slotProps.data.publisherNames.length > 50 ? slotProps.data.publisherNames.substr(0, 50) + '...' : slotProps.data.publisherNames}}</b></div>
+                            <div>Genres: <b>{{slotProps.data.genreNames.length > 50 ? slotProps.data.genreNames.substr(0, 50) + '...' : slotProps.data.genreNames}}</b></div>
                             <div>Released On: <b>{{slotProps.data.releasedOn ? new Date(slotProps.data.releasedOn).toLocaleDateString() : 'TBD'}}</b></div>
                             <Button label="Details" icon="pi pi-search" @click="gameDetails(slotProps.data.id)"></Button>
                         </div>
@@ -63,13 +63,11 @@
                 </div>
             </template>
             <template #empty><div class="p-1">No games found.</div></template>
-            <template #loading><div class="p-1">Loading games.</div></template>
         </DataView>
     </div>
 </template>
 
 <script>
-    import 'primeflex/primeflex.css';
     import DataView from 'primevue/dataview';
     import Button from 'primevue/button';
     import Dropdown from 'primevue/dropdown';
@@ -120,9 +118,10 @@
             gameDetails(id) {
                 this.$router.push({ name: 'gameDetails', params: { id: id } });
             },
-            loadData() {
+            reloadData() {
                 var _this = this;
-                
+                _this.featuredGames = [];
+
                 gamesApi.getAllFeatured().then(function(res) {
                     var data = res.data.data;
 
@@ -136,11 +135,25 @@
         },
         watch: {
             searchFilter() {
-                this.loadData();
+                this.reloadData();
             }
         },
         created() {
-            this.loadData();
+            var searchFilterQueryParam = this.$route.query.searchFilter;
+
+            if (searchFilterQueryParam) {
+                this.searchFilter = searchFilterQueryParam;
+            }
+
+            this.reloadData();
+        },
+        beforeRouteUpdate(to, from) {
+            var searchFilterQueryParam = to.query.searchFilter;
+
+            if (searchFilterQueryParam) {
+                this.searchFilter = searchFilterQueryParam;
+                history.replaceState(null, '', '/games/featured?searchFilter=' + searchFilterQueryParam);
+            }
         }
     }
 </script>

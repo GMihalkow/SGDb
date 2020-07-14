@@ -7,9 +7,9 @@
 
             <Menubar v-if="isLoggedIn" :model="adminMenuModel" />
 
-            <div class="p-fluid d-flex">
-                <AutoComplete v-model="selectedGameName" :suggestions="gameNames" @complete="searchGame($event)" placeholder="Search for games by name..." field="name" />
-                <Button icon="pi pi-search" class="p-button-primary p-button" />    
+            <div class="p-fluid d-flex nav-search-wrapper">
+                <AutoComplete v-model="selectedGameName" @item-select="redirectToGameDetailsWithId" :suggestions="gameNames" @complete="searchGame($event)" placeholder="Search for games by name..." field="name" />
+                <Button icon="pi pi-search" class="p-button-primary p-button" @click="redirectToFeaturedGamesWithAppliedFilter"/>
             </div>
             
             <router-link v-if="!isLoggedIn" to="/identity/login">Login</router-link>
@@ -23,7 +23,7 @@
     import AutoComplete from 'primevue/autocomplete';
     import Button from 'primevue/button';
     import Menubar from 'primevue/menubar';
-    import baseApi from '../../api/base-api.js';
+    import gamesApi from '../../api/creators/games-api';
     import creatorsApi from '../../api/creators/creators-api';
 
     import { mapGetters } from 'vuex';
@@ -32,8 +32,6 @@
     export default {
         name: 'Nav',
         data() {
-            var _this = this;
-
             return {
                 selectedGameName: null,
                 gameNames: [],
@@ -51,30 +49,45 @@
             Menubar: Menubar
         },
         methods: {
-            async searchGame(event) {
-            //     var result = (await baseApi.getAllForAutoComplete());
+            searchGame(event) {
+                var _this = this;
 
-            //     console.log(result);
-
-            //     this.gameNames = result.data.data.filter(function(g) { return g.name.toLowerCase().includes(event.query.toLowerCase()); /* IE11 support*/ });
+                var result = gamesApi.getAllForAutoComplete().then(function(res) {
+                    var games = res.data.data;
+                
+                    _this.gameNames = games.filter(function(g) { return g.name.toLowerCase().startsWith(event.query.toLowerCase()); });
+                });
             },
             logout() {
                 this.$store.dispatch('logout');
             },
-            test() {
-                creatorsApi.getAll().then(function(res) {
-                    console.log(res);
-                }).catch(function(err){ 
-                    console.log(err);
-                });
+            redirectToGameDetailsWithId(param) {
+                if (this.$route.name === 'gameDetails') {
+                    // catch is just for silencing the duplicates error
+                    this.$router.replace({ name: 'gameDetails', params: { id: param.value.id } }).catch(function() {});
+                } else {
+                    this.$router.push({ name: 'gameDetails', params: { id: param.value.id } });
+                }
+            },
+            redirectToFeaturedGamesWithAppliedFilter() {
+                var _this = this;
+
+                if (this.$route.name === 'featuredGames') {
+                    // catch is just for silencing the duplicates error
+                    this.$router.replace({ name: 'featuredGames', query: { searchFilter: _this.selectedGameName } }).catch(function() {});
+                } else {
+                    this.$router.push({ name: 'featuredGames', query: { searchFilter: _this.selectedGameName } });
+                }
             }
         },
         computed: {
             ...mapGetters({'isLoggedIn': 'isLoggedIn'}),
             ...mapGetters({'role': 'role'}),
-            ...mapGetters({'isUserAdmin': 'isUserAdmin'})
+            ...mapGetters({'isUserAdmin': 'isUserAdmin'}),
+            ...mapGetters({'isUserCreator': 'isUserCreator'})
         },
         mounted() {
+            //TODO [GM]: remove _this?
             var _this = this;
 
             var creatorsLinkObj = { label: 'Creators', visible: _this.isUserAdmin, to: '/admin/creators/search' };
@@ -83,7 +96,8 @@
                 { label: '...', command:() => {} },
                 { separator: true },
                 { label: 'Creators', visible: _this.isUserAdmin, to: '/admin/creators/search' },
-                { label: 'Games', visible: _this.isUserAdmin, to: '/admin/games/search' }
+                { label: 'Games', visible: _this.isUserAdmin || _this.isUserCreator, to: '/admin/games/search' },
+                { label: 'Publishers', visible: _this.isUserAdmin || _this.isUserCreator, to: '/admin/publishers/search' }
             ];
         },
         updated() {
@@ -94,7 +108,8 @@
             var items = this.adminMenuModel[0].items.filter(function(menuObj, index) { return index <= separatorIndex; });
 
             items.push({ label: 'Creators', visible: this.isUserAdmin, to: '/admin/creators/search' });
-            items.push({ label: 'Games', visible: this.isUserAdmin, to: '/admin/games/search' });
+            items.push({ label: 'Games', visible: this.isUserAdmin || this.isUserCreator, to: '/admin/games/search' });
+            items.push({ label: 'Publishers', visible: this.isUserAdmin || this.isUserCreator, to: '/admin/games/search' });
 
             this.adminMenuModel[0].items = items;
         }
@@ -136,5 +151,11 @@
         color: #fff;
         font-weight: bold;
         outline: none;
+    }
+
+    @media (max-width: 860px) { 
+        .nav-search-wrapper {
+            display: none;
+        }
     }
 </style>
