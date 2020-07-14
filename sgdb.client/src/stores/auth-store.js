@@ -35,11 +35,10 @@ const store = new Vuex.Store({
       Vue.set(state, 'role', secureLs.get('role'));
       
       var isUserAdmin = role === roles.Administrator;
-
-      // TODO [GM]: set isUserCreator
       var isUserCreator = role === roles.Creator;
 
       Vue.set(state, 'isUserAdmin', !!secureLs.get('auth_token') && isUserAdmin);
+      Vue.set(state, 'isUserCreator', !!secureLs.get('auth_token') && isUserCreator);
 
       state.pending = false;
 
