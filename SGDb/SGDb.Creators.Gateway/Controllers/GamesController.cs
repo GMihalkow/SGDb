@@ -27,6 +27,10 @@ namespace SGDb.Creators.Gateway.Controllers
         public async Task<IActionResult> GetGameDetails(uint id)
         {
             var game = await this._gamesService.Get(id);
+            
+            if (game == null)
+                return this.NotFound(Result.Failure("Game not found"));
+            
             game.Views = await this._gameDetailsViewService.GetCountByGameId(id);;
 
             return this.Ok(Result<GameDetailsViewModel>.SuccessWith(game));

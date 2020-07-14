@@ -37,7 +37,7 @@ namespace SGDb.Creators.Controllers
             var gameViewModel = await this._gamesService.Get(id);
 
             if (gameViewModel == null)
-                return this.NotFound();
+                return this.Ok(null);
 
             var message = new GameDetailsViewedMessage
             {
