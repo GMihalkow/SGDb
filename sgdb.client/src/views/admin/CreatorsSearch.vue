@@ -8,6 +8,7 @@
                         columnResizeMode="fit"
                         :filters="filters"
                         :paginator="true" 
+                        :loading="loading"
                         :rows="10"
                         :rowsPerPageOptions="[5,10,25,50]">
                     <template #header>
@@ -25,7 +26,7 @@
                     <template #loading>
                         Loading creators data. Please wait.
                     </template>
-                    <Column class="text-center" field="username" header="Username" :sortable="true" filterMatchMode="startsWith"/>
+                    <Column field="username" header="Username" :sortable="true" filterMatchMode="startsWith"/>
                     <Column field="totalGamesCreatedCount" header="Total Games Created" :sortable="true"/>
                     <Column field="createdOn" header="Created On" :sortable="true">
                         <template #body="slotProps">
@@ -52,8 +53,8 @@
                     </div>
 
                     <template #footer>
-                        <Button label="Save" @click="onEditSubmit" class="p-button-success" />
-                        <Button label="Close" @click="closeDialog" class="p-button-secondary" />
+                        <Button label="Save" @click="onEditSubmit" class="p-button-success p-button-text" />
+                        <Button label="Close" @click="closeDialog" class="p-button-text" />
                     </template>
                 </Dialog>
             </div>
@@ -78,7 +79,8 @@
                 dialogVisible: false,
                 creator: {},
                 filters: {},
-                form: {}
+                form: {},
+                loading: false
             };
         },
         components: {
@@ -91,7 +93,7 @@
         },
         methods: {
             onCreatorEdit(creator) {
-                this.creator = creator;
+                Object.assign(this.creator, creator);
                 Object.assign(this.form, creator);
 
                 this.dialogVisible = true;
@@ -100,31 +102,40 @@
                 var _this = this;
 
                 creatorsApi.edit({ id: this.form.id, username: this.form.username }).then(function(res){
-                    _this.$toast.add({severity: 'success', summary: 'Creator Updated.'});
-                    
+                    _this.reloadData();
+                    _this.$toast.add({severity: 'success', summary: 'Creator Updated.', life: 3000});
+
                     _this.creator.username = _this.form.username;
+                    _this.$set(_this.creators, _this.creators.findIndex(function(cr) { return cr.id === _this.creator.id; }), _this.creator);
                 }).catch(function(err) {
-                    _this.$toast.add({severity: 'error', summary: 'Something went wrong.'});
+                    _this.$toast.add({severity: 'error', summary: 'Something went wrong.', life: 3000});
+
+                    _this.$set(_this.creators, _this.creators.findIndex(function(cr) { return cr.id === _this.creator.id; }), _this.creator);
                 });
 
                 this.closeDialog();
             },
             closeDialog() {
                 this.dialogVisible = false;
+            },
+            reloadData() {
+                var _this = this;
+                _this.loading = true;
+                _this.creators = [];
+
+                creatorsApi.getAll().then(function(res) {
+                    _this.loading = false;
+                    _this.creators = res.data.data;
+                }).catch(function(err) {
+                    _this.loading = false;
+                    console.log(err);
+                });
             }
         },
-        mounted() {
-            var _this = this;
-
-            creatorsApi.getAll().then(function(res) {
-                _this.creators = res.data.data;
-            }).catch(function(err) {
-                console.log(err);
-            });
+        created() {
+            this.reloadData();
         }
     };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

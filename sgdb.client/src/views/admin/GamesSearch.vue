@@ -9,6 +9,7 @@
                         :filters="filters"
                         :paginator="true" 
                         :rows="10"
+                        :loading="loading"
                         :rowsPerPageOptions="[5,10,25,50]">
                     <template #header>
                         <div class="p-grid p-nogutter">
@@ -53,8 +54,8 @@
                     </Column>
                     <Column header="Actions" headerStyle="text-align: center" bodyStyle="text-align: center; overflow: visible">
                         <template #body="slotProps">
-                            <Button type="button" icon="pi pi-cog" class="p-button-secondary p-button-rounded p-mr-2" @click="openEditGameDialog(slotProps.data)"/>
-                            <Button type="button" icon="pi pi-trash" class="p-button-danger p-button-rounded" @click="openDeleteGameDialog(slotProps.data)"/>
+                            <Button type="button" icon="pi pi-cog" class="p-button-secondary p-mr-2" @click="openEditGameDialog(slotProps.data)"/>
+                            <Button type="button" icon="pi pi-trash" class="p-button-danger" @click="openDeleteGameDialog(slotProps.data)"/>
                         </template>
                     </Column>
                 </DataTable>
@@ -63,7 +64,7 @@
 
                 <Dialog 
                     class="p-fluid w-mx-60r overflow-y-md-auto overflow-y-sm-auto" 
-                    :header=" isEdit ? 'Edit Game' : 'New Game'"
+                    :header="isEdit ? 'Edit Game' : 'New Game'"
                     :visible.sync="createGameDialog" 
                     :modal="true" 
                     :contentStyle="'overflow-y: visible;'">
@@ -177,7 +178,7 @@
                     </div>
                     <template #footer>
                         <Button label="Yes" icon="pi pi-check" @click="confirmDeleteGame" class="p-button-success p-button-text" autofocus />
-                        <Button label="No" icon="pi pi-times" @click="closeDialogs" class="p-button-text"/>
+                        <Button label="No" icon="pi pi-times" @click="closeDialogs" class="p-button-text" />
                     </template>
                 </Dialog>
             </div>
@@ -186,7 +187,7 @@
 </template>
 
 <script>
-    import 'primeflex/primeflex.css';
+    // import 'primeflex/primeflex.css';
     import DataTable from 'primevue/datatable';
     import Column from 'primevue/column';
     import InputText from 'primevue/inputtext';
@@ -236,7 +237,8 @@
                 filters: {},
                 deleteGameDialog: false,
                 createGameDialog: false,
-                isEdit: false
+                isEdit: false,
+                loading: false
             };
         },
         components: {
@@ -305,20 +307,16 @@
             openEditGameDialog(game) {
                 this.isEdit = true;
 
-                this.form = game;
-                this.form.releasedOn = this.form.releasedOn ? new Date(this.form.releasedOn) : '';
-                Object.assign(this.game, game);
+                var newFormObj = game;
+                newFormObj.releasedOn = this.form.releasedOn ? new Date(this.form.releasedOn) : '';
 
-                // this.game = game;
+                Object.assign(this.game, game);
+                Object.assign(this.form, newFormObj);
 
                 this.createGameDialog = true;   
 
                 this.selectedPublishers = game.publisherIds ? this.publishers.filter(function(p) { return game.publisherIds.indexOf(p.id) >= 0; }) : [];
                 this.selectedGenres = game.genreIds ? this.genres.filter(function(gnr) { return game.genreIds.indexOf(gnr.id) >= 0; }) : [];
-            },
-            closeDialogs() {
-                this.deleteGameDialog = false;
-                this.createGameDialog = false;
             },
             confirmCreateGame() {
                 var _this = this;
@@ -352,9 +350,9 @@
                     gamesApi.create(formObj).then(function() {
                         _this.closeDialogs();
 
-                        _this.$toast.add({severity: 'success', summary: 'Game Created.'});
+                        _this.$toast.add({severity: 'success', summary: 'Game Created.', life: 3000});
 
-                        _this.games.push(_this.form);
+                        _this.reloadData();
                     }).catch(function(err) {
                         if (err.response){
                             var data = err.response.data;
@@ -409,9 +407,9 @@
                         newVal.publisherIds = _this.selectedPublishers.map(function(sp) { return sp.id; });
                         newVal.genreIds = _this.selectedGenres.map(function(sg) { return sg.id; });
 
-                        _this.$set(_this.games, _this.games.findIndex(function(g) { return g.id === _this.game.id; }), newVal);
+                        _this.reloadData();
 
-                        _this.$toast.add({severity: 'success', summary: 'Game Updated Successfully.'});
+                        _this.$toast.add({severity: 'success', summary: 'Game Updated Successfully.', life: 3000});
 
                         _this.game = {};
                     }).catch(function(err) {
@@ -419,7 +417,7 @@
 
                         _this.game = {};
                         _this.closeDialogs();
-                        _this.$toast.add({severity: 'error', summary: 'Something went wrong.'});
+                        _this.$toast.add({severity: 'error', summary: 'Something went wrong.', life: 3000});
 
                         if (err.response){
                             var data = err.response.data;
@@ -437,48 +435,92 @@
                 var _this = this;
                 
                 gamesApi.delete({id: _this.game.id}).then(function() {
-                    _this.games = _this.games.filter(function(g) {
-                        return g.id !== _this.game.id;
-                    });
-
+                    _this.reloadData();
                     _this.deleteGameDialog = false;
                     _this.game = {};
 
-                    _this.$toast.add({severity: 'success', summary: 'Game Deleted.'});
+                    _this.$toast.add({severity: 'success', summary: 'Game Deleted.', life: 3000});
                 }).catch(function() {
-                    _this.$toast.add({severity: 'error', summary: 'Something went wrong.'});
+                    _this.$toast.add({severity: 'error', summary: 'Something went wrong.', life: 3000});
 
                     _this.deleteGameDialog = false;
                     _this.game = {};
                 });
+
+                _this.closeDialogs();
+            },
+            closeDialogs() {
+                this.deleteGameDialog = false;
+                this.createGameDialog = false;
+            },
+            reloadData() {
+                var _this = this;
+                _this.loading = true;
+                _this.games = [];
+
+                var loadedRecords = {
+                    games: false,
+                    publishers: false,
+                    genres: false
+                };
+
+                creatorsApiGateway.getAllSearchGames().then(function(res) {
+                    var games = res.data.data;
+                    
+                    _this.games = games;
+
+                    loadedRecords.games = true;
+                    if (loadedRecords.genres && loadedRecords.publishers) {
+                        _this.loading = false;
+                    }
+                }).catch(function(err) {
+                    loadedRecords.games = true;
+                    if (loadedRecords.genres && loadedRecords.publishers) {
+                        _this.loading = false;
+                    }
+
+                    _this.$toast.add({severity: 'error', summary: 'Something went wrong.', life: 3000});
+                });
+
+                publishersApi.getAllPublishersForMultiselect().then(function(res) {
+                    var publishers = res.data.data;
+
+                    _this.publishers = publishers;
+
+                    loadedRecords.publishers = true;
+                    if (loadedRecords.games && loadedRecords.genres) {
+                        _this.loading = false;
+                    }
+                }).catch(function(err) {
+                    loadedRecords.publishers = true;
+                    if (loadedRecords.games && loadedRecords.genres) {
+                        _this.loading = false;
+                    }
+
+                    console.log(err);
+                });
+
+                genresApi.getAllGenresForMultiselect().then(function(res) {
+                    var genres = res.data.data;
+
+                    _this.genres = genres;
+
+                    loadedRecords.genres = true;
+                    if (loadedRecords.publishers && loadedRecords.games) {
+                        _this.loading = false;
+                    }
+                }).catch(function(err) {
+                    loadedRecords.genres = true;
+                    if (loadedRecords.publishers && loadedRecords.games) {
+                        _this.loading = false;
+                    }
+
+                    console.log(err);
+                });
             }
         },
         created() {
-            var _this = this;
-
-            creatorsApiGateway.getAllSearchGames().then(function(res) {
-                var games = res.data.data;
-
-                _this.games = games;
-            }).catch(function(err) {
-                console.log(err);
-            });
-
-            publishersApi.getAllPublishersForMultiselect().then(function(res) {
-                var publishers = res.data.data;
-
-                _this.publishers = publishers;
-            }).catch(function(err) {
-                console.log(err);
-            });
-
-            genresApi.getAllGenresForMultiselect().then(function(res) {
-                var genres = res.data.data;
-
-                _this.genres = genres;
-            }).catch(function(err) {
-                console.log(err);
-            });
+            this.reloadData();
         }
     }
 </script>
