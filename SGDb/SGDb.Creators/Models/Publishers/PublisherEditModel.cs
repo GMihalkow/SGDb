@@ -1,7 +1,7 @@
 namespace SGDb.Creators.Models.Publishers
 {
-    public class PublisherEditModl
+    public class PublisherEditModel : PublisherInputModel
     {
-        
+        public uint Id { get; set; }
     }
 }

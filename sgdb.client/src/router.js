@@ -6,6 +6,7 @@ import Register from './views/identity/Register';
 import Login from './views/identity/Login';
 import CreatorsSearch from './views/admin/CreatorsSearch';
 import GamesSearch from './views/admin/GamesSearch';
+import PublishersSearch from './views/admin/PublishersSearch';
 import FeaturedGames from './views/games/FeaturedGames';
 import GameDetails from './views/games/GameDetails';
 
@@ -47,7 +48,13 @@ var router = new Router({
       path: '/admin/games/search',
       name: 'gamesSearch',
       component: GamesSearch,
-      meta: { authenticate: true, authorize: [roles.Administrator] }
+      meta: { authenticate: true, authorize: [roles.Administrator, roles.Creator] }
+    },
+    {
+      path: '/admin/publishers/search',
+      name: 'publishersSearch',
+      component: PublishersSearch,
+      meta: { authenticate: true, authorize: [roles.Administrator, roles.Creator] }
     },
     {
       path: '/games/featured',
@@ -69,6 +76,10 @@ router.beforeEach(function(to, from, next) {
 
   var isLoggedIn = authStore.getters.isLoggedIn;
   var role = authStore.getters.role;
+
+  if ((to.fullPath === '/identity/login' || to.fullPath === '/identity/register') && isLoggedIn) {
+    return next({ path: '/' });
+  }
 
   if (authenticate && !isLoggedIn) {
     return next({ path: '/identity/login' });
