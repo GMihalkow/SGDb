@@ -1,5 +1,9 @@
+using System;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using SGDb.Common.Infrastructure.Extensions;
 using SGDb.Statistics.Data;
 using SGDb.Statistics.Models.Statistics;
 using SGDb.Statistics.Services.Statistics.Contracts;
@@ -11,10 +15,8 @@ namespace SGDb.Statistics.Services.Statistics
         private readonly StatisticsDbContext _dbContext;
 
         public StatisticsService(StatisticsDbContext dbContext)
-        {
-            this._dbContext = dbContext;
-        }
-        
+            => this._dbContext = dbContext;
+
         public async Task<StatisticsViewModel> Get()
         {
             var statisticsEntity = await this._dbContext.Statistics.FirstOrDefaultAsync();
@@ -32,23 +34,46 @@ namespace SGDb.Statistics.Services.Statistics
             return statisticsViewModel;
         }
 
-        public async Task IncrementGamesCount()
+        public async Task IncrementProperties(params Expression<Func<StatisticsViewModel, object>>[] properties)
         {
             var statistics = await this._dbContext.Statistics.FirstOrDefaultAsync();
-            
-            statistics.TotalGamesCount++;
 
-            this._dbContext.Statistics.Update(statistics);
+            var members = properties
+                .Select(e => ((UnaryExpression) e.Body).Operand.ToString())
+                .Distinct()
+                .ToList();
+            
+            members.ForEach(pName =>
+            {
+                if (pName.EndsWith("TotalGamesCount"))
+                    statistics.TotalGamesCount++;
+                else if (pName.EndsWith("TotalPublishersCount"))
+                    statistics.TotalPublishersCount++;
+                else if (pName.EndsWith("TotalPublishersCount"))
+                    statistics.TotalGenresCount++;
+            });
+
             await this._dbContext.SaveChangesAsync();
         }
-
-        public async Task DecrementGamesCount()
+        
+        public async Task DecrementProperties(params Expression<Func<StatisticsViewModel,object>> [] properties)
         {
             var statistics = await this._dbContext.Statistics.FirstOrDefaultAsync();
-            
-            statistics.TotalGamesCount--;
 
-            this._dbContext.Statistics.Update(statistics);
+            var members = properties
+                .Select(e => ((UnaryExpression) e.Body).Operand.ToString())
+                .Distinct();
+            
+            members.ForEach(pName =>
+            {
+                if (pName.EndsWith("TotalGamesCount"))
+                    statistics.TotalGamesCount--;
+                else if (pName.EndsWith("TotalPublishersCount"))
+                    statistics.TotalPublishersCount--;
+                else if (pName.EndsWith("TotalPublishersCount"))
+                    statistics.TotalGenresCount--;
+            });
+
             await this._dbContext.SaveChangesAsync();
         }
     }

@@ -20,7 +20,7 @@ namespace SGDb.Statistics.Messages
         public async Task Consume(ConsumeContext<GameDeletedMessage> context)
         {
             await this._gameDetailViewsService.DeleteByGameId(context.Message.GameId);
-            await this._statisticsService.DecrementGamesCount();
+            await this._statisticsService.DecrementProperties(st => st.TotalGamesCount);
         }
     }
 }

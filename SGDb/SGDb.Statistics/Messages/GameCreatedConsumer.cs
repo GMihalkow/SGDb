@@ -13,6 +13,6 @@ namespace SGDb.Statistics.Messages
             => this._statisticsService = statisticsService;
 
         public async Task Consume(ConsumeContext<GameCreatedMessage> context)
-            => await this._statisticsService.IncrementGamesCount();
+            => await this._statisticsService.IncrementProperties(st => st.TotalGamesCount);
     }
 }
