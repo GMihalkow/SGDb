@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -51,6 +53,19 @@ namespace SGDb.Common.Infrastructure.Extensions
 
                     endpoints.MapControllers();
                 });
+
+            return app;
+        }
+        
+        public static IApplicationBuilder Initialize(
+            this IApplicationBuilder app)
+        {
+            using var serviceScope = app.ApplicationServices.CreateScope();
+            var serviceProvider = serviceScope.ServiceProvider;
+
+            var db = serviceProvider.GetRequiredService<DbContext>();
+
+            db.Database.Migrate();
 
             return app;
         }

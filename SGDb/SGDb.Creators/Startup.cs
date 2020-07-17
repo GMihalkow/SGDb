@@ -22,6 +22,8 @@ namespace SGDb.Creators
                 .AddMessaging(this.Configuration, typeof(UserCreatedConsumer));
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-            => app.UseWebService(env);
+            => app
+                .UseWebService(env)
+                .Initialize();
     }
 }

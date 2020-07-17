@@ -29,6 +29,7 @@ namespace SGDb.Statistics
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
             => app
                 .UseWebService(env)
+                .Initialize()
                 .SeedDb();
     }
 }
