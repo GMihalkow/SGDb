@@ -13,6 +13,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using SGDb.Common.Data.Models;
 using SGDb.Creators.Services.Creators.Contracts;
+using SGDb.Creators.Services.GameGenres.Contracts;
+using SGDb.Creators.Services.GamePublishers.Contracts;
 
 namespace SGDb.Creators.Controllers
 {
@@ -22,13 +24,17 @@ namespace SGDb.Creators.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ICreatorsService _creatorsService;
         private readonly IBus _bus;
+        private readonly IGameGenreService _gameGenreService;
+        private readonly IGamePublishersService _gamePublishersService;
 
-        public GamesController(IGamesService gamesService, IHttpContextAccessor httpContextAccessor, ICreatorsService creatorsService, IBus bus)
+        public GamesController(IGamesService gamesService, IHttpContextAccessor httpContextAccessor, ICreatorsService creatorsService, IBus bus, IGameGenreService gameGenreService, IGamePublishersService gamePublishersService)
         {
             this._gamesService = gamesService;
             this._httpContextAccessor = httpContextAccessor;
             this._creatorsService = creatorsService;
             this._bus = bus;
+            this._gameGenreService = gameGenreService;
+            this._gamePublishersService = gamePublishersService;
         }
 
         [Authorize]
@@ -119,6 +125,8 @@ namespace SGDb.Creators.Controllers
             if (game == null) 
                 return this.NotFound(Result.Failure());
 
+            await this._gameGenreService.DeleteByGameId(id);
+            await this._gamePublishersService.DeleteByGameId(id);
             await this._gamesService.Delete(id);
 
             var gameDeletedMessage = new GameDeletedMessage { GameId = id };

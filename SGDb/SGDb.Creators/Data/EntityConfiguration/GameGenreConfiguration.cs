@@ -16,7 +16,7 @@ namespace SGDb.Creators.Data.EntityConfiguration
             builder.HasOne(vgg => vgg.Genre)
                 .WithMany(g => g.Games)
                 .HasForeignKey(vgs => vgs.GenreId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasKey(vgs => new {vgs.GameId, vgs.GenreId});
         }
