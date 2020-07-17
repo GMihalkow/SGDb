@@ -4,7 +4,7 @@ namespace SGDb.Creators.Models.Publishers
 {
     public class PublisherSearchViewModel
     {
-        public uint Id { get; set; }
+        public int Id { get; set; }
         
         public string Name { get; set; }
 

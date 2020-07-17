@@ -35,7 +35,7 @@ namespace SGDb.Creators.Services.Games
             this._gamePublishersService = gamePublishersService;
         }
 
-        public async Task<GameViewModel> Get(uint id)
+        public async Task<GameViewModel> Get(int id)
         {
             var gameEntity = await this._dbContext.Games.FirstOrDefaultAsync(g => g.Id == id);
 
@@ -60,7 +60,7 @@ namespace SGDb.Creators.Services.Games
             return gameViewModel;
         }
 
-        public async Task<IEnumerable<GameViewModel>> GetAll(uint[] ids = null)
+        public async Task<IEnumerable<GameViewModel>> GetAll(int[] ids = null)
         {
             var gameViewModels = await this._dbContext
                 .Games
@@ -241,7 +241,7 @@ namespace SGDb.Creators.Services.Games
             await this._gamePublishersService.BulkCreateByGameId(gameEntity.Id, model.PublisherIds);
         }
 
-        public async Task Delete(uint id)
+        public async Task Delete(int id)
         {
             var gameEntity = await this._dbContext.Games.FirstOrDefaultAsync(g => g.Id == id);
 

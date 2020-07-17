@@ -9,12 +9,12 @@ using SGDb.Creators.Services.Base.Contracts;
 
 namespace SGDb.Creators.Services.Publishers.Contracts
 {
-    public interface IPublishersService : IBaseService<uint, PublisherViewModel, Publisher, PublisherInputModel, PublisherEditModel>, IPersistMessages<CreatorsDbContext>
+    public interface IPublishersService : IBaseService<int, PublisherViewModel, Publisher, PublisherInputModel, PublisherEditModel>, IPersistMessages<CreatorsDbContext>
     {
         Task<PublisherViewModel> GetByName(string name);
         
         Task<IEnumerable<PublisherSearchViewModel>> GetSearchPublishers();
         
-        Task<IEnumerable<BasicMultiselectOptionViewModel<uint>>> GetAllPublishersForMultiselect();
+        Task<IEnumerable<BasicMultiselectOptionViewModel<int>>> GetAllPublishersForMultiselect();
     }
 }

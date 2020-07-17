@@ -27,6 +27,7 @@ namespace SGDb.Common.Data.EntityConfiguration
 
             builder
                 .Property(m => m.CreatedOn)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .ValueGeneratedOnAdd()
                 .IsRequired();
             

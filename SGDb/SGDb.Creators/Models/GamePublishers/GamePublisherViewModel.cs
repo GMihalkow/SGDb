@@ -2,8 +2,8 @@ namespace SGDb.Creators.Models.GamePublishers
 {
     public class GamePublisherViewModel
     {
-        public uint GameId { get; set; }
+        public int GameId { get; set; }
         
-        public uint PublisherId { get; set; }
+        public int PublisherId { get; set; }
     }
 }

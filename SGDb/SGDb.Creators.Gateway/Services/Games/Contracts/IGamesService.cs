@@ -8,7 +8,7 @@ namespace SGDb.Creators.Gateway.Services.Games.Contracts
     public interface IGamesService
     {
         [Get("/api/Games/Get")]
-        Task<GameDetailsViewModel> Get([Query]uint id);
+        Task<GameDetailsViewModel> Get([Query]int id);
 
         [Get("/api/Games/GetAllSearchGames")]
         Task<IEnumerable<GameSearchViewModel>> GetAllSearchGames();

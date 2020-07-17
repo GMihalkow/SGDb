@@ -18,7 +18,7 @@ namespace SGDb.Common.Data.Models
         {
         }
         
-        public uint Id { get; private set; }
+        public int Id { get; private set; }
 
         public string GuidId { get; set; }
 

@@ -4,7 +4,7 @@ using SGDb.Common.Data.Models;
 
 namespace SGDb.Creators.Data.Models
 {
-    public class Game : BaseEntity<uint>
+    public class Game : BaseEntity<int>
     {
         public string Name { get; set; }
 
@@ -24,7 +24,7 @@ namespace SGDb.Creators.Data.Models
 
         public DateTime CreatedOn { get; set; }
         
-        public uint CreatorId { get; set; }
+        public int CreatorId { get; set; }
 
         public Creator Creator { get; set; }
         

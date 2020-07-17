@@ -2,7 +2,6 @@ using System;
 using System.Text;
 using GreenPipes;
 using Hangfire;
-using Hangfire.MySql.Core;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +20,7 @@ namespace SGDb.Common.Infrastructure.Extensions
         {
             var healthChecks = services.AddHealthChecks();
             
-            healthChecks.AddMySql(configuration.GetConnectionString("DefaultConnection"));
+            healthChecks.AddSqlServer(configuration.GetConnectionString("DefaultConnection"));
             // healthChecks.AddRabbitMQ(rabbitConnectionString: "amqp://localhost:localhost@localhost/");
             
             return services;
@@ -40,10 +39,10 @@ namespace SGDb.Common.Infrastructure.Extensions
             services
                 .AddScoped<DbContext, TDbContext>()
                 .AddDbContext<TDbContext>(options
-                    => options.UseMySql(configuration.GetConnectionString("DefaultConnection"),
-                       mySqlOptionsAction: mySqlOption =>
+                    => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+                       sqlServerOption =>
                        {
-                           mySqlOption.EnableRetryOnFailure(
+                           sqlServerOption.EnableRetryOnFailure(
                                maxRetryCount: 10,
                                maxRetryDelay: TimeSpan.FromSeconds(30),
                                errorNumbersToAdd: null);
@@ -127,9 +126,7 @@ namespace SGDb.Common.Infrastructure.Extensions
                     .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
                     .UseSimpleAssemblyNameTypeSerializer()
                     .UseRecommendedSerializerSettings()
-                    .UseStorage(
-                        new MySqlStorage(configuration.GetConnectionString("DefaultConnection"),
-                        new MySqlStorageOptions { TablePrefix = "Hangfire" })));
+                    .UseSqlServerStorage(configuration.GetConnectionString("DefaultConnection")));
             
             services.AddHangfireServer(opts=> opts.WorkerCount = 1);
 

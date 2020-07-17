@@ -39,7 +39,7 @@ namespace SGDb.Creators.Controllers
                 .SuccessWith(await this._publishersService.GetSearchPublishers()));
 
         public async Task<IActionResult> GetAllPublishersForMultiselect()
-            => this.Ok(Result<IEnumerable<BasicMultiselectOptionViewModel<uint>>>
+            => this.Ok(Result<IEnumerable<BasicMultiselectOptionViewModel<int>>>
                 .SuccessWith(await this._publishersService.GetAllPublishersForMultiselect()));
 
         [HttpPost]
@@ -95,7 +95,7 @@ namespace SGDb.Creators.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Delete(uint id)
+        public async Task<IActionResult> Delete(int id)
         {
             var publisher = await this._publishersService.Get(id);
 

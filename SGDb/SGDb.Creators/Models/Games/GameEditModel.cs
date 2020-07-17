@@ -5,6 +5,6 @@ namespace SGDb.Creators.Models.Games
     public class GameEditModel : GameInputModel
     {
         [Required]
-        public uint Id { get; set; }
+        public int Id { get; set; }
     }
 }

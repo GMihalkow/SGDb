@@ -5,7 +5,7 @@ namespace SGDb.Creators.Data.Models
 {
     public class Creator
     {
-        public uint Id { get; set; }
+        public int Id { get; set; }
 
         public string Username { get; set; }
         

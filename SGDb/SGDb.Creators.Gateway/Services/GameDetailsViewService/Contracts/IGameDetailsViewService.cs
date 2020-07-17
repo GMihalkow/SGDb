@@ -8,7 +8,7 @@ namespace SGDb.Creators.Gateway.Services.GameDetailsViewService.Contracts
     public interface IGameDetailsViewService
     {
         [Get("/api/GameDetailsViews/GetCountByGameId")]
-        Task<uint> GetCountByGameId(uint id);
+        Task<uint> GetCountByGameId(int id);
 
         [Get("/api/GameDetailsViews/GetCountByGameIds")]
         Task<IEnumerable<GameDetailsCountByIdViewModel>> GetCountByGameIds([Query(CollectionFormat.Multi)] IEnumerable<uint> ids);

@@ -4,7 +4,7 @@ namespace SGDb.Creators.Models.Games
 {
     public class FeaturedGameViewModel
     {
-        public uint Id { get; set; }
+        public int Id { get; set; }
         
         public string Name { get; set; }
 

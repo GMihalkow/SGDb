@@ -32,7 +32,7 @@ namespace SGDb.Creators.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Get(uint id)
+        public async Task<IActionResult> Get(int id)
         {
             var gameViewModel = await this._gamesService.Get(id);
 
@@ -112,7 +112,7 @@ namespace SGDb.Creators.Controllers
         
         [HttpDelete]
         [AuthorizeMultipleRoles(new[] {RolesConstants.Administrator, RolesConstants.Creator})]
-        public async Task<IActionResult> Delete(uint id)
+        public async Task<IActionResult> Delete(int id)
         {
             var game = await this._gamesService.Get(id);
 

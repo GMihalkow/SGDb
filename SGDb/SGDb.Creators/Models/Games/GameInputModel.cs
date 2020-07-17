@@ -26,14 +26,14 @@ namespace SGDb.Creators.Models.Games
 
         public string About { get; set; }
 
-        public uint CreatorId { get; set; }
+        public int CreatorId { get; set; }
 
         public decimal? Price { get; set; }
 
         public DateTime? ReleasedOn { get; set; }
 
-        public IEnumerable<uint> PublisherIds { get; set; }
+        public IEnumerable<int> PublisherIds { get; set; }
 
-        public IEnumerable<uint> GenreIds { get; set; }
+        public IEnumerable<int> GenreIds { get; set; }
     }
 }

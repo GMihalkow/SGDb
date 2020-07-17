@@ -16,11 +16,11 @@ namespace SGDb.Statistics.Controllers
             => this._gameDetailViewsService = gameDetailViewsService;
 
         [Authorize]
-        public async Task<IActionResult> GetCountByGameId(uint id) =>
+        public async Task<IActionResult> GetCountByGameId(int id) =>
             this.Ok(await this._gameDetailViewsService.GetCountByGameId(id));
 
         [Authorize(Roles = RolesConstants.Administrator)]
-        public async Task<IActionResult> GetCountByGameIds([FromQuery] IEnumerable<uint> ids) =>
+        public async Task<IActionResult> GetCountByGameIds([FromQuery] IEnumerable<int> ids) =>
             this.Ok(await this._gameDetailViewsService.GetCountByGameIds(ids));
     }
 }

@@ -2,7 +2,7 @@
 {
     public class GameDetailsCountByIdViewModel
     {
-        public uint GameId { get; set; }
+        public int GameId { get; set; }
 
         public uint Views { get; set; }
     }

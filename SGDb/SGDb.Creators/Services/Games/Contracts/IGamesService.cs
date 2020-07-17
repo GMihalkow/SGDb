@@ -8,7 +8,7 @@ using SGDb.Creators.Services.Base.Contracts;
 
 namespace SGDb.Creators.Services.Games.Contracts
 {
-    public interface IGamesService : IBaseService<uint, GameViewModel, Game, GameInputModel, GameEditModel>, IPersistMessages<CreatorsDbContext>
+    public interface IGamesService : IBaseService<int, GameViewModel, Game, GameInputModel, GameEditModel>, IPersistMessages<CreatorsDbContext>
     {
         Task<IEnumerable<GameAutoCompleteModel>> GetAutoCompleteGameModels();
 

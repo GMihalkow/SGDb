@@ -5,7 +5,7 @@ using SGDb.Creators.Services.Base.Contracts;
 
 namespace SGDb.Creators.Services.Creators.Contracts
 {
-    public interface ICreatorsService : IBaseService<uint, CreatorViewModel, Creator, CreatorInputModel, CreatorEditModel>
+    public interface ICreatorsService : IBaseService<int, CreatorViewModel, Creator, CreatorInputModel, CreatorEditModel>
     {
         Task<CreatorViewModel> GetByUserId(string userId);
     }

@@ -2,7 +2,7 @@ using SGDb.Common.Data.Models;
 
 namespace SGDb.Statistics.Data.Models
 {
-    public class Statistics : BaseEntity<uint>
+    public class Statistics : BaseEntity<int>
     {
         public uint TotalGamesCount { get; set; }
 

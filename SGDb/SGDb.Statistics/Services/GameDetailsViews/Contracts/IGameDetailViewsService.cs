@@ -6,12 +6,12 @@ namespace SGDb.Statistics.Services.GameDetailsViews.Contracts
 {
     public interface IGameDetailViewsService
     {
-        Task Create(uint gameId, string userId);
+        Task Create(int gameId, string userId);
 
-        Task<uint> GetCountByGameId(uint id);
+        Task<uint> GetCountByGameId(int id);
 
-        Task<IEnumerable<GameDetailsCountByIdViewModel>> GetCountByGameIds(IEnumerable<uint> ids);
+        Task<IEnumerable<GameDetailsCountByIdViewModel>> GetCountByGameIds(IEnumerable<int> ids);
 
-        Task DeleteByGameId(uint id);
+        Task DeleteByGameId(int id);
     }
 }

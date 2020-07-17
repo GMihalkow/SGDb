@@ -22,7 +22,7 @@ namespace SGDb.Creators.Services.GameGenres
             this._genresService = genresService;
         }
 
-        public async Task<IEnumerable<GameGenreViewModel>> GetByGameIds(IEnumerable<uint> gameIds) =>
+        public async Task<IEnumerable<GameGenreViewModel>> GetByGameIds(IEnumerable<int> gameIds) =>
              await this._dbContext.GameGenres
                  .Where(ggnr => gameIds.IsNullOrEmpty() || gameIds.Contains(ggnr.GameId))
                  .Select(ggnr => new GameGenreViewModel
@@ -32,7 +32,7 @@ namespace SGDb.Creators.Services.GameGenres
                  })
                  .ToListAsync();
 
-        public async Task BulkCreateByGameId(uint gameId, IEnumerable<uint> genreIds)
+        public async Task BulkCreateByGameId(int gameId, IEnumerable<int> genreIds)
         {
             var genreEntities = await this._genresService.GetAll(genreIds?.ToArray());
 
@@ -47,7 +47,7 @@ namespace SGDb.Creators.Services.GameGenres
             await this._dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteByGameId(uint gameId)
+        public async Task DeleteByGameId(int gameId)
         {
             var gameGenres = await this._dbContext.GameGenres.Where(ggnr => ggnr.GameId == gameId).ToListAsync();
             

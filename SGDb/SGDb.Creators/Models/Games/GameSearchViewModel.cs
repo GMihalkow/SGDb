@@ -5,7 +5,7 @@ namespace SGDb.Creators.Models.Games
 {
     public class GameSearchViewModel
     {
-        public uint Id { get; set; }
+        public int Id { get; set; }
 
         public string Name { get; set; }
         
@@ -23,8 +23,8 @@ namespace SGDb.Creators.Models.Games
 
         public DateTime? ReleasedOn { get; set; }
         
-        public IEnumerable<uint> PublisherIds { get; set; }
+        public IEnumerable<int> PublisherIds { get; set; }
 
-        public IEnumerable<uint> GenreIds { get; set; }
+        public IEnumerable<int> GenreIds { get; set; }
     }
 }

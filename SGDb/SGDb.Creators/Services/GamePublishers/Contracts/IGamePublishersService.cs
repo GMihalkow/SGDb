@@ -6,10 +6,10 @@ namespace SGDb.Creators.Services.GamePublishers.Contracts
 {
     public interface IGamePublishersService
     {
-        Task<IEnumerable<GamePublisherViewModel>> GetByGameIds(IEnumerable<uint> gameIds);
+        Task<IEnumerable<GamePublisherViewModel>> GetByGameIds(IEnumerable<int> gameIds);
         
-        Task BulkCreateByGameId(uint gameId, IEnumerable<uint> publisherIds);
+        Task BulkCreateByGameId(int gameId, IEnumerable<int> publisherIds);
 
-        Task DeleteByGameId(uint gameId);        
+        Task DeleteByGameId(int gameId);        
     }
 }

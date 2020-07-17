@@ -7,8 +7,8 @@ namespace SGDb.Creators.Services.Genres.Contracts
 {
     public interface IGenresService
     {
-        Task<IEnumerable<GenreViewModel>> GetAll(uint[] ids = null);
+        Task<IEnumerable<GenreViewModel>> GetAll(int[] ids = null);
         
-        Task<IEnumerable<BasicMultiselectOptionViewModel<uint>>> GetAllGenresForMultiselect();
+        Task<IEnumerable<BasicMultiselectOptionViewModel<int>>> GetAllGenresForMultiselect();
     }
 }

@@ -14,21 +14,19 @@ namespace SGDb.Statistics.Services.GameDetailsViews
         private readonly StatisticsDbContext _dbContext;
 
         public GameDetailViewsService(StatisticsDbContext dbContext)
-        {
-            this._dbContext = dbContext;
-        }
+            => this._dbContext = dbContext;
 
-        public async Task<uint> GetCountByGameId(uint id) =>
+        public async Task<uint> GetCountByGameId(int id) =>
             (uint)await this._dbContext.GameDetailsViews.CountAsync(g => g.GameId == id);
 
 
-        public async Task Create(uint gameId, string userId)
+        public async Task Create(int gameId, string userId)
         {
             await this._dbContext.GameDetailsViews.AddAsync(new GameDetailsView { GameId = gameId, UserId = userId });
             await this._dbContext.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<GameDetailsCountByIdViewModel>> GetCountByGameIds(IEnumerable<uint> ids)
+        public async Task<IEnumerable<GameDetailsCountByIdViewModel>> GetCountByGameIds(IEnumerable<int> ids)
         {
             var gameDetailsViewsCountByIds = await this._dbContext.GameDetailsViews
                 .Select(gdv => new GameDetailsCountByIdViewModel
@@ -41,7 +39,7 @@ namespace SGDb.Statistics.Services.GameDetailsViews
             return gameDetailsViewsCountByIds;
         }
 
-        public async Task DeleteByGameId(uint id)
+        public async Task DeleteByGameId(int id)
         {
             var gameDetailsViews = await this._dbContext.GameDetailsViews.Where(gdv => gdv.GameId == id).ToListAsync();
 

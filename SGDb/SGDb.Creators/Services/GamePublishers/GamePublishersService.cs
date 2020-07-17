@@ -22,7 +22,7 @@ namespace SGDb.Creators.Services.GamePublishers
             this._publishersService = publishersService;
         }
 
-        public async Task<IEnumerable<GamePublisherViewModel>> GetByGameIds(IEnumerable<uint> gameIds)
+        public async Task<IEnumerable<GamePublisherViewModel>> GetByGameIds(IEnumerable<int> gameIds)
                 => await this._dbContext.GamePublishers
                     .Where(gp => gameIds.IsNullOrEmpty() || gameIds.Contains(gp.GameId))
                     .Select(gp => new GamePublisherViewModel
@@ -32,7 +32,7 @@ namespace SGDb.Creators.Services.GamePublishers
                     })
                     .ToListAsync();
 
-        public async Task BulkCreateByGameId(uint gameId, IEnumerable<uint> publisherIds)
+        public async Task BulkCreateByGameId(int gameId, IEnumerable<int> publisherIds)
         {
             var publisherEntities = await this._publishersService.GetAll(publisherIds?.ToArray());
 
@@ -47,7 +47,7 @@ namespace SGDb.Creators.Services.GamePublishers
             await this._dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteByGameId(uint gameId)
+        public async Task DeleteByGameId(int gameId)
         {
             var gamePublishers = await this._dbContext.GamePublishers.Where(gp => gp.GameId == gameId).ToListAsync();
             

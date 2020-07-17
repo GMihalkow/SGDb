@@ -23,6 +23,7 @@ namespace SGDb.Creators.Data.EntityConfiguration
             
             builder
                 .Property(c => c.CreatedOn)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .ValueGeneratedOnAdd()
                 .IsRequired();
 
@@ -30,19 +31,19 @@ namespace SGDb.Creators.Data.EntityConfiguration
                 .HasMany(c => c.Games)
                 .WithOne(g => g.Creator)
                 .HasForeignKey(g => g.CreatorId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
             
             builder
                 .HasMany(c => c.Genres)
                 .WithOne(g => g.Creator)
                 .HasForeignKey(g => g.CreatorId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder
                 .HasMany(c => c.Publishers)
                 .WithOne(g => g.Creator)
                 .HasForeignKey(g => g.CreatorId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

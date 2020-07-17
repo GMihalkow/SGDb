@@ -18,7 +18,7 @@ namespace SGDb.Creators.Services.Publishers
 
         public PublishersService(CreatorsDbContext dbContext) => this._dbContext = dbContext;
 
-        public async Task<IEnumerable<PublisherViewModel>> GetAll(uint[] ids = null)
+        public async Task<IEnumerable<PublisherViewModel>> GetAll(int[] ids = null)
             => await this._dbContext
                 .Publishers
                 .Where(p => ids.IsNullOrEmpty() || ids.Contains(p.Id) == true)
@@ -63,17 +63,17 @@ namespace SGDb.Creators.Services.Publishers
                 })
                 .ToListAsync();
 
-        public async Task<IEnumerable<BasicMultiselectOptionViewModel<uint>>> GetAllPublishersForMultiselect()
+        public async Task<IEnumerable<BasicMultiselectOptionViewModel<int>>> GetAllPublishersForMultiselect()
             => await this._dbContext
                 .Publishers
-                .Select(p => new BasicMultiselectOptionViewModel<uint>
+                .Select(p => new BasicMultiselectOptionViewModel<int>
                 {
                     Id = p.Id,
                     Name = p.Name
                 })
                 .ToListAsync();
 
-        public async Task<PublisherViewModel> Get(uint id)
+        public async Task<PublisherViewModel> Get(int id)
         {
             var publisherEntity = await this._dbContext
                 .Publishers
@@ -114,7 +114,7 @@ namespace SGDb.Creators.Services.Publishers
             await this._dbContext.SaveChangesAsync();
         }
 
-        public async Task Delete(uint id)
+        public async Task Delete(int id)
         {
             var publisherEntity = await this._dbContext.Publishers.FirstOrDefaultAsync(p => p.Id == id);
 

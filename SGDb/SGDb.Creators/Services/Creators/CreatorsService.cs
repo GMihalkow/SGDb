@@ -16,11 +16,9 @@ namespace SGDb.Creators.Services.Creators
         private readonly CreatorsDbContext _dbContext;
 
         public CreatorsService(CreatorsDbContext dbContext)
-        {
-            this._dbContext = dbContext;
-        }
+            => this._dbContext = dbContext;
         
-        public async Task<CreatorViewModel> Get(uint id)
+        public async Task<CreatorViewModel> Get(int id)
         {
             var creatorEntity = await this._dbContext
                 .Creators
@@ -41,7 +39,7 @@ namespace SGDb.Creators.Services.Creators
             return creatorViewModel;
         }
 
-        public async Task<IEnumerable<CreatorViewModel>> GetAll(uint[] ids = null)
+        public async Task<IEnumerable<CreatorViewModel>> GetAll(int[] ids = null)
         {
             var creatorsViewModels = await this._dbContext
                 .Creators
@@ -103,7 +101,7 @@ namespace SGDb.Creators.Services.Creators
             await this._dbContext.SaveChangesAsync();
         }
 
-        public Task Delete(uint id)
+        public Task Delete(int id)
         {
             throw new System.NotImplementedException();
         }

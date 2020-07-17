@@ -24,7 +24,7 @@ namespace SGDb.Creators.Gateway.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> GetGameDetails(uint id)
+        public async Task<IActionResult> GetGameDetails(int id)
         {
             var game = await this._gamesService.Get(id);
             

@@ -18,7 +18,7 @@ namespace SGDb.Creators.Controllers
 
         [AuthorizeMultipleRoles(new[] {RolesConstants.Administrator, RolesConstants.Creator})]
         public async Task<IActionResult> GetAllGenresForMultiselect()
-            => this.Ok(Result<IEnumerable<BasicMultiselectOptionViewModel<uint>>>.SuccessWith(
+            => this.Ok(Result<IEnumerable<BasicMultiselectOptionViewModel<int>>>.SuccessWith(
                 (await this._genresService.GetAllGenresForMultiselect())));
     }
 }

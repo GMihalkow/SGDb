@@ -11,12 +11,12 @@ namespace SGDb.Creators.Data.EntityConfiguration
             builder.HasOne(vgp => vgp.Game)
                 .WithMany(g => g.Publishers)
                 .HasForeignKey(vgs => vgs.GameId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(vgp => vgp.Publisher)
                 .WithMany(g => g.Games)
                 .HasForeignKey(vgs => vgs.PublisherId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasKey(vgs => new {vgs.GameId, vgs.PublisherId});
         }
