@@ -38,13 +38,11 @@ namespace SGDb.Common.Infrastructure.Extensions
 
                     var authorizationHeader = new AuthenticationHeaderValue(AuthorizationHeaderValuePrefix, token);
                     client.DefaultRequestHeaders.Authorization = authorizationHeader;
-                });
-
-        // .AddTransientHttpErrorPolicy(policy => policy
-        //     .OrResult(result => result.StatusCode == HttpStatusCode.NotFound)
-        //     .WaitAndRetryAsync(6, retry => 
-        //         TimeSpan.FromSeconds(Math.Pow(2, retry))))
-        // .AddTransientHttpErrorPolicy(policy => policy
-        //     .CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
+                }).AddTransientHttpErrorPolicy(policy => policy
+                    .OrResult(result => result.StatusCode == HttpStatusCode.NotFound)
+                    .WaitAndRetryAsync(6, retry =>
+                        TimeSpan.FromSeconds(Math.Pow(2, retry))))
+                .AddTransientHttpErrorPolicy(policy => policy
+                    .CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
     }
 }
