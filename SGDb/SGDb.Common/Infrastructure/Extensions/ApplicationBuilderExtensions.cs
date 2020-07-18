@@ -22,7 +22,6 @@ namespace SGDb.Common.Infrastructure.Extensions
 
             app
                 .UseRouting()
-                .UseHttpsRedirection()
                 .UseCors(options => options
                     .AllowAnyOrigin()
                     .AllowAnyHeader()
