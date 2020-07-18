@@ -1,0 +1,110 @@
+version: "3"
+
+services:
+    data:
+        container_name: sgdb-sql-server
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        ports: 
+            - "1433:1433"
+        env_file: SGDb/SGDb.Common/Common.env
+        environment:
+            - ACCEPT_EULA=Y
+            - SA_PASSWORD=yourStrongPassword12!@
+        volumes: 
+            - sqldata:/var/opt/sqlserver 
+        networks: 
+            - sgdb-network
+
+    messages:
+        container_name: rabbitmq
+        image: rabbitmq:3-management
+        ports:
+            - "15672:15672"
+            - "5672:5672"
+        hostname: "rabbitmq"
+        environment:
+            - RABBITMQ_ERLANG_COOKIE=Rand0mR4bbitMqCo0k1e
+            - RABBITMQ_DEFAULT_USER=rabbitmq
+            - RABBITMQ_DEFAULT_PASS=rabbitmq
+        networks: 
+            - sgdb-network
+
+    sgdb-client:
+        container_name: sgdb-client
+        build:
+            context: ./sgdb.client
+            dockerfile: ./Dockerfile
+        ports: 
+            - "8080:8080"
+        restart: on-failure
+        networks: 
+            - sgdb-network
+
+    creators-gateway:
+        container_name: sgdb-creators-gateway
+        build:
+            context: ./SGDb
+            dockerfile: ./SGDb.Creators/Dockerfile
+        ports: 
+            - "5005:80"
+        env_file: SGDb/SGDb.Common/Common.env
+        restart: on-failure
+        volumes:
+            - ./.aspnet/creators-gateway/DataProtection-Keys:/root/.aspnet/DataProtection-Keys
+        networks: 
+            - sgdb-network
+
+    creators:
+        container_name: sgdb-creators
+        build:
+            context: ./SGDb
+            dockerfile: ./SGDb.Creators/Dockerfile
+        ports: 
+            - "5001:80"
+        env_file: SGDb/SGDb.Common/Common.env
+        environment:
+            - ConnectionStrings__DefaultConnection=Server=sgdb-sql-server;Database=SGDb-Creators;User Id=sa; Password=yourStrongPassword12!@;MultipleActiveResultSets=true;
+        restart: on-failure
+        volumes:
+            - ./.aspnet/creators/DataProtection-Keys:/root/.aspnet/DataProtection-Keys
+        networks: 
+            - sgdb-network
+        depends_on: ["data"]
+
+    identity:
+        container_name: sgdb-identity
+        build:
+            context: ./SGDb
+            dockerfile: ./SGDb.Identity/Dockerfile
+        ports: 
+            - "5003:80"
+        env_file: SGDb/SGDb.Common/Common.env
+        environment:
+            - ConnectionStrings__DefaultConnection=Server=sgdb-sql-server;Database=SGDb-Identity;User Id=sa; Password=yourStrongPassword12!@;MultipleActiveResultSets=true;
+        restart: on-failure
+        volumes:
+            - ./.aspnet/identity/DataProtection-Keys:/root/.aspnet/DataProtection-Keys
+        networks: 
+            - sgdb-network
+        depends_on: ["data"]
+
+    statstics:
+        container_name: sgdb-statstics
+        build:
+            context: ./SGDb
+            dockerfile: ./SGDb.Statistics/Dockerfile
+        ports: 
+            - "5007:80"
+        env_file: SGDb/SGDb.Common/Common.env
+        environment:
+            - ConnectionStrings__DefaultConnection=Server=sgdb-sql-server;Database=SGDb-Statistics;User Id=sa; Password=yourStrongPassword12!@;MultipleActiveResultSets=true;
+        restart: on-failure
+        volumes:
+            - ./.aspnet/statstics/DataProtection-Keys:/root/.aspnet/DataProtection-Keys
+        networks: 
+            - sgdb-network
+        depends_on: ["data"]
+networks:
+    sgdb-network:
+volumes:
+    sqldata:

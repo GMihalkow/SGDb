@@ -21,7 +21,7 @@ namespace SGDb.Common.Infrastructure.Extensions
             var healthChecks = services.AddHealthChecks();
             
             healthChecks.AddSqlServer(configuration.GetConnectionString("DefaultConnection"));
-            // healthChecks.AddRabbitMQ(rabbitConnectionString: "amqp://localhost:localhost@localhost/");
+            healthChecks.AddRabbitMQ(rabbitConnectionString: "amqp://rabbitmq:rabbitmq@rabbitmq/");
             
             return services;
         }        
@@ -108,7 +108,11 @@ namespace SGDb.Common.Infrastructure.Extensions
         
                     mt.AddBus(bus => Bus.Factory.CreateUsingRabbitMq(rmq =>
                     {
-                        rmq.Host("localhost");
+                        rmq.Host("rabbitmq", config =>
+                        {
+                            config.Username("rabbitmq");
+                            config.Password("rabbitmq");
+                        });
 
                         consumers.ForEach(consumer => rmq.ReceiveEndpoint(consumer.FullName, endpoint =>
                         {
