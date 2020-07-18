@@ -133,6 +133,7 @@ namespace SGDb.Common.Infrastructure.Extensions
                     .UseSqlServerStorage(configuration.GetConnectionString("DefaultConnection")));
             
             services.AddHangfireServer(opts=> opts.WorkerCount = 1);
+            services.AddHostedService<MessagesHostedService>();
 
             return services;
         }
