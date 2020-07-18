@@ -3,7 +3,6 @@
         <nav class="nav">
             <router-link to="/">Home</router-link>
             <router-link to="/games/featured">Games</router-link>
-            <router-link to="/about">About</router-link>
 
             <Menubar v-if="isLoggedIn" :model="adminMenuModel" />
 
