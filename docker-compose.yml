@@ -104,6 +104,19 @@ services:
         networks: 
             - sgdb-network
         depends_on: ["data"]
+
+    watchdog:
+        container_name: sgdb-watchdog
+        build:
+            context: ./SGDb
+            dockerfile: ./SGDb.Watchdog/Dockerfile
+        ports: 
+            - "5009:80"
+        restart: on-failure
+        volumes:
+            - ./.aspnet/watchdog/DataProtection-Keys:/root/.aspnet/DataProtection-Keys
+        networks: 
+            - sgdb-network
 networks:
     sgdb-network:
 volumes:

@@ -22,7 +22,7 @@ namespace SGDb.Common.Infrastructure.Extensions
             var healthChecks = services.AddHealthChecks();
             
             healthChecks.AddSqlServer(configuration.GetConnectionString("DefaultConnection"));
-            healthChecks.AddRabbitMQ(rabbitConnectionString: "amqp://rabbitmq:rabbitmq@rabbitmq/");
+            healthChecks.AddRabbitMQ(rabbitConnectionString: "amqp://rabbitmq:rabbitmq@rabbitmq:5672/");
             
             return services;
         }        
