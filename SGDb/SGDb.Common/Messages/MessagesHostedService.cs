@@ -28,6 +28,16 @@ namespace SGDb.Common.Messages
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
+            using (var scope = this._serviceScopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetService<DbContext>();
+
+                if (!dbContext.Database.CanConnect())
+                {
+                    dbContext.Database.Migrate();
+                }
+            }
+
             this._recurringJobManager.AddOrUpdate(
                 nameof(MessagesHostedService),
                 () => this.ProcessPendingMessages(),
