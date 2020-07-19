@@ -63,17 +63,11 @@ namespace SGDb.Common.Messages
 
                 pendingMessages.ForEach(pm =>
                 {
-                    try
-                    {
-                        this._bus.PublishWithTimeout(pm.Data, pm.Type).GetAwaiter().GetResult();
+                    this._bus.PublishWithTimeout(pm.Data, pm.Type).GetAwaiter().GetResult();
 
-                        pm.MarkAsPublished();
+                    pm.MarkAsPublished();
 
-                        dbContext.SaveChanges();
-                    }
-                    catch (OperationCanceledException)
-                    {
-                    }
+                    dbContext.SaveChanges();
                 });
             }
         }

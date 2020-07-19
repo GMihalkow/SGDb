@@ -11,6 +11,6 @@ namespace SGDb.Creators.Gateway.Services.GameDetailsViewService.Contracts
         Task<uint> GetCountByGameId(int id);
 
         [Get("/api/GameDetailsViews/GetCountByGameIds")]
-        Task<IEnumerable<GameDetailsCountByIdViewModel>> GetCountByGameIds([Query(CollectionFormat.Multi)] IEnumerable<uint> ids);
+        Task<IEnumerable<GameDetailsCountByIdViewModel>> GetCountByGameIds([Query(CollectionFormat.Multi)] IEnumerable<int> ids);
     }
 }

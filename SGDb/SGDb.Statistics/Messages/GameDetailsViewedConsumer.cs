@@ -10,9 +10,7 @@ namespace SGDb.Statistics.Messages
         private readonly IGameDetailViewsService _gameDetailViewsService;
 
         public GameDetailsViewedConsumer(IGameDetailViewsService gameDetailViewsService)
-        {
-            this._gameDetailViewsService = gameDetailViewsService;
-        }
+            => this._gameDetailViewsService = gameDetailViewsService;
 
         public async Task Consume(ConsumeContext<GameDetailsViewedMessage> context) =>
             await this._gameDetailViewsService.Create(context.Message.GameId, context.Message.UserId);
