@@ -44,7 +44,7 @@ services:
         container_name: sgdb-creators-gateway
         build:
             context: ./SGDb
-            dockerfile: ./SGDb.Creators/Dockerfile
+            dockerfile: ./SGDb.Creators.Gateway/Dockerfile
         ports: 
             - "5005:80"
         env_file: SGDb/SGDb.Common/Common.env
