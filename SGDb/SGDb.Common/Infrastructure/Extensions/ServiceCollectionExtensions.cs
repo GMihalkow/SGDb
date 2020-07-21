@@ -132,6 +132,13 @@ namespace SGDb.Common.Infrastructure.Extensions
                     .UseSimpleAssemblyNameTypeSerializer()
                     .UseRecommendedSerializerSettings()
                     .UseSqlServerStorage(configuration.GetConnectionString("DefaultConnection")));
+
+            using (var scope = services.BuildServiceProvider().CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetService<DbContext>();
+
+                dbContext.Database.Migrate();
+            }
             
             services.AddHangfireServer(opts=> opts.WorkerCount = 1);
             services.AddHostedService<MessagesHostedService>();
