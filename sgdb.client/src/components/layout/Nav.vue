@@ -122,7 +122,7 @@
 
             items.push({ label: 'Creators', visible: this.isUserAdmin, to: '/admin/creators/search' });
             items.push({ label: 'Games', visible: this.isUserAdmin || this.isUserCreator, to: '/admin/games/search' });
-            items.push({ label: 'Publishers', visible: this.isUserAdmin || this.isUserCreator, to: '/admin/games/search' });
+            items.push({ label: 'Publishers', visible: this.isUserAdmin || this.isUserCreator, to: '/admin/publishers/search' });
 
             this.adminMenuModel[0].items = items;
         }
