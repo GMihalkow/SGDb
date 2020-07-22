@@ -5,6 +5,7 @@ using SGDb.Common.Infrastructure;
 using SGDb.Statistics.Services.GameDetailsViews.Contracts;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SGDb.Common.Infrastructure.Attributes.Authorization;
 
 namespace SGDb.Statistics.Controllers
 {
@@ -19,7 +20,7 @@ namespace SGDb.Statistics.Controllers
         public async Task<IActionResult> GetCountByGameId(int id) =>
             this.Ok(await this._gameDetailViewsService.GetCountByGameId(id));
 
-        [Authorize(Roles = RolesConstants.Administrator)]
+        [AuthorizeMultipleRoles(new [] {RolesConstants.Administrator, RolesConstants.Creator})]
         public async Task<IActionResult> GetCountByGameIds([FromQuery] IEnumerable<int> ids) =>
             this.Ok(await this._gameDetailViewsService.GetCountByGameIds(ids));
     }
