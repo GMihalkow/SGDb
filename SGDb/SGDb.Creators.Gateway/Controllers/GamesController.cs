@@ -1,4 +1,3 @@
-using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SGDb.Common.Controllers;
@@ -9,6 +8,7 @@ using SGDb.Creators.Gateway.Services.Games.Contracts;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SGDb.Common.Infrastructure.Attributes.Authorization;
 
 namespace SGDb.Creators.Gateway.Controllers
 {
@@ -24,7 +24,6 @@ namespace SGDb.Creators.Gateway.Controllers
         }
 
         [Authorize]
-        [HttpGet]
         public async Task<IActionResult> GetGameDetails([FromQuery]int id)
         {
             var game = await this._gamesService.Get(id);
@@ -37,8 +36,7 @@ namespace SGDb.Creators.Gateway.Controllers
             return this.Ok(Result<GameDetailsViewModel>.SuccessWith(game));
         }
 
-        [Authorize(Roles = RolesConstants.Administrator)]
-        [HttpGet]
+        [AuthorizeMultipleRoles(new[] {RolesConstants.Administrator, RolesConstants.Creator})]
         public async Task<IActionResult> GetAllSearchGames()
         {
             var gamesSearchViewModels = (await this._gamesService.GetAllSearchGames()).ToList();
