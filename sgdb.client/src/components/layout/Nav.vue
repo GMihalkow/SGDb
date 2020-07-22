@@ -6,8 +6,14 @@
 
             <Menubar v-if="isLoggedIn" :model="adminMenuModel" />
 
-            <div class="p-fluid d-flex nav-search-wrapper">
-                <AutoComplete v-model="selectedGameName" @item-select="redirectToGameDetailsWithId" :suggestions="gameNames" @complete="searchGame($event)" placeholder="Search for games by name..." field="name" />
+            <div class="p-fluid d-flex nav-search-wrapper"> 
+                <AutoComplete 
+                    v-model="selectedGameName" 
+                    @item-select="redirectToGameDetailsWithId" 
+                    :suggestions="gameNames" 
+                    @complete="searchGame($event)" 
+                    placeholder="Search for games by name..." 
+                    field="name" />
                 <Button icon="pi pi-search" class="p-button-primary p-button" @click="redirectToFeaturedGamesWithAppliedFilter"/>
             </div>
             
@@ -71,11 +77,19 @@
             redirectToFeaturedGamesWithAppliedFilter() {
                 var _this = this;
 
+                var searchValue;
+                
+                if (typeof _this.selectedGameName == 'object' && _this.selectedGameName != null ) {
+                    searchValue = _this.selectedGameName.name;
+                } else if(typeof _this.selectedGameName == 'string') {
+                    searchValue = _this.selectedGameName;
+                }
+
                 if (this.$route.name === 'featuredGames') {
                     // catch is just for silencing the duplicates error
-                    this.$router.replace({ name: 'featuredGames', query: { searchFilter: _this.selectedGameName } }).catch(function() {});
+                    this.$router.replace({ name: 'featuredGames', query: { searchFilter: searchValue } }).catch(function() {});
                 } else {
-                    this.$router.push({ name: 'featuredGames', query: { searchFilter: _this.selectedGameName } });
+                    this.$router.push({ name: 'featuredGames', query: { searchFilter: searchValue } });
                 }
             }
         },
