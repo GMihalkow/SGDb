@@ -8,7 +8,6 @@ using SGDb.Identity.Services.Identity.Contracts;
 using SGDb.Identity.Services.TokenGenerator.Contracts;
 using SGDb.Identity.Services.Users.Contracts;
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 using SGDb.Common.Data.Models;
 using SGDb.Common.Infrastructure.Extensions;
