@@ -54,8 +54,10 @@
                     </Column>
                     <Column header="Actions" headerStyle="text-align: center" bodyStyle="text-align: center; overflow: visible">
                         <template #body="slotProps">
-                            <Button type="button" icon="pi pi-cog" class="p-button-secondary p-mr-2" @click="openEditGameDialog(slotProps.data)"/>
-                            <Button type="button" icon="pi pi-trash" class="p-button-danger" @click="openDeleteGameDialog(slotProps.data)"/>
+                            <div v-if="currentCreatorId === slotProps.data.creatorId || isUserAdmin">
+                                <Button type="button" icon="pi pi-cog" class="p-button-secondary p-mr-2" @click="openEditGameDialog(slotProps.data)"/>
+                                <Button type="button" icon="pi pi-trash" class="p-button-danger" @click="openDeleteGameDialog(slotProps.data)"/>
+                            </div>
                         </template>
                     </Column>
                 </DataTable>
@@ -205,6 +207,7 @@
     import genresApi from '../../api/creators/genres-api';
     
     import { required, url, maxLength, decimal, minValue, between } from 'vuelidate/lib/validators';
+    import { mapGetters } from 'vuex';
     
     const validImageUrl = function(param) { 
         var regExp = new RegExp(/^(https?:)?\/\/?[^'"<>]+?\.(jpg|jpeg|gif|png)(|\?[^'"<>]*)$/);
@@ -240,6 +243,10 @@
                 isEdit: false,
                 loading: false
             };
+        },
+        computed: {
+            ...mapGetters({'currentCreatorId': 'creatorId'}),
+            ...mapGetters({'isUserAdmin': 'isUserAdmin'})
         },
         components: {
             DataTable: DataTable,

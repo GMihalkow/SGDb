@@ -106,10 +106,15 @@ namespace SGDb.Creators.Controllers
         [AuthorizeMultipleRoles(new[] {RolesConstants.Administrator, RolesConstants.Creator})]
         public async Task<IActionResult> Edit([FromForm]GameEditModel gameEditModel)
         {
-            var game = await this._gamesService.Get(gameEditModel.Id);
+            var gameViewModel = await this._gamesService.Get(gameEditModel.Id);
 
-            if (game == null) 
+            if (gameViewModel == null)
                 return this.NotFound(Result.Failure());
+
+            var currentCreator = await this._creatorsService.GetByUserId(this._httpContextAccessor.UserId());
+
+            if (gameViewModel.CreatorId != currentCreator?.Id && !this.User.IsInRole(RolesConstants.Administrator))
+                return this.BadRequest(Result.Failure());
             
             await this._gamesService.Edit(gameEditModel);
             
@@ -120,10 +125,15 @@ namespace SGDb.Creators.Controllers
         [AuthorizeMultipleRoles(new[] {RolesConstants.Administrator, RolesConstants.Creator})]
         public async Task<IActionResult> Delete(int id)
         {
-            var game = await this._gamesService.Get(id);
+            var gameViewModel = await this._gamesService.Get(id);
 
-            if (game == null) 
+            if (gameViewModel == null) 
                 return this.NotFound(Result.Failure());
+            
+            var currentCreator = await this._creatorsService.GetByUserId(this._httpContextAccessor.UserId());
+
+            if (gameViewModel.CreatorId != currentCreator?.Id && !this.User.IsInRole(RolesConstants.Administrator))
+                return this.BadRequest(Result.Failure());
 
             await this._gameGenreService.DeleteByGameId(id);
             await this._gamePublishersService.DeleteByGameId(id);

@@ -18,6 +18,8 @@ namespace SGDb.Creators.Models.Games
 
         public uint? Recommendations { get; set; }
 
+        public int CreatorId { get; set; }
+
         public DateTime? ReleasedOn { get; set; }
 
         public DateTime CreatedOn { get; set; }

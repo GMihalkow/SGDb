@@ -22,6 +22,8 @@ namespace SGDb.Creators.Gateway.Models.Games
         public uint? Recommendations { get; set; }
 
         public DateTime? ReleasedOn { get; set; }
+
+        public int CreatorId { get; set; }
         
         public IEnumerable<int> PublisherIds { get; set; }
 
