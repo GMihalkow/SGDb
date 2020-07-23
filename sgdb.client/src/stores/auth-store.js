@@ -11,6 +11,7 @@ Vue.use(Vuex);
 const AUTHENTICATE = 'AUTHENTICATE';
 const AUTHENTICATE_SUCCESS = 'AUTHENTICATE_SUCCESS';
 const LOGOUT = 'LOGOUT';
+const SETCREATORID = 'SETCREATORID';
 
 var secureLs = new SecureLS({ encodingType: 'aes' });
 
@@ -20,6 +21,7 @@ const store = new Vuex.Store({
     role: secureLs.get('role'),
     isUserAdmin: !!secureLs.get('auth_token') && secureLs.get('role') == roles.Administrator,
     isUserCreator: !!secureLs.get('auth_token') && secureLs.get('role') == roles.Creator,
+    creatorId: secureLs.get('creatorId'),
     pending: false
   },
   mutations: {
@@ -53,6 +55,9 @@ const store = new Vuex.Store({
       axios.defaults.headers.common['Authorization'] = '';
 
       router.push('/');
+    },
+    [SETCREATORID](state) {
+      Vue.set(state, 'creatorId', secureLs.get('creatorId'));
     }
   },
   actions: {
@@ -96,13 +101,19 @@ const store = new Vuex.Store({
       if(token){
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
       }
+    },
+    setCreatorId({ commit }, { creatorId }) {
+      secureLs.set('creatorId', creatorId);
+      
+      commit(SETCREATORID);
     }
   },
   getters: {
     isLoggedIn: state => state.isLoggedIn,
     role: state => state.role,
     isUserAdmin: state => state.isUserAdmin,
-    isUserCreator: state => state.isUserCreator
+    isUserCreator: state => state.isUserCreator,
+    creatorId: state => state.creatorId
   }
 });  
 

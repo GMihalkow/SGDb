@@ -188,7 +188,12 @@
                     formObj.append('PhoneNumber', this.form.phoneNumber);
 
                     _this.$store.dispatch('authenticate', { endpoint: 'register', creds: formObj, successCallback: function() {
-                        _this.$store.dispatch('setAuthHeader');                        
+                        _this.$store.dispatch('setAuthHeader');
+
+                        creatorsApi.getCurrentCreatorId().then(function(res) {
+                            var data = res.data.data;
+                            _this.$store.dispatch('setCreatorId', { creatorId: data });
+                        });
                     }, 
                     errorCallback: function(error) {
                             if(error.response){

@@ -50,6 +50,7 @@
     import ValidationMessages from '../../components/partials/ValidationMessages';
 
     import { required, minLength, email, maxLength } from 'vuelidate/lib/validators';
+    import creatorsApi from '../../api/creators/creators-api';
 
     export default {
         name: 'Login',
@@ -102,6 +103,11 @@
                         creds: formObj, 
                         successCallback: function(){
                             _this.$store.dispatch('setAuthHeader');
+                           
+                            creatorsApi.getCurrentCreatorId().then(function(res) {
+                                var data = res.data.data;
+                                _this.$store.dispatch('setCreatorId', { creatorId: data });
+                            });
                         },
                         errorCallback: function(error) {
                             if (error.response){

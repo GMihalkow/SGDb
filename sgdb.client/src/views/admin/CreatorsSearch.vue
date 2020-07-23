@@ -35,7 +35,7 @@
                     </Column>
                     <Column header="Actions" headerStyle="text-align: center" bodyStyle="text-align: center; overflow: visible">
                         <template #body="slotProps">
-                            <Button type="button" icon="pi pi-user-edit" v-on:click="onCreatorEdit(slotProps.data)" class="p-button-secondary"></Button>
+                            <Button :disabled="currentCreatorId === slotProps.data.id" type="button" icon="pi pi-user-edit" v-on:click="onCreatorEdit(slotProps.data)" class="p-button-secondary"></Button>
                         </template>
                     </Column>
                 </DataTable>
@@ -70,6 +70,7 @@
     import Dialog from 'primevue/dialog';
     import Toast from 'primevue/toast';
     import creatorsApi from '../../api/creators/creators-api';
+    import { mapGetters } from 'vuex';
     
     export default {
         name: 'CreatorsSearch',
@@ -82,6 +83,9 @@
                 form: {},
                 loading: false
             };
+        },
+        computed: {
+            ...mapGetters({'currentCreatorId': 'creatorId'})
         },
         components: {
             DataTable: DataTable,
