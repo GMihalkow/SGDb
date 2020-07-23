@@ -79,10 +79,15 @@ namespace SGDb.Creators.Controllers
         [HttpPatch]
         public async Task<IActionResult> Edit(PublisherEditModel publisherEditModel)
         {
-            var publisherById = await this._publishersService.Get(publisherEditModel.Id);
+            var publisherViewModel = await this._publishersService.Get(publisherEditModel.Id);
 
-            if (publisherById == null)
+            if (publisherViewModel == null)
                 return this.NotFound(Result.Failure("Publisher not found."));
+
+            var currentCreator = await this._creatorsService.GetByUserId(this._httpContextAccessor.UserId());
+
+            if (currentCreator.Id != publisherViewModel.CreatorId && !this.User.IsInRole(RolesConstants.Administrator))
+                return this.BadRequest(Result.Failure());
 
             var publisherByName = await this._publishersService.GetByName(publisherEditModel.Name);
             
@@ -97,10 +102,15 @@ namespace SGDb.Creators.Controllers
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
-            var publisher = await this._publishersService.Get(id);
+            var publisherViewModel = await this._publishersService.Get(id);
 
-            if (publisher == null)
+            if (publisherViewModel == null)
                 return this.NotFound(Result.Failure());
+            
+            var currentCreator = await this._creatorsService.GetByUserId(this._httpContextAccessor.UserId());
+
+            if (currentCreator.Id != publisherViewModel.CreatorId && !this.User.IsInRole(RolesConstants.Administrator))
+                return this.BadRequest(Result.Failure());
 
             await this._publishersService.Delete(id);
 

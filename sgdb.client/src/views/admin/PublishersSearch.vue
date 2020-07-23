@@ -42,8 +42,10 @@
                         </Column>
                         <Column header="Actions" headerStyle="text-align: center" bodyStyle="text-align: center; overflow: visible">
                             <template #body="slotProps">
-                                <Button type="button" icon="pi pi-user-edit" @click="openPublisherEditDialog(slotProps.data)" class="p-button-secondary p-mr-2"></Button>
-                                <Button type="button" icon="pi pi-trash" class="p-button-danger" @click="openDeletePublisherDialog(slotProps.data)"/>
+                                <div v-if="currentCreatorId === slotProps.data.creatorId || isUserAdmin">
+                                    <Button type="button" icon="pi pi-user-edit" @click="openPublisherEditDialog(slotProps.data)" class="p-button-secondary p-mr-2"></Button>
+                                    <Button type="button" icon="pi pi-trash" class="p-button-danger" @click="openDeletePublisherDialog(slotProps.data)"/>
+                                </div>
                             </template>
                         </Column>
                     </DataTable>
@@ -102,6 +104,7 @@
     import publishersApi from '../../api/creators/publishers-api';
 
     import { required, maxLength } from 'vuelidate/lib/validators';
+    import { mapGetters } from 'vuex';
 
     export default {
         name: 'PublishersSearch',
@@ -119,6 +122,10 @@
                 isEdit: false,
                 loading: false
             }
+        },
+        computed: {
+            ...mapGetters({'currentCreatorId': 'creatorId'}),
+            ...mapGetters({'isUserAdmin': 'isUserAdmin'})
         },
         components: {
             DataTable: DataTable,

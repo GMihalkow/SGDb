@@ -10,6 +10,8 @@ namespace SGDb.Creators.Models.Publishers
 
         public DateTime CreatedOn { get; set; }
 
+        public int CreatorId { get; set; }
+        
         public string CreatorName { get; set; }
     }
 }

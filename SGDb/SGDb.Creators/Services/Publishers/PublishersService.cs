@@ -59,6 +59,7 @@ namespace SGDb.Creators.Services.Publishers
                     Id = p.Id,
                     Name = p.Name,
                     CreatedOn = p.CreatedOn,
+                    CreatorId =  p.CreatorId,
                     CreatorName = p.Creator.Username
                 })
                 .ToListAsync();
