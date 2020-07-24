@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 import SecureLS from 'secure-ls';
 import axios from 'axios';
 import router from '../router';
-import authApi from '../api/auth-api';
+import identityApi from '../api/identity/identity-api';
 import { roles } from '../helpers/constants/roles';
 
 Vue.use(Vuex);
@@ -65,7 +65,7 @@ const store = new Vuex.Store({
       commit(AUTHENTICATE); // TODO [GM]: show spinner
 
       return new Promise(function() {
-        authApi[endpoint](creds).then(function(res) {
+        identityApi[endpoint](creds).then(function(res) {
           var data = res.data;
 
           if (data.succeeded) {

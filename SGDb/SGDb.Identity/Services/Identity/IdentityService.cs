@@ -72,6 +72,19 @@ namespace SGDb.Identity.Services.Identity
             (await this._signInManager.PasswordSignInAsync(loginInputModel.EmailAddress, loginInputModel.Password, true,
                 false)).Succeeded;
 
+        public async Task ChangePassword(string userId, ChangePasswordInputModel changePasswordInputModel)
+        {
+            var user = await this._signInManager.UserManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            
+            if (user == null)
+                throw new InvalidOperationException("User not found.");
+
+            var result = await this._signInManager.UserManager.ChangePasswordAsync(user, changePasswordInputModel.CurrentPassword, changePasswordInputModel.NewPassword);
+
+            if (!result.Succeeded)
+                throw new ArgumentException(result.Errors.FirstOrDefault()?.Description ?? "Something went wrong.");
+        }
+
         public async Task MarkAsPublished(string guidId)
         {
             var message = await this._dbContext.Messages.FirstOrDefaultAsync(m => m.GuidId == guidId);

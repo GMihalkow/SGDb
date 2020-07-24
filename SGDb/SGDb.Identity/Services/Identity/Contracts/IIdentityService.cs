@@ -11,6 +11,8 @@ namespace SGDb.Identity.Services.Identity.Contracts
         Task Register(RegisterInputModel registerInputModel);
 
         Task<bool> Login(LoginInputModel loginInputModel);
+
+        Task ChangePassword(string userId, ChangePasswordInputModel changePasswordInputModel);
         
         Task MarkAsPublished(string guidId);
         

@@ -107,6 +107,7 @@
 
             _this.adminMenuModel[0].items = [
                 { label: '...', command:() => {} },
+                { label: 'Change Password', visible: _this.isLoggedIn, to: '/identity/changepassword' },
                 { separator: true },
                 { label: 'Creators', visible: _this.isUserAdmin, to: '/admin/creators/search' },
                 { label: 'Games', visible: _this.isUserAdmin || _this.isUserCreator, to: '/admin/games/search' },

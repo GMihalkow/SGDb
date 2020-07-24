@@ -4,6 +4,7 @@ import Home from './views/Home';
 import About from './views/About';
 import Register from './views/identity/Register';
 import Login from './views/identity/Login';
+import ChangePassword from './views/identity/ChangePassword';
 import CreatorsSearch from './views/admin/CreatorsSearch';
 import GamesSearch from './views/admin/GamesSearch';
 import PublishersSearch from './views/admin/PublishersSearch';
@@ -37,6 +38,12 @@ var router = new Router({
       path: '/identity/login',
       name: 'login',
       component: Login
+    },
+    {
+      path: '/identity/changepassword',
+      name: 'changePassword',
+      component: ChangePassword,
+      meta: { authenticate: true }
     },
     {
       path: '/admin/creators/search',
