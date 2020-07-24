@@ -42,12 +42,21 @@
 
                 <Toast />
 
-                <Dialog :visible.sync="dialogVisible" header="Creator Details" :modal="true">
+                <Dialog :visible.sync="dialogVisible" header="Edit Creator" :modal="true">
+                    <ValidationSummary v-bind:errors="errors"/>
+
                     <div class="p-cardialog-content">
                         <div class="p-grid p-fluid" v-if="creator">
                             <div class="p-col-12 mx-auto"><label for="username">Username</label></div>
                             <div class="p-col-12 mx-auto">
-                                <InputText id="username" v-model="form.username" autocomplete="off" />
+                                <InputText 
+                                    id="username" 
+                                    v-model.trim="form.username" 
+                                    v-bind:class="{ 'p-invalid': !$v.form.username.required || !$v.form.username.maxLength }"
+                                    @blur="setFieldValue('username', $event.target.value)"
+                                    placeholder="Username"
+                                    autocomplete="off" />
+                                <ValidationMessages v-bind:validationContext="$v.form.username" v-bind:propName="'Username'" />
                             </div>
                         </div>
                     </div>
@@ -69,7 +78,11 @@
     import Button from 'primevue/button';
     import Dialog from 'primevue/dialog';
     import Toast from 'primevue/toast';
+    import ValidationMessages from '../../components/partials/ValidationMessages';
+    import ValidationSummary from '../../components/partials/ValidationSummary';
     import creatorsApi from '../../api/creators/creators-api';
+    
+    import { required, maxLength } from 'vuelidate/lib/validators';
     import { mapGetters } from 'vuex';
     
     export default {
@@ -80,12 +93,24 @@
                 dialogVisible: false,
                 creator: {},
                 filters: {},
-                form: {},
-                loading: false
+                form: {
+                    id: '',
+                    username: ''
+                },
+                loading: false,
+                errors: []
             };
         },
         computed: {
             ...mapGetters({'currentCreatorId': 'creatorId'})
+        },
+        validations: {
+            form: {
+                username: {
+                    required: required,
+                    maxLength: maxLength(50)
+                }
+            }
         },
         components: {
             DataTable: DataTable,
@@ -93,31 +118,41 @@
             InputText: InputText,
             Dialog: Dialog,
             Button: Button,
-            Toast: Toast
+            Toast: Toast,
+            ValidationSummary: ValidationSummary,
+            ValidationMessages: ValidationMessages
         },
         methods: {
+            setFieldValue(fieldName, value) {
+                this.form[fieldName] = value;
+                this.$v.form[fieldName].$touch();
+            },            
             onCreatorEdit(creator) {
                 Object.assign(this.creator, creator);
-                Object.assign(this.form, creator);
+
+                this.form.id = creator.id;
+                this.form.username = creator.username;
 
                 this.dialogVisible = true;
             },
             onEditSubmit() {
                 var _this = this;
 
-                creatorsApi.edit({ id: this.form.id, username: this.form.username }).then(function(res){
-                    _this.reloadData();
-                    _this.$toast.add({severity: 'success', summary: 'Creator Updated.', life: 3000});
+                if (!_this.$v.$invalid) {
+                    creatorsApi.edit({ id: this.form.id, username: this.form.username }).then(function(res){
+                        _this.reloadData();
+                        _this.$toast.add({severity: 'success', summary: 'Creator Updated.', life: 3000});
 
-                    _this.creator.username = _this.form.username;
-                    _this.$set(_this.creators, _this.creators.findIndex(function(cr) { return cr.id === _this.creator.id; }), _this.creator);
-                }).catch(function(err) {
-                    _this.$toast.add({severity: 'error', summary: 'Something went wrong.', life: 3000});
+                        _this.creator.username = _this.form.username;
+                        _this.$set(_this.creators, _this.creators.findIndex(function(cr) { return cr.id === _this.creator.id; }), _this.creator);
+                    }).catch(function(err) {
+                        _this.$toast.add({severity: 'error', summary: 'Something went wrong.', life: 3000});
 
-                    _this.$set(_this.creators, _this.creators.findIndex(function(cr) { return cr.id === _this.creator.id; }), _this.creator);
-                });
+                        _this.$set(_this.creators, _this.creators.findIndex(function(cr) { return cr.id === _this.creator.id; }), _this.creator);
+                    });
 
-                this.closeDialog();
+                    this.closeDialog();
+                }
             },
             closeDialog() {
                 this.dialogVisible = false;
