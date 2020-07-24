@@ -91,9 +91,7 @@ namespace SGDb.Creators.Services.Creators
             var creatorEntity = await this._dbContext.Creators.FirstOrDefaultAsync(cr => cr.Id == model.Id);
 
             if (creatorEntity == null)
-            {
                 throw new InvalidOperationException("Invalid creator id.");
-            }
             
             creatorEntity.Username = model.Username;
 

@@ -14,7 +14,7 @@
                         v-model="form.email" 
                         v-bind:class="{ 'p-invalid': !$v.form.email.minLength || !$v.form.email.required }"
                         @blur="setFieldValue('email', $event.target.value)"
-                        placeholder="Email" />
+                        placeholder="Email Address" />
                 </div>
                 <ValidationMessages v-bind:validationContext="$v.form.email" v-bind:propName="'Email Address'" />
             </div>

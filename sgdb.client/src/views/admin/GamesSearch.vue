@@ -189,7 +189,6 @@
 </template>
 
 <script>
-    // import 'primeflex/primeflex.css';
     import DataTable from 'primevue/datatable';
     import Column from 'primevue/column';
     import InputText from 'primevue/inputtext';
