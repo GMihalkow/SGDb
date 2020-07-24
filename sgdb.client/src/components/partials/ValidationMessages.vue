@@ -2,7 +2,7 @@
     <div>
         <div v-if="validationContext.$dirty">
             <div v-bind:key="param ? param.id : Date.now()" v-for="param in validationContext.$flattenParams()">
-                <div class="error" v-if="!validationContext[param.name]">{{validationMessage(param, propName)}}</div>
+                <div class="error" v-if="!validationContext[param.name]">{{validationMessage(param, propName, errorMessage)}}</div>
             </div>
         </div>
     </div>
@@ -13,10 +13,11 @@
         name: 'ValidationMessages',
         props: {
             propName: String,
+            errorMessage: String,
             validationContext: Object
         },
         methods: {
-            validationMessage: function (param, propName) {
+            validationMessage: function (param, propName, errorMessage) {
                 var params = param.params ? param.params : {};
 
                 const validationMessages = {
@@ -29,7 +30,8 @@
                     url: '{0} must a valid url address.'.replace('{0}', propName),
                     decimal: '{0} must a valid decimal number.'.replace('{0}', propName),
                     minValue: '{0} has a minimum value of {1}.'.replace('{0}', propName).replace('{1}', params.min),
-                    validImageUrl: '{0} must be a valid image url using HTTPS. Allowed image formats are jpeg, jpg, png & gif.'.replace('{0}', propName)
+                    validImageUrl: '{0} must be a valid image url using HTTPS. Allowed image formats are jpeg, jpg, png & gif.'.replace('{0}', propName),
+                    not: errorMessage
                 };
 
                 return validationMessages[param.name];
