@@ -1,3 +1,4 @@
+using System;
 using SGDb.Common.Data.Models;
 
 namespace SGDb.Statistics.Data.Models
@@ -7,5 +8,7 @@ namespace SGDb.Statistics.Data.Models
         public string UserId { get; set; }
 
         public int GameId { get; set; }
+
+        public DateTime CreatedOn { get; set; }
     }
 }

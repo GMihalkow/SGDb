@@ -14,6 +14,12 @@ namespace SGDb.Statistics.Data.EntityConfiguration
             
             builder.Property(gdv => gdv.GameId).IsRequired();
             builder.Property(gdv => gdv.UserId).IsRequired();
+            
+            builder
+                .Property(g => g.CreatedOn)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .ValueGeneratedOnAdd()
+                .IsRequired();
         }
     }
 }
