@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './views/Home';
-import About from './views/About';
 import Register from './views/identity/Register';
 import Login from './views/identity/Login';
 import ChangePassword from './views/identity/ChangePassword';
@@ -10,6 +9,7 @@ import GamesSearch from './views/admin/GamesSearch';
 import PublishersSearch from './views/admin/PublishersSearch';
 import FeaturedGames from './views/games/FeaturedGames';
 import GameDetails from './views/games/GameDetails';
+import UserViewedGamesHistory from './views/games/UserViewedGamesHistory';
 
 import authStore from './stores/auth-store';
 import { roles } from './helpers/constants/roles';
@@ -23,11 +23,6 @@ var router = new Router({
       path: '/',
       name: 'home',
       component: Home
-    },
-    {
-      path: '/about',
-      name: 'about',
-      component: About
     },
     {
       path: '/identity/register',
@@ -73,11 +68,16 @@ var router = new Router({
       name: 'gameDetails',
       component: GameDetails,
       meta: { authenticate: true } 
+    },
+    {
+      path: '/games/userViewedGamesHistory',
+      name: 'userViewedGamesHistory',
+      component: UserViewedGamesHistory,
+      meta: { authenticate: true }
     }
   ]
 });
 
-// TODO [GM]: add authorization
 router.beforeEach(function(to, from, next) {
   const { authorize, authenticate } = to.meta;
 

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SGDb.Common.Infrastructure.Attributes.Authorization;
+using SGDb.Common.Infrastructure.Extensions;
 
 namespace SGDb.Creators.Gateway.Controllers
 {
@@ -21,6 +22,22 @@ namespace SGDb.Creators.Gateway.Controllers
         {
             this._gamesService = gamesService;
             this._gameDetailsViewService = gameDetailsViewService;
+        }
+
+        [Authorize]
+        public async Task<IActionResult> GetMyViewedGamesHistory()
+        {
+            var gameHistoryViewModels = await this._gameDetailsViewService.GetMyViewedGamesHistory();
+
+            var gameIds = gameHistoryViewModels?.Select(ghvm => ghvm.GameId)?.ToArray();
+            var simpleGameViewModels = (await this._gamesService.GetSimplifiedGamesByIds(gameIds)).ToArray();
+
+            gameHistoryViewModels.ForEach((ghvm) =>
+            {
+                ghvm.Game = simpleGameViewModels.FirstOrDefault(sgvm => sgvm.Id == ghvm.GameId);
+            });
+
+            return this.Ok(Result<IEnumerable<GameHistoryDetailsViewModel>>.SuccessWith(gameHistoryViewModels));
         }
 
         [Authorize]

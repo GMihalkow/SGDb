@@ -60,6 +60,10 @@ namespace SGDb.Creators.Controllers
             return this.Ok(gameViewModel);  
         }
 
+        [Authorize]
+        public async Task<IActionResult> GetSimplifiedGamesByIds([FromQuery] int[] gameIds) => 
+            this.Ok(await this._gamesService.GetAllSimplifiedGameModels(gameIds));
+
         public async Task<IActionResult> GetAllForAutoComplete()
         {
             var autoCompleteGames = await this._gamesService.GetAutoCompleteGameModels();

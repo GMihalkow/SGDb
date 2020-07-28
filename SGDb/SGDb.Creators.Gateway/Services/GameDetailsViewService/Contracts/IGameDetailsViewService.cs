@@ -7,6 +7,9 @@ namespace SGDb.Creators.Gateway.Services.GameDetailsViewService.Contracts
 {
     public interface IGameDetailsViewService
     {
+        [Get("/api/GameDetailsViews/GetMyViewedGamesHistory")]
+        Task<IEnumerable<GameHistoryDetailsViewModel>> GetMyViewedGamesHistory();
+
         [Get("/api/GameDetailsViews/GetCountByGameId")]
         Task<uint> GetCountByGameId(int id);
 

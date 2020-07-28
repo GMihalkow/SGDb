@@ -16,6 +16,16 @@ namespace SGDb.Statistics.Services.GameDetailsViews
         public GameDetailViewsService(StatisticsDbContext dbContext)
             => this._dbContext = dbContext;
 
+        public async Task<IEnumerable<GameDetailsViewModel>> GetByUserId(string userId) => 
+            await this._dbContext.GameDetailsViews.Where(gdv => gdv.UserId == userId)
+                .Select(gdv => new GameDetailsViewModel
+                {
+                    CreatedOn = gdv.CreatedOn,
+                    UserId = gdv.UserId,
+                    GameId = gdv.GameId
+                })
+                .ToListAsync();
+
         public async Task<uint> GetCountByGameId(int id) =>
             (uint)await this._dbContext.GameDetailsViews.CountAsync(g => g.GameId == id);
 

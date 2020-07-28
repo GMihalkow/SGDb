@@ -10,6 +10,9 @@ namespace SGDb.Creators.Gateway.Services.Games.Contracts
         [Get("/api/Games/Get")]
         Task<GameDetailsViewModel> Get([Query]int id);
 
+        [Get("/api/Games/GetSimplifiedGamesByIds")]
+        Task<IEnumerable<SimpleGameViewModel>> GetSimplifiedGamesByIds([Query(CollectionFormat.Multi)] IEnumerable<int> gameIds);
+
         [Get("/api/Games/GetAllSearchGames")]
         Task<IEnumerable<GameSearchViewModel>> GetAllSearchGames();
     }

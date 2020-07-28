@@ -83,6 +83,15 @@ namespace SGDb.Creators.Services.Games
             return gameViewModels;
         }
 
+        public async Task<IEnumerable<SimpleGameViewModel>> GetAllSimplifiedGameModels(int[] gameIds) => 
+            await this._dbContext.Games
+                .Where(g => gameIds.Contains(g.Id))
+                .Select(g => new SimpleGameViewModel 
+                {   Id = g.Id,
+                    Name = g.Name 
+                })
+                .ToListAsync();
+
         public async Task<IEnumerable<GameAutoCompleteModel>> GetAutoCompleteGameModels()
         {
             var gameAutoCompleteModels = await this._dbContext
