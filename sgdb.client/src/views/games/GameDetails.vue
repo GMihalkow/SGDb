@@ -11,7 +11,11 @@
                         <ul>
                             <li>Recommendations: {{game.recommendations ? game.recommendations : '-'}}</li>
                             <li>Price: {{game.price ? game.price + '$' : '-'}}</li>
-                            <li>Release Date: {{game.releasedOn ? new Date(game.releasedOn).toLocaleDateString() : 'TBD'}}</li>
+                            <li>Release Date: {{game.releasedOn ? new Date(game.releasedOn).toLocaleString('en-US', { 
+                                    year: 'numeric', 
+                                    day:'numeric', 
+                                    month: 'numeric'
+                                }) : 'TBD'}}</li>
                             <li>Views: {{game.views}}</li>
                             <li>Website: <a :href="game.websiteUrl">{{game.websiteUrl}}</a></li>
                         </ul>

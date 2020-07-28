@@ -49,7 +49,12 @@
                     </Column>
                     <Column class="text-center" field="releasedOn" header="Release Date" :sortable="true">
                         <template #body="slotProps">
-                            <div>{{new Date(slotProps.data.releasedOn).toLocaleDateString()}}</div>
+                            <div>{{new Date(slotProps.data.releasedOn).toLocaleString('en-US', { 
+                                    year: 'numeric', 
+                                    day:'numeric', 
+                                    month: 'numeric'
+                                })
+                            }}</div>
                         </template>
                     </Column>
                     <Column header="Actions" headerStyle="text-align: center" bodyStyle="text-align: center; overflow: visible">

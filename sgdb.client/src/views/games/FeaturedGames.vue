@@ -30,7 +30,11 @@
                             <div>Name: <b>{{slotProps.data.name}}</b></div>
                             <div>Publishers: <b>{{slotProps.data.publisherNames.length > 50 ? slotProps.data.publisherNames.substr(0, 50) + '...' : slotProps.data.publisherNames}}</b></div>
                             <div>Genres: <b>{{slotProps.data.genreNames.length > 50 ? slotProps.data.genreNames.substr(0, 50) + '...' : slotProps.data.genreNames}}</b></div>
-                            <div>Released On: <b>{{slotProps.data.releasedOn ? new Date(slotProps.data.releasedOn).toLocaleDateString() : 'TBD'}}</b></div>
+                            <div>Released On: <b>{{slotProps.data.releasedOn ? new Date(slotProps.data.releasedOn).toLocaleString('en-US', { 
+                                    year: 'numeric', 
+                                    day:'numeric', 
+                                    month: 'numeric'
+                                }) : 'TBD'}}</b></div>
                             <Button label="Details" icon="pi pi-search" @click="gameDetails(slotProps.data.id)"></Button>
                         </div>
                     </div>
@@ -45,7 +49,11 @@
                                 <b>{{slotProps.data.name.length > 15 ? slotProps.data.name.substr(0, 15) + '...' : slotProps.data.name}}</b>
                             </div>
                             <div>Release Date: 
-                                <b>{{slotProps.data.releasedOn ? new Date(slotProps.data.releasedOn).toLocaleDateString() : 'TBD'}}</b>
+                                <b>{{slotProps.data.releasedOn ? new Date(slotProps.data.releasedOn).toLocaleString('en-US', { 
+                                    year: 'numeric', 
+                                    day:'numeric', 
+                                    month: 'numeric'
+                                }) : 'TBD'}}</b>
                             </div>
                             <div>Publishers: 
                                 <b v-if="slotProps.data.publisherNames.length">{{slotProps.data.publisherNames.length > 20 ? slotProps.data.publisherNames.substr(0, 20) + '...' : slotProps.data.publisherNames}}</b>

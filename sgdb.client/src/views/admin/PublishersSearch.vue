@@ -37,7 +37,12 @@
                         <Column field="creatorName" header="Creator" :sortable="true"/>
                         <Column field="createdOn" header="Created On" :sortable="true">
                             <template #body="slotProps">
-                                <div>{{new Date(slotProps.data.createdOn).toLocaleDateString()}}</div>
+                                <div>{{new Date(slotProps.data.createdOn).toLocaleString('en-US', { 
+                                    year: 'numeric', 
+                                    day:'numeric', 
+                                    month: 'numeric'
+                                })
+                            }}</div>
                             </template>
                         </Column>
                         <Column header="Actions" headerStyle="text-align: center" bodyStyle="text-align: center; overflow: visible">
