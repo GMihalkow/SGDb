@@ -1,25 +1,20 @@
 <template>
     <div class="nav-container main-bg-dark">
         <nav class="nav">
-            <router-link to="/">Home</router-link>
-            <router-link to="/games/featured">Games</router-link>
-
-            <Menubar v-if="isLoggedIn" :model="adminMenuModel" />
-
-            <div class="p-fluid d-flex nav-search-wrapper"> 
-                <AutoComplete 
-                    v-model="selectedGameName" 
-                    @item-select="redirectToGameDetailsWithId" 
-                    :suggestions="gameNames" 
-                    @complete="searchGame($event)" 
-                    placeholder="Search for games by name..." 
-                    field="name" />
-                <Button icon="pi pi-search" class="p-button-primary p-button" @click="redirectToFeaturedGamesWithAppliedFilter"/>
-            </div>
-            
-            <router-link v-if="!isLoggedIn" to="/identity/login">Login</router-link>
-            <router-link v-if="!isLoggedIn" to="/identity/register">Register</router-link>
-            <a href="javascript:void(0)" v-if="isLoggedIn" v-on:click="logout()">Logout</a>
+            <Menubar :model="menuModel">
+                <template #end>
+                    <div class="p-fluid d-flex nav-search-wrapper">
+                        <AutoComplete 
+                            v-model="selectedGameName" 
+                            @item-select="redirectToGameDetailsWithId" 
+                            :suggestions="gameNames" 
+                            @complete="searchGame($event)" 
+                            placeholder="Search for games by name..." 
+                            field="name" />
+                        <Button icon="pi pi-search" class="p-button-primary p-button" @click="redirectToFeaturedGamesWithAppliedFilter"/>
+                    </div>
+                </template>
+            </Menubar>
         </nav>
     </div>
 </template>
@@ -29,7 +24,6 @@
     import Button from 'primevue/button';
     import Menubar from 'primevue/menubar';
     import gamesApi from '../../api/creators/games-api';
-    import creatorsApi from '../../api/creators/creators-api';
 
     import { mapGetters } from 'vuex';
     import { roles } from '../../helpers/constants/roles';
@@ -40,12 +34,37 @@
             return {
                 selectedGameName: null,
                 gameNames: [],
-                adminMenuModel: [
-                {
-                    label: 'Tools',
-                    icon:'pi pi-fw pi-cog',
-                    items: []
-                }]
+                menuModel: [
+                    {
+                        label: 'Home',
+                        to: '/'
+                    },
+                    {
+                        label: 'Games',
+                        to: '/games/featured'
+                    },
+                    {
+                        label: 'Tools',
+                        icon:'pi pi-fw pi-cog',
+                        items: [],
+                        visible: this.$store.state.isLoggedIn
+                    },
+                    {
+                        label: 'Login',
+                        to: '/identity/login',
+                        visible: !this.$store.state.isLoggedIn
+                    },
+                    {
+                        label: 'Register',
+                        to: '/identity/register',
+                        visible: !this.$store.state.isLoggedIn
+                    },
+                    {
+                        label: 'Logout',
+                        visible: this.$store.state.isLoggedIn,
+                        command: () => this.$store.dispatch('logout')
+                    }
+                ]
             }
         },
         components: {
@@ -53,11 +72,16 @@
             AutoComplete: AutoComplete,
             Menubar: Menubar
         },
+        watch: {
+            isLoggedIn() {
+                this.$forceUpdate();
+            }
+        },
         methods: {
             searchGame(event) {
                 var _this = this;
 
-                var result = gamesApi.getAllForAutoComplete().then(function(res) {
+                gamesApi.getAllForAutoComplete().then(function(res) {
                     var games = res.data.data;
                 
                     _this.gameNames = games.filter(function(g) { return g.name.toLowerCase().startsWith(event.query.toLowerCase()); });
@@ -75,14 +99,12 @@
                 }
             },
             redirectToFeaturedGamesWithAppliedFilter() {
-                var _this = this;
-
                 var searchValue;
                 
-                if (typeof _this.selectedGameName == 'object' && _this.selectedGameName != null ) {
-                    searchValue = _this.selectedGameName.name;
-                } else if(typeof _this.selectedGameName == 'string') {
-                    searchValue = _this.selectedGameName;
+                if (typeof this.selectedGameName == 'object' && this.selectedGameName != null) {
+                    searchValue = this.selectedGameName.name;
+                } else if (typeof this.selectedGameName == 'string') {
+                    searchValue = this.selectedGameName;
                 }
 
                 if (this.$route.name === 'featuredGames') {
@@ -91,52 +113,56 @@
                 } else {
                     this.$router.push({ name: 'featuredGames', query: { searchFilter: searchValue } });
                 }
+            },
+            refreshToolsMenu() {
+                if (this.isLoggedIn) {
+                    this.toolsMenuBar.items = [
+                        { label: '...' },
+                        { label: 'Views History', to: '/games/userViewedGamesHistory' },
+                        { label: 'Change Password', visible: this.isLoggedIn, to: '/identity/changepassword' },
+                        { separator: true },
+                        { label: 'Creators', visible: this.isUserAdmin, to: '/admin/creators/search' },
+                        { label: 'Games', visible: this.isUserAdmin || this.isUserCreator, to: '/admin/games/search' },
+                        { label: 'Publishers', visible: this.isUserAdmin || this.isUserCreator, to: '/admin/publishers/search' }
+                    ];
+                }
             }
         },
         computed: {
+            toolsMenuBar() {
+                return this.menuModel.find(function(item) { return item.label === 'Tools'; });
+            },
             ...mapGetters({'isLoggedIn': 'isLoggedIn'}),
             ...mapGetters({'role': 'role'}),
             ...mapGetters({'isUserAdmin': 'isUserAdmin'}),
             ...mapGetters({'isUserCreator': 'isUserCreator'})
         },
         mounted() {
-            //TODO [GM]: remove _this?
-            var _this = this;
-
-            var creatorsLinkObj = { label: 'Creators', visible: _this.isUserAdmin, to: '/admin/creators/search' };
-
-            _this.adminMenuModel[0].items = [
-                { label: '...', command:() => {} },
-                { label: 'Views History', to: '/games/userViewedGamesHistory' },
-                { label: 'Change Password', visible: _this.isLoggedIn, to: '/identity/changepassword' },
-                { separator: true },
-                { label: 'Creators', visible: _this.isUserAdmin, to: '/admin/creators/search' },
-                { label: 'Games', visible: _this.isUserAdmin || _this.isUserCreator, to: '/admin/games/search' },
-                { label: 'Publishers', visible: _this.isUserAdmin || _this.isUserCreator, to: '/admin/publishers/search' }
-            ];
+            this.refreshToolsMenu();
         },
         updated() {
-            this.adminMenuModel[0].items = this.adminMenuModel[0].items || [];
+            this.toolsMenuBar.visible = this.isLoggedIn;
 
-            var separatorIndex = this.adminMenuModel[0].items.findIndex(function(menuObj) { return menuObj.separator; });
+            this.refreshToolsMenu();
 
-            var items = this.adminMenuModel[0].items.filter(function(menuObj, index) { return index <= separatorIndex; });
+            const _this = this;
 
-            items.push({ label: 'Creators', visible: this.isUserAdmin, to: '/admin/creators/search' });
-            items.push({ label: 'Games', visible: this.isUserAdmin || this.isUserCreator, to: '/admin/games/search' });
-            items.push({ label: 'Publishers', visible: this.isUserAdmin || this.isUserCreator, to: '/admin/publishers/search' });
-
-            this.adminMenuModel[0].items = items;
+            this.menuModel.filter(function(mModel) {
+                return ['Register', 'Login', 'Logout'].indexOf(mModel.label) > -1; 
+            }).forEach(function(mModel) {
+                if (mModel.label === 'Logout') {
+                    mModel.visible = _this.isLoggedIn;
+                } else {
+                    mModel.visible = !_this.isLoggedIn;
+                }
+            });
         }
     };
 </script>
 
 <style scoped>
     .nav {
-        display: flex;
         color: #fff;
-        justify-content: center;
-        flex-wrap: wrap;
         max-width: 60rem;
         margin: 0 auto;
     }
@@ -149,15 +175,18 @@
         margin: 0.6rem 0;
     }
 
+    .nav-search-wrapper {
+        margin: 0 0.5rem;
+    }
+
     .p-autocomplete {
         display: block;
         margin: 0.6rem 0;
-        min-width: 30rem;
+        min-width: 15rem;
     }
 
     .p-menubar {
         padding: 0;
-        margin: 0.5rem;
     }
 
     .nav a {
