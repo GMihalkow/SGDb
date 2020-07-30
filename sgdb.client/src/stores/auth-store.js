@@ -13,7 +13,7 @@ const AUTHENTICATE_SUCCESS = 'AUTHENTICATE_SUCCESS';
 const LOGOUT = 'LOGOUT';
 const SETCREATORID = 'SETCREATORID';
 
-var secureLs = new SecureLS({ encodingType: 'aes' });
+const secureLs = new SecureLS({ encodingType: 'aes' });
 
 const store = new Vuex.Store({
   state: {

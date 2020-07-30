@@ -15,6 +15,5 @@ namespace SGDb.Statistics.Infrastructure.Extensions
                 .AddTransient<IDataSeeder, StatisticsDataSeeder>()
                 .AddTransient<IStatisticsService, StatisticsService>()
                 .AddTransient<IGameDetailViewsService, GameDetailViewsService>();
-
     }
 }
