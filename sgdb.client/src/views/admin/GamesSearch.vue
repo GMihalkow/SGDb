@@ -42,11 +42,6 @@
                         </template>
                     </Column>
                     <Column class="text-center" field="views" header="Views" :sortable="true"/>
-                    <Column class="text-center" field="recommendations" header="Recommendations" :sortable="true">
-                        <template #body="slotProps">
-                            <div>{{slotProps.data.recommendations ? slotProps.data.recommendations : '-'}}</div>
-                        </template>
-                    </Column>
                     <Column class="text-center" field="releasedOn" header="Release Date" :sortable="true">
                         <template #body="slotProps">
                             <div>{{new Date(slotProps.data.releasedOn).toLocaleString('en-US', { 

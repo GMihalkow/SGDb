@@ -49,7 +49,6 @@ namespace SGDb.Creators.Services.Games
                 Name = gameEntity.Name,
                 About = gameEntity.About,
                 Price = gameEntity.Price,
-                Recommendations = gameEntity.Recommendations,
                 CreatorId = gameEntity.CreatorId,
                 CreatedOn = gameEntity.CreatedOn,
                 ReleasedOn = gameEntity.ReleasedOn,
@@ -71,7 +70,6 @@ namespace SGDb.Creators.Services.Games
                     Name = g.Name,
                     About = g.About,
                     Price = g.Price,
-                    Recommendations = g.Recommendations,
                     CreatedOn = g.CreatedOn,
                     ReleasedOn = g.ReleasedOn,
                     WebsiteUrl = g.WebsiteUrl,
@@ -148,7 +146,6 @@ namespace SGDb.Creators.Services.Games
                     Id = g.Id,
                     Name = g.Name,
                     Price = g.Price,
-                    Recommendations = g.Recommendations,
                     CreatorId = g.CreatorId,
                     ReleasedOn = g.ReleasedOn,
                     About = g.About,
@@ -178,11 +175,6 @@ namespace SGDb.Creators.Services.Games
                 Name = model.Name,
                 About = model.About,
                 WebsiteUrl = model.WebsiteUrl,
-
-                // TODO [GM]: Make non nullable?
-                // TODO [GM]: Remove?
-                Recommendations = 0,
-
                 BackgroundImageUrl = model.BackgroundImageUrl,
                 HeaderImageUrl = model.HeaderImageUrl,
                 ReleasedOn = model.ReleasedOn,

@@ -16,8 +16,6 @@ namespace SGDb.Creators.Gateway.Models.Games
 
         public decimal? Price { get; set; }
 
-        public uint? Recommendations { get; set; }
-
         public DateTime? ReleasedOn { get; set; }
 
         public uint Views { get; set; }

@@ -9,7 +9,6 @@
                     <div>
                         <img :src="game.headerImageUrl" :alt="game.name"/>
                         <ul>
-                            <li>Recommendations: {{game.recommendations ? game.recommendations : '-'}}</li>
                             <li>Price: {{game.price ? game.price + '$' : '-'}}</li>
                             <li>Release Date: {{game.releasedOn ? new Date(game.releasedOn).toLocaleString('en-US', { 
                                     year: 'numeric', 

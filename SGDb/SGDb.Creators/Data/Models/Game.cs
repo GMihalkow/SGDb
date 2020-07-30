@@ -18,8 +18,6 @@ namespace SGDb.Creators.Data.Models
 
         public decimal? Price { get; set; }
 
-        public uint? Recommendations { get; set; }
-
         public DateTime? ReleasedOn { get; set; }
 
         public DateTime CreatedOn { get; set; }
