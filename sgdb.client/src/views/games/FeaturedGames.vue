@@ -168,7 +168,7 @@
 
 <style scoped>
     /* grid view */
-    .game-grid-item {
+    /deep/ .game-grid-item {
         border-bottom: 0.5px solid #fff;
         margin: 0.2rem;
         padding: 0.5rem;
@@ -184,7 +184,7 @@
     /* grid view */
 
     /* list view */
-    .game-data-list-item {
+    /deep/ .game-data-list-item {
         display: flex;
         justify-content: start;
         align-items: center;
