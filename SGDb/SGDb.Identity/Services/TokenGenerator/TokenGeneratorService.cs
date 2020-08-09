@@ -39,7 +39,7 @@ namespace SGDb.Identity.Services.TokenGenerator
 
             var roles = await this._signInManager.UserManager.GetRolesAsync(user);
             
-            var key = Encoding.ASCII.GetBytes(_options.Value.Secret);
+            var key = Encoding.ASCII.GetBytes(this._options.Value.Secret);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
