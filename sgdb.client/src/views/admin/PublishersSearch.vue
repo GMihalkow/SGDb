@@ -31,7 +31,7 @@
                             No publishers found.
                         </template>
                         <template #loading>
-                            Loading creators data. Please wait.
+                            Loading publishers data. Please wait.
                         </template>
                         <Column field="name" header="Name" :sortable="true" filterMatchMode="startsWith"/>
                         <Column field="creatorName" header="Creator" :sortable="true"/>
@@ -168,58 +168,69 @@
             },
             confirmEditPublisher() {
                 var _this = this;
-                _this.loading = true;
+                
+                if (!_this.$v.$invalid) {
+                    _this.loading = true;
 
-                publishersApi.edit({id: _this.form.id, name: _this.form.name}).then(function(res) {
-                    _this.loading = false;
-                    _this.$toast.add({severity: 'success', summary: 'Publisher Updated.', life: 3000});
-                    _this.form.name = '';
-                    _this.reloadData();
-                }).catch(function(err) {
-                    _this.loading = false;
+                    publishersApi.edit({id: _this.form.id, name: _this.form.name}).then(function(res) {
+                        _this.loading = false;
+                        _this.$toast.add({severity: 'success', summary: 'Publisher Updated.', life: 3000});
+                        _this.form.name = '';
+                        _this.reloadData();
+                    }).catch(function(err) {
+                        _this.loading = false;
 
-                    if (err.response) {
-                        var data = err.response.data;
+                        if (err.response) {
+                            var data = err.response.data;
 
-                        if (!data.succeeded) {
-                            _this.$toast.add({severity: 'error', summary: data.errors[0] ? data.errors[0] : 'Something went wrong.', life: 3000});
+                            if (!data.succeeded) {
+                                _this.$toast.add({severity: 'error', summary: data.errors[0] ? data.errors[0] : 'Something went wrong.', life: 3000});
+                            }
+                        } else {
+                            _this.$toast.add({severity: 'error', summary: 'Something went wrong.', life: 3000});
                         }
-                    } else {
-                        _this.$toast.add({severity: 'error', summary: 'Something went wrong.', life: 3000});
-                    }
 
-                    _this.form.name = '';
-                });
+                        _this.form.name = '';
+                    });
 
-                _this.closeDialogs();
+                    _this.closeDialogs();
+                } else {
+                    _this.$v.$touch();
+                }
             },
             confirmCreatePublisher() {
                 var _this = this;
-                _this.loading = true;
 
-                var formObj = new FormData();
-                formObj.append('Name', _this.form.name);
+                if (!_this.$v.$invalid) {
 
-                publishersApi.create(formObj).then(function(res) {
-                    _this.loading = false;
-                    _this.$toast.add({severity: 'success', summary: 'Publisher Created.', life: 3000});                   
-                    _this.form.name = '';
-                    _this.reloadData();
-                }).catch(function(err) {
-                    _this.loading = false;
+                    _this.loading = true;
 
-                    if (err.response){
-                        var data = err.response.data;
+                    var formObj = new FormData();
+                    formObj.append('Name', _this.form.name);
 
-                        if (!data.succeeded) {
-                            _this.errors = data.errors;
+                    publishersApi.create(formObj).then(function(res) {
+                        _this.loading = false;
+                        _this.$toast.add({severity: 'success', summary: 'Publisher Created.', life: 3000});                   
+                        _this.form.name = '';
+                        _this.reloadData();
+                    }).catch(function(err) {
+                        _this.loading = false;
+
+                        if (err.response) {
+                            var data = err.response.data;
+
+                            if (!data.succeeded) {
+                                _this.errors = data.errors;
+                            }
+                        } else {
+                            _this.errors = ['Something went wrong.'];
                         }
-                    } else {
-                        _this.errors = ['Something went wrong.'];
-                    }
-                });
+                    });
 
-                _this.closeDialogs();
+                    _this.closeDialogs();
+                } else {
+                    _this.$v.$touch();
+                }
             },
             confirmDeletePublisher() {
                 var _this = this;
