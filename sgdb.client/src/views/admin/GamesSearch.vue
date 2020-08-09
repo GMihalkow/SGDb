@@ -44,11 +44,11 @@
                     <Column class="text-center" field="views" header="Views" :sortable="true"/>
                     <Column class="text-center" field="releasedOn" header="Release Date" :sortable="true">
                         <template #body="slotProps">
-                            <div>{{new Date(slotProps.data.releasedOn).toLocaleString('en-US', { 
+                            <div>{{slotProps.data.releasedOn ? new Date(slotProps.data.releasedOn).toLocaleString('en-US', { 
                                     year: 'numeric', 
                                     day:'numeric', 
                                     month: 'numeric'
-                                })
+                                }) : '-'
                             }}</div>
                         </template>
                     </Column>
@@ -143,6 +143,7 @@
                                 placeholder="Released On" 
                                 :monthNavigator="true" 
                                 :yearNavigator="true" 
+                                dateFormat="dd/mm/yy"
                                 yearRange="1980:2020" />
                         </div>
                         <div class="p-field p-lg-5 p-md-5 p-col-12">
@@ -313,8 +314,13 @@
             openEditGameDialog(game) {
                 this.isEdit = true;
 
-                var newFormObj = game;
-                newFormObj.releasedOn = this.form.releasedOn ? new Date(this.form.releasedOn) : '';
+                game.about = game.about !== 'null' ? game.about : '';
+
+                var newFormObj = {};
+
+                Object.assign(newFormObj, game);
+                
+                newFormObj.releasedOn = newFormObj.releasedOn ? new Date(newFormObj.releasedOn) : '';
 
                 Object.assign(this.game, game);
                 Object.assign(this.form, newFormObj);
