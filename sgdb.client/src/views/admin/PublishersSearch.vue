@@ -242,14 +242,12 @@
                     _this.$toast.add({severity: 'success', summary: 'Publisher Deleted.', life: 3000});
                     
                     _this.publisher = {};
-                    _this.deletePublisherDialog = false;
                     _this.reloadData();
                 }).catch(function(err) {
                     _this.loading = false;
                     _this.$toast.add({severity: 'error', summary: 'Something went wrong.', life: 3000});
 
                     _this.publisher = {};
-                    _this.deletePublisherDialog = false;
                 });
 
                 _this.closeDialogs();

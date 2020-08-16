@@ -84,15 +84,15 @@ namespace SGDb.Creators.Controllers
             if (publisherViewModel == null)
                 return this.NotFound(Result.Failure("Publisher not found."));
 
+            var publisherByName = await this._publishersService.GetByName(publisherEditModel.Name);
+
+            if (publisherByName != null)
+                return this.BadRequest(Result.Failure("A publisher with this name already exists."));
+
             var currentCreator = await this._creatorsService.GetByUserId(this._httpContextAccessor.UserId());
 
             if (currentCreator.Id != publisherViewModel.CreatorId && !this.User.IsInRole(RolesConstants.Administrator))
                 return this.BadRequest(Result.Failure());
-
-            var publisherByName = await this._publishersService.GetByName(publisherEditModel.Name);
-            
-            if (publisherByName != null)
-                return this.BadRequest(Result.Failure("A publisher with this name already exists."));
 
             await this._publishersService.Edit(publisherEditModel);
             
