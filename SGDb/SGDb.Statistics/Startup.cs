@@ -24,7 +24,9 @@ namespace SGDb.Statistics
                     typeof(GameDeletedConsumer),
                     typeof(GameCreatedConsumer),
                     typeof(PublisherDeletedConsumer),
-                    typeof(PublisherCreatedConsumer));
+                    typeof(PublisherCreatedConsumer),
+                    typeof(GenreCreatedConsumer),
+                    typeof(GenreDeletedConsumer));
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
             => app

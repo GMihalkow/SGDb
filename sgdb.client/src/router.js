@@ -7,6 +7,7 @@ import ChangePassword from './views/identity/ChangePassword';
 import CreatorsSearch from './views/admin/CreatorsSearch';
 import GamesSearch from './views/admin/GamesSearch';
 import PublishersSearch from './views/admin/PublishersSearch';
+import GenresSearch from './views/admin/GenresSearch';
 import FeaturedGames from './views/games/FeaturedGames';
 import GameDetails from './views/games/GameDetails';
 import UserViewedGamesHistory from './views/games/UserViewedGamesHistory';
@@ -56,6 +57,12 @@ var router = new Router({
       path: '/admin/publishers/search',
       name: 'publishersSearch',
       component: PublishersSearch,
+      meta: { authenticate: true, authorize: [roles.Administrator, roles.Creator] }
+    },
+    {
+      path: '/admin/genres/search',
+      name: 'genresSearch',
+      component: GenresSearch,
       meta: { authenticate: true, authorize: [roles.Administrator, roles.Creator] }
     },
     {
