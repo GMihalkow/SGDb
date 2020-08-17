@@ -144,11 +144,11 @@ namespace SGDb.Creators.Controllers
             await this._gamesService.Delete(id);
 
             var gameDeletedMessage = new GameDeletedMessage { GameId = id };
-            var messageDate = new Message(gameDeletedMessage);
+            var messageData = new Message(gameDeletedMessage);
             
-            await this._gamesService.Save(messageDate);
+            await this._gamesService.Save(messageData);
             await this._bus.PublishWithTimeout(gameDeletedMessage);
-            await this._gamesService.MarkAsPublished(messageDate.GuidId);
+            await this._gamesService.MarkAsPublished(messageData.GuidId);
 
             return this.Ok(Result.Success());
         } 
