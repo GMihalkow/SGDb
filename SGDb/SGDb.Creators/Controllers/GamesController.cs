@@ -15,6 +15,8 @@ using SGDb.Common.Data.Models;
 using SGDb.Creators.Services.Creators.Contracts;
 using SGDb.Creators.Services.GameGenres.Contracts;
 using SGDb.Creators.Services.GamePublishers.Contracts;
+using Ganss.XSS;
+using SGDb.Creators.Infrastructure;
 
 namespace SGDb.Creators.Controllers
 {
@@ -94,6 +96,9 @@ namespace SGDb.Creators.Controllers
             if (gameInputModel.CreatorId == 0)
                 return this.NotFound(Result.Failure()); 
             
+            var sanitizer = new HtmlSanitizer(ValidationConstants.AllowedTagsInGameAboutSection);
+            gameInputModel.About = sanitizer.Sanitize(gameInputModel.About);
+
             await this._gamesService.Create(gameInputModel);
             
             var gameCreatedMessage = new GameCreatedMessage();
@@ -119,7 +124,10 @@ namespace SGDb.Creators.Controllers
 
             if (gameViewModel.CreatorId != currentCreator?.Id && !this.User.IsInRole(RolesConstants.Administrator))
                 return this.BadRequest(Result.Failure());
-            
+
+            var sanitizer = new HtmlSanitizer(ValidationConstants.AllowedTagsInGameAboutSection);
+            gameEditModel.About = sanitizer.Sanitize(gameEditModel.About);
+
             await this._gamesService.Edit(gameEditModel);
             
             return this.Ok(Result.Success());
