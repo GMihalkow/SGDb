@@ -45,11 +45,11 @@ namespace SGDb.Statistics.Services.Statistics
             
             members.ForEach(pName =>
             {
-                if (pName.EndsWith("TotalGamesCount"))
+                if (pName.EndsWith(nameof(statistics.TotalGamesCount)))
                     statistics.TotalGamesCount++;
-                else if (pName.EndsWith("TotalPublishersCount"))
+                else if (pName.EndsWith(nameof(statistics.TotalPublishersCount)))
                     statistics.TotalPublishersCount++;
-                else if (pName.EndsWith("TotalPublishersCount"))
+                else if (pName.EndsWith(nameof(statistics.TotalGenresCount)))
                     statistics.TotalGenresCount++;
             });
 
@@ -66,11 +66,11 @@ namespace SGDb.Statistics.Services.Statistics
             
             members.ForEach(pName =>
             {
-                if (pName.EndsWith("TotalGamesCount"))
+                if (pName.EndsWith(nameof(statistics.TotalGamesCount)))
                     statistics.TotalGamesCount--;
-                else if (pName.EndsWith("TotalPublishersCount"))
+                else if (pName.EndsWith(nameof(statistics.TotalPublishersCount)))
                     statistics.TotalPublishersCount--;
-                else if (pName.EndsWith("TotalPublishersCount"))
+                else if (pName.EndsWith(nameof(statistics.TotalGenresCount)))
                     statistics.TotalGenresCount--;
             });
 
