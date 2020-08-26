@@ -54,7 +54,7 @@
     import ValidationSummary from '../../components/partials/ValidationSummary';
     import ValidationMessages from '../../components/partials/ValidationMessages';
 
-    import { minLength, required, sameAs, not } from 'vuelidate/lib/validators';
+    import { required, sameAs, not } from 'vuelidate/lib/validators';
     import identityApi from '../../api/identity/identity-api';
 
     export default {
@@ -78,13 +78,11 @@
         validations: {
             form: {
                 currentPassword: {
-                    required: required,
-                    minLength: minLength(6)
+                    required: required
                 },
                 newPassword: {
                     not: not(sameAs('currentPassword')),
-                    required: required,
-                    minLength: minLength(6)
+                    required: required
                 }
             }
         },
