@@ -41,7 +41,7 @@ namespace SGDb.Creators.Controllers
             // TODO [GM]: Add ids as a parameter?
             var creators = await this._creatorsService.GetAll();
                 
-            return this.Ok(Result<IEnumerable<CreatorViewModel>>.SuccessWith(creators));
+            return this.Ok(creators);
         }
         
         [HttpPatch]

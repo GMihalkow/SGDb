@@ -1,17 +1,17 @@
-using System;
+﻿using System;
 
-namespace SGDb.Creators.Models.Creators
+namespace SGDb.Creators.Gateway.Models.Creators
 {
-    public class CreatorViewModel
+    public class CreatorSearchViewModel
     {
         public int Id { get; set; }
-
-        public string UserId { get; set; }
 
         public string Username { get; set; }
 
         public DateTime CreatedOn { get; set; }
 
         public int TotalGamesCreatedCount { get; set; }
+
+        public string RoleName { get; set; }
     }
 }

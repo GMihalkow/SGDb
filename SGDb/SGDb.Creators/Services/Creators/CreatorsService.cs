@@ -40,22 +40,19 @@ namespace SGDb.Creators.Services.Creators
         }
 
         public async Task<IEnumerable<CreatorViewModel>> GetAll(int[] ids = null)
-        {
-            var creatorsViewModels = await this._dbContext
+            => await this._dbContext
                 .Creators
                 .Where(c => ids.IsNullOrEmpty() || ids.Contains(c.Id))
                 .Select(c => new CreatorViewModel
                 {
                     Id = c.Id,
+                    UserId = c.UserId,
                     Username = c.Username,
                     CreatedOn = c.CreatedOn,
                     TotalGamesCreatedCount = c.Games.IsNullOrEmpty() ? 0 : c.Games.Count
                 })
                 .ToListAsync();
 
-            return creatorsViewModels;
-        }
-        
         public async Task<CreatorViewModel> GetByUserId(string userId)
         {
             var creatorEntity = await this._dbContext.Creators.FirstOrDefaultAsync(cr => cr.UserId == userId);

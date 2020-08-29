@@ -27,6 +27,7 @@
                         Loading creators data. Please wait.
                     </template>
                     <Column field="username" header="Username" :sortable="true" filterMatchMode="startsWith"/>
+                    <Column field="roleName" header="Role" :sortable="true"/>
                     <Column field="totalGamesCreatedCount" header="Total Games Created" :sortable="true"/>
                     <Column field="createdOn" header="Created On" :sortable="true">
                         <template #body="slotProps">
@@ -86,6 +87,7 @@
     import ValidationMessages from '../../components/partials/ValidationMessages';
     import ValidationSummary from '../../components/partials/ValidationSummary';
     import creatorsApi from '../../api/creators/creators-api';
+    import creatorsGatewayApi from '../../api/creators-gateway/creators-api-gateway';
     
     import { required, maxLength } from 'vuelidate/lib/validators';
     import { mapGetters } from 'vuex';
@@ -167,7 +169,7 @@
                 _this.loading = true;
                 _this.creators = [];
 
-                creatorsApi.getAll().then(function(res) {
+                creatorsGatewayApi.getAllSearchCreators().then(function(res) {
                     _this.loading = false;
                     _this.creators = res.data.data;
                 }).catch(function(err) {

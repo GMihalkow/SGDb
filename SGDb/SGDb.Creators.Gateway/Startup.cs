@@ -7,8 +7,10 @@ using Refit;
 using SGDb.Common.Infrastructure;
 using SGDb.Common.Infrastructure.Extensions;
 using SGDb.Creators.Gateway.Infrastructure;
+using SGDb.Creators.Gateway.Services.Creators;
 using SGDb.Creators.Gateway.Services.GameDetailsViewService.Contracts;
 using SGDb.Creators.Gateway.Services.Games.Contracts;
+using SGDb.Creators.Gateway.Services.UserRoles.Contracts;
 
 namespace SGDb.Creators.Gateway
 {
@@ -36,10 +38,18 @@ namespace SGDb.Creators.Gateway
             services
                 .AddRefitClient<IGamesService>()
                 .WithConfiguration(serviceEndpoints.Creators);
-            
+
+            services
+                .AddRefitClient<ICreatorsService>()
+                .WithConfiguration(serviceEndpoints.Creators);
+
             services
                 .AddRefitClient<IGameDetailsViewService>()
                 .WithConfiguration(serviceEndpoints.Statistics);
+
+            services
+                .AddRefitClient<IUserRolesService>()
+                .WithConfiguration(serviceEndpoints.Identity);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

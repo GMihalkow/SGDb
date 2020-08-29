@@ -1,6 +1,6 @@
-using System;
+﻿using System;
 
-namespace SGDb.Creators.Models.Creators
+namespace SGDb.Creators.Gateway.Models.Creators
 {
     public class CreatorViewModel
     {
