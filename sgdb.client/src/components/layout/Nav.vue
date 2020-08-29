@@ -81,11 +81,15 @@
             searchGame(event) {
                 var _this = this;
 
-                gamesApi.getAllForAutoComplete().then(function(res) {
-                    var games = res.data.data;
+                if (_this.isLoggedIn) {
+                    gamesApi.getAllForAutoComplete().then(function(res) {
+                        var games = res.data.data;
                 
-                    _this.gameNames = games.filter(function(g) { return g.name.toLowerCase().startsWith(event.query.toLowerCase()); });
-                });
+                        _this.gameNames = games.filter(function(g) { return g.name.toLowerCase().startsWith(event.query.toLowerCase()); });
+                    });
+                } else {
+                    _this.gameNames = [];
+                }
             },
             logout() {
                 this.$store.dispatch('logout');
@@ -130,9 +134,7 @@
             }
         },
         computed: {
-            toolsMenuBar() {
-                return this.menuModel.find(function(item) { return item.label === 'Tools'; });
-            },
+            toolsMenuBar() { return this.menuModel.find(function(item) { return item.label === 'Tools'; }); },
             ...mapGetters({'isLoggedIn': 'isLoggedIn'}),
             ...mapGetters({'role': 'role'}),
             ...mapGetters({'isUserAdmin': 'isUserAdmin'}),
