@@ -43,8 +43,11 @@ namespace SGDb.Identity.Controllers
 
                 var userId = await this._usersService.GetUserId(registerInputModel.EmailAddress);
 
-                var userCreatedMessage = new UserCreatedMessage
-                    {Username = registerInputModel.Username, UserId = userId};
+                var userCreatedMessage = new UserCreatedMessage 
+                {
+                    Username = registerInputModel.Username, 
+                    UserId = userId
+                };
                 var messageData = new Message(userCreatedMessage);
 
                 await this._identityService.Save(messageData);
