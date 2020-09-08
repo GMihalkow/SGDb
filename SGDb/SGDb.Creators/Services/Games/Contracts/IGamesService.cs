@@ -4,7 +4,7 @@ using SGDb.Common.Services.Common.Contracts;
 using SGDb.Creators.Data;
 using SGDb.Creators.Data.Models;
 using SGDb.Creators.Models.Games;
-using SGDb.Creators.Services.Base.Contracts;
+using SGDb.Common.Services.Base.Contracts;
 
 namespace SGDb.Creators.Services.Games.Contracts
 {

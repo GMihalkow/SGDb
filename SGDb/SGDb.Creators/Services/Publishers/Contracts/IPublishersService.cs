@@ -5,7 +5,7 @@ using SGDb.Creators.Data;
 using SGDb.Creators.Data.Models;
 using SGDb.Creators.Models.Common;
 using SGDb.Creators.Models.Publishers;
-using SGDb.Creators.Services.Base.Contracts;
+using SGDb.Common.Services.Base.Contracts;
 
 namespace SGDb.Creators.Services.Publishers.Contracts
 {

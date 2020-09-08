@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace SGDb.Creators.Services.Base.Contracts
+namespace SGDb.Common.Services.Base.Contracts
 {
     public interface IBaseService<TKey, TViewModel, TEntityModel, TInputModel, TEditModel>
     {

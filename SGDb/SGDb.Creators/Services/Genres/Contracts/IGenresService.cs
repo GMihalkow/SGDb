@@ -3,7 +3,7 @@ using SGDb.Creators.Data;
 using SGDb.Creators.Data.Models;
 using SGDb.Creators.Models.Common;
 using SGDb.Creators.Models.Genres;
-using SGDb.Creators.Services.Base.Contracts;
+using SGDb.Common.Services.Base.Contracts;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
