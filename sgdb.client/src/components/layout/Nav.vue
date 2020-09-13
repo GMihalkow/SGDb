@@ -128,7 +128,8 @@
                         { label: 'Creators', visible: this.isUserAdmin, to: '/admin/creators/search' },
                         { label: 'Games', visible: this.isUserAdmin || this.isUserCreator, to: '/admin/games/search' },
                         { label: 'Publishers', visible: this.isUserAdmin || this.isUserCreator, to: '/admin/publishers/search' },
-                        { label: 'Genres', visible: this.isUserAdmin || this.isUserCreator, to: '/admin/genres/search' }
+                        { label: 'Genres', visible: this.isUserAdmin || this.isUserCreator, to: '/admin/genres/search' },
+                        { label: 'Roles', visible: this.isUserAdmin, to: '/admin/roles/search' }
                     ];
                 }
             }
